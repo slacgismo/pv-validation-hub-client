@@ -1,6 +1,6 @@
 {
   "extends": ["next/core-web-vitals", "eslint:recommended", "google"],
   "rules": {
-    "max-len": ["warning", { "code": 120 }]
+    "max-len": ["error", { "ignoreComments": true }]
   }
 }
