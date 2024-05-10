@@ -1,3 +1,4 @@
+'use client';
 // *********** START OF IMPORTS ***********
 import Link from 'next/link';
 import styles from '../modulecss/header.module.css';

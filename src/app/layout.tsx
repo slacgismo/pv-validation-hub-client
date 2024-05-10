@@ -1,7 +1,7 @@
+'use client';
 // *********** START OF IMPORTS ***********
 
 import type {Metadata} from 'next';
-import {Inter} from 'next/font/google';
 import './globals.css';
 import React from 'react';
 import {ReduxProvider} from './modules/provider';
@@ -11,8 +11,6 @@ import {ReduxProvider} from './modules/provider';
 // *********** REDUX IMPORTS ***********
 
 // *********** END OF IMPORTS ***********
-
-const inter = new (Inter as any)({subsets: ['latin']});
 
 export const metadata: Metadata = {
   title: 'PV Validation Hub',
@@ -32,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>
