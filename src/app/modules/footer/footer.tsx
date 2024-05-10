@@ -1,6 +1,7 @@
 'use client';
 // *********** START OF IMPORTS ***********
 import Link from 'next/link';
+import Image from 'next/image';
 
 // *********** MODULE IMPORTS ***********
 
@@ -16,10 +17,9 @@ export default function Footer() {
   return (
     <footer className="flex items-center justify-center w-full h-24 border-t">
       <Link href="https://vercel.com" target="_blank" rel="noopener noreferrer">
-        <a className="flex items-center justify-center">
             Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
-        </a>
+        <Image src="/vercel.svg" alt="Vercel Logo"
+          width={10} height={10} className="h-4 ml-2" />
       </Link>
     </footer>
   );

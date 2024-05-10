@@ -15,12 +15,19 @@ const corsMw = cors({
  * @return {Promise} The promise object.
 */
 function runMiddleware(req: NextRequest, res: NextResponse, fn: Function) {
+  const resWithHeader = {
+    ...res,
+    setHeader: (name: string, value: string) => {
+      res.headers.set(name, value);
+    },
+  };
+
   return new Promise((resolve, reject) => {
-    fn(req, res, (result: any) => {
+    fn(req, resWithHeader, (result: any) => {
       if (result instanceof Error) {
         return reject(result);
       }
-      return resolve(result);
+      resolve(result);
     });
   });
 }

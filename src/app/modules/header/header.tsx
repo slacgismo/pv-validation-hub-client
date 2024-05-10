@@ -142,11 +142,7 @@ const NavMenu: React.FC<NavMenuProps> = ({pages}) => {
         <Link className={styles.menuLink}
           key={`${index}-${page.route}`}
           href={page.route}>
-          <a style={{margin: '1rem',
-            color: '#18A0FB', display: 'block',
-            textTransform: 'none'}}>
-            {page.text}
-          </a>
+          {page.text}
         </Link>
       ))}
     </Box>
