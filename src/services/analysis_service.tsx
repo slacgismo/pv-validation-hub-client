@@ -47,8 +47,10 @@ const AnalysisService = {
 
       // Return the Promise from client.post
       return client.post(url, formData, {
-        'Accept': '*/*',
-        'content-type': 'multipart/form-data',
+        headers: {
+          'Accept': '*/*',
+          'Content-Type': 'multipart/form-data',
+        },
       });
     }
 

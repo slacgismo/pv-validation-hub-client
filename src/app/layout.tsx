@@ -1,4 +1,3 @@
-'use client';
 // *********** START OF IMPORTS ***********
 
 import type {Metadata} from 'next';
