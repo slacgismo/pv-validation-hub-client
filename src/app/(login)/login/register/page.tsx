@@ -13,9 +13,12 @@ import Footer from '@/app/modules/footer/footer';
 
 const SignupPage: React.FC = () => {
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <h1>Welcome to the signup page!</h1>
+      <main className="flex min-h-screen flex-col
+    items-center justify-between p-24">
+        <h1>Welcome to the signup page!</h1>
+      </main>
       <Footer />
     </div>
   );
