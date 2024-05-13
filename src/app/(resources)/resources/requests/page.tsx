@@ -2,6 +2,8 @@
 // *********** START OF IMPORTS ***********
 
 import React from 'react';
+import Header from '../../components/header';
+import Footer from '../../components/footer';
 
 // *********** MODULE IMPORTS ***********
 
@@ -9,12 +11,14 @@ import React from 'react';
 
 // *********** END OF IMPORTS ***********
 
-const ResourcesPage: React.FC = () => {
+const RequestsPage: React.FC = () => {
   return (
     <div>
+      <Header />
       <h1>Welcome to the requests page!</h1>
+      <Footer />
     </div>
   );
 };
 
-export default ResourcesPage;
+export default RequestsPage;

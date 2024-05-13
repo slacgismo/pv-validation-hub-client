@@ -2,6 +2,8 @@
 // *********** START OF IMPORTS ***********
 
 import React from 'react';
+import Header from '../../components/header';
+import Footer from '../../components/footer';
 
 // *********** MODULE IMPORTS ***********
 
@@ -12,7 +14,9 @@ import React from 'react';
 const ResourcesPage: React.FC = () => {
   return (
     <div>
+      <Header />
       <h1>Welcome to the resources page!</h1>
+      <Footer />
     </div>
   );
 };
