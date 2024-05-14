@@ -4,6 +4,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
+import styles from '@/app/modules/modulecss/footer.module.css';
 import {Grid, Typography} from '@mui/material';
 import {Box} from '@mui/system';
 
@@ -24,6 +25,7 @@ export default function Footer() {
       minHeight: 100,
       maxHeight: 200,
     }}
+    className={styles.footerBackground}
     >
       <Grid container spacing={2} alignItems="center" justify="center">
         <Grid item xs={12}>

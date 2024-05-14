@@ -1,0 +1,9 @@
+.footerBackground {
+    background-color: #FFA07A;
+    color: #333;
+    text-align: center;
+    padding: 10px;
+    height: 150px;
+    min-height: 100px;
+    max-height: 200px;
+  }
