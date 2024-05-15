@@ -27,7 +27,7 @@ export default function Footer() {
     }}
     className={styles.footerBackground}
     >
-      <Grid container spacing={2} alignItems="center" justify="center">
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center"
             alignItems="center" sx={{borderBottom: 1, borderColor: 'divider',
@@ -38,13 +38,13 @@ export default function Footer() {
                 <Link
                   href="https://www6.slac.stanford.edu/
                   news-and-events/connect-with-us"
-                  underline="hover" color="inherit">
+                  color="inherit">
                   Community
                 </Link>
               </Grid>
               <Grid item xs={2}>
                 <Link href="https://www6.slac.stanford.edu/about"
-                  underline="hover" color="inherit">
+                  color="inherit">
                   Company
                 </Link>
               </Grid>
@@ -55,7 +55,6 @@ export default function Footer() {
                     align="center"
                     variant="h6"
                     noWrap
-                    href="/"
                     sx={{
                       mr: 2,
                       fontFamily: 'sans-serif',
@@ -71,13 +70,13 @@ export default function Footer() {
               <Grid item xs={2}>
                 <Link href="https://www6.slac.stanford.edu/
                 news-and-events/news-center"
-                underline="hover" color="inherit">
+                color="inherit">
                   Blog
                 </Link>
               </Grid>
               <Grid item xs={2}>
                 <Link href="https://www6.slac.stanford.edu/about/resources"
-                  underline="hover" color="inherit">
+                  color="inherit">
                   Resources
                 </Link>
               </Grid>

@@ -1,0 +1,32 @@
+
+
+import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/jest-globals';
+import {describe, it, expect, beforeEach} from '@jest/globals';
+
+import {configureStore} from '@reduxjs/toolkit';
+import userReducer, {logIn, logOut} from '@/reducers/user';
+
+describe('user reducer', () => {
+  let store: any;
+
+  beforeEach(() => {
+    store = configureStore({
+      reducer: {
+        user: userReducer,
+      },
+    });
+  });
+
+  it('handles logIn action', () => {
+    store.dispatch(logIn());
+    const loggedIn = store.getState().user.loggedIn;
+    expect(loggedIn).toBe(true);
+  });
+
+  it('handles logOut action', () => {
+    store.dispatch(logOut());
+    const loggedIn = store.getState().user.loggedIn;
+    expect(loggedIn).toBe(false);
+  });
+});
