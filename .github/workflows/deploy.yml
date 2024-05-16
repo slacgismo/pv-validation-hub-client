@@ -41,7 +41,7 @@ jobs:
       - name: Move Build to tmp
         run: |
           mkdir -p /tmp/workspace/build
-          mv -v frontend/build/* /tmp/workspace/build
+          mv -v out/* /tmp/workspace/build
 
       - name: Temporarily save Build to artifacts
         uses: actions/upload-artifact@v2

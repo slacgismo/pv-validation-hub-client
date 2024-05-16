@@ -16,6 +16,7 @@ import Validation from '@/services/validation_service';
 import UserService from '@/services/user_service';
 import Header from '@/app/modules/header/header';
 import Footer from '@/app/modules/footer/footer';
+import Terms from '@/app/(login)/register/terms';
 
 // *********** REDUX IMPORTS ***********
 
@@ -32,6 +33,7 @@ interface RegisterStates {
   username: string;
   password: string;
   confirmPassword: string;
+  acceptTerms: boolean;
 }
 
 interface RegisterErrors {
@@ -41,6 +43,7 @@ interface RegisterErrors {
   username: string;
   password: string;
   confirmPassword: string;
+  acceptTerms: boolean;
 }
 
 const SignupPage: React.FC = () => {
@@ -51,6 +54,16 @@ const SignupPage: React.FC = () => {
 
   const router = useRouter();
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const isClosed = () => {
+    setIsOpen(false);
+  };
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
   const [registerStates, setRegisterStates] = useState<RegisterStates>({
     first_name: '',
     last_name: '',
@@ -58,6 +71,7 @@ const SignupPage: React.FC = () => {
     username: '',
     password: '',
     confirmPassword: '',
+    acceptTerms: false,
   });
   const [registrationErrors, setRegistrationErrors] = useState<RegisterErrors>({
     first_name: '',
@@ -66,18 +80,32 @@ const SignupPage: React.FC = () => {
     username: '',
     password: '',
     confirmPassword: '',
+    acceptTerms: false,
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const {id, value} = e.target;
-    setRegisterStates((prevState) => ({
-      ...prevState,
-      [id]: value,
-    }));
-    setRegistrationErrors((prevState) => ({
-      ...prevState,
-      [id]: '',
-    }));
+    if (id === 'acceptTerms') {
+      setRegisterStates((prevState) => ({
+        ...prevState,
+        [id]: !registerStates.acceptTerms,
+      }));
+      setRegistrationErrors((prevState) => ({
+        ...prevState,
+        [id]: false,
+      }));
+      return;
+    } else {
+      setRegisterStates((prevState) => ({
+        ...prevState,
+        [id]: value,
+      }));
+      setRegistrationErrors((prevState) => ({
+        ...prevState,
+        [id]: '',
+      }));
+      return;
+    }
   };
 
   /**
@@ -150,17 +178,11 @@ const SignupPage: React.FC = () => {
         registerStates.confirmPassword,
         registerStates.password,
     );
+    const acceptTermsError = !registerStates.acceptTerms;
 
     if (firstNameError !== '' || lastNameError !== '' ||
             emailError !== '' || userNameError !== '' ||
             passwordError !== '' || confirmPasswordError !== '') {
-      console.log('firstNameError: ', firstNameError);
-      console.log('lastNameError: ', lastNameError);
-      console.log('emailError: ', emailError);
-      console.log('userNameError: ', userNameError);
-      console.log('passwordError: ', passwordError);
-      console.log('confirmPasswordError: ', confirmPasswordError);
-
       setRegistrationErrors({
         first_name: firstNameError,
         last_name: lastNameError,
@@ -168,17 +190,18 @@ const SignupPage: React.FC = () => {
         username: userNameError,
         password: passwordError,
         confirmPassword: confirmPasswordError,
+        acceptTerms: acceptTermsError,
       });
-      console.log('here is the registration error: ', registrationErrors);
     } else {
       setRegistrationErrors((prevState) => ({
         ...prevState,
-        [registrationErrors.first_name]: '',
-        [registrationErrors.last_name]: '',
-        [registrationErrors.email]: '',
-        [registrationErrors.username]: '',
-        [registrationErrors.password]: '',
-        [registrationErrors.confirmPassword]: '',
+        first_name: '',
+        last_name: '',
+        email: '',
+        username: '',
+        password: '',
+        confirmPassword: '',
+        acceptTerms: false,
       }));
       const response = UserService.register(
           registerStates.username,
@@ -186,6 +209,7 @@ const SignupPage: React.FC = () => {
           registerStates.password,
           registerStates.first_name,
           registerStates.last_name,
+          registerStates.acceptTerms,
       );
       if (response !== null) {
         cookies.set(
@@ -219,17 +243,23 @@ const SignupPage: React.FC = () => {
             }}
             noValidate
             autoComplete="off"
+            className='shadowedBox'
           >
             {' '}
-            <div>
-              <Typography variant="h4" gutterBottom>Register</Typography>
-              <Typography variant="body1">
-                <Link href="/login">Already have an account?</Link>
+            <div className='flex flex-column'>
+              <Typography variant="h4" gutterBottom>
+                Registration
               </Typography>
+              <span className='rAlign'>
+                <Link href="/login" className='uLink'>
+                  Sign In
+                </Link>
+              </span>
             </div>
             <div>
 
               <TextField
+                className='isolate'
                 sx={{'& .MuiTextField-root': {m: 1, width: '18ch'}}}
                 required
                 id="first_name"
@@ -242,6 +272,7 @@ const SignupPage: React.FC = () => {
             </div>
             <div>
               <TextField
+                className='isolate'
                 sx={{'& .MuiTextField-root': {m: 1, width: '36ch'}}}
                 required
                 id="last_name"
@@ -254,6 +285,7 @@ const SignupPage: React.FC = () => {
             </div>
             <div>
               <TextField
+                className='isolate'
                 required
                 id="username"
                 label="Username"
@@ -265,6 +297,7 @@ const SignupPage: React.FC = () => {
             </div>
             <div>
               <TextField
+                className='isolate'
                 id="email"
                 label="Email"
                 value={registerStates.email}
@@ -275,6 +308,7 @@ const SignupPage: React.FC = () => {
             </div>
             <div>
               <TextField
+                className='isolate'
                 required
                 type="password"
                 id="password"
@@ -287,6 +321,7 @@ const SignupPage: React.FC = () => {
             </div>
             <div>
               <TextField
+                className='isolate'
                 required
                 type="password"
                 id="confirmPassword"
@@ -297,15 +332,31 @@ const SignupPage: React.FC = () => {
                 helperText={registrationErrors.confirmPassword}
               />
             </div>
-            <div>
+            <div className='flex flex-row'>
+              <div>
+                <input
+                  type="checkbox"
+                  id="acceptTerms"
+                  onChange={handleChange}
+                  checked={registerStates.acceptTerms}
+                  className='m-1'
+                />
+                <label htmlFor="acceptTerms">I agree to follow the</label>
+                <Button onClick={openModal} className='uLink'>
+                Terms and Conditions
+                </Button>
+              </div>
               <Button
                 variant="contained"
-                onClick={submitHandler}>
+                onClick={submitHandler}
+                className='rAlign'
+              >
                 Register
               </Button>
             </div>
           </Box>
         </Grid>
+        <Terms isOpen={isOpen} closeModal={isClosed} />
       </main>
       <Footer />
     </div>

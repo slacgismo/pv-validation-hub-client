@@ -34,7 +34,8 @@ const UserService = {
     return response.data;
   },
   register(username: string, email: string,
-      password: string, firstName: string, lastName: string) {
+      password: string, firstName: string, lastName: string, 
+      acceptTerms: boolean) {
     const url = '/register';
     client.post(url, {
       username,
@@ -42,6 +43,7 @@ const UserService = {
       password,
       firstName,
       lastName,
+      acceptTerms,
     }).then((response) => {
       return response.data.token;
     }).catch((error) => console.error(error));
