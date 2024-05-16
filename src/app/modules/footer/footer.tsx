@@ -87,13 +87,17 @@ export default function Footer() {
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Image src="/static/next.svg"
-              alt="Next.js Logo" width={32} height={32} />
+              alt="Next.js Logo" width={32} height={32}
+              className={styles.footerIcon} />
             <Image src="/static/next.svg"
-              alt="Next.js Logo" width={32} height={32} />
+              alt="Next.js Logo" width={32} height={32}
+              className={styles.footerIcon} />
             <Image src="/static/next.svg"
-              alt="Next.js Logo" width={32} height={32} />
+              alt="Next.js Logo" width={32} height={32}
+              className={styles.footerIcon} />
             <Image src="/static/next.svg"
-              alt="Next.js Logo" width={32} height={32} />
+              alt="Next.js Logo" width={32} height={32}
+              className={styles.footerIcon} />
           </Box>
         </Grid>
       </Grid>

@@ -1,9 +1,27 @@
 .footerBackground {
-    background-color: #FFA07A;
+    background-color: #F1B350;
     color: #333;
     text-align: center;
     padding: 10px;
     height: 150px;
     min-height: 100px;
     max-height: 200px;
+  }
+
+  .footerIcon {
+    width: 32px;
+    height: auto;
+    margin-right: 2%;
+  }
+  
+  @media (min-width: 600px) {
+    .footerIcon {
+      width: 48px;
+    }
+  }
+  
+  @media (min-width: 900px) {
+    .footerIcon {
+      width: 64px;
+    }
   }

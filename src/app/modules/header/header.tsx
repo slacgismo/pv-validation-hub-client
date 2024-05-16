@@ -20,9 +20,7 @@ import Divider from '@mui/material/Divider';
 
 // *********** REDUX IMPORTS ***********
 
-import {useSelector} from 'react-redux';
-import {selectLoggedIn} from '@/reducers/user';
-
+import {useAppSelector} from '@/store/store';
 
 // *********** END OF IMPORTS ***********
 
@@ -55,7 +53,9 @@ interface NavMenuPage {
  * @return {JSX.Element} The rendered Header component.
  */
 export default function Header() {
-  const loggedIn = useSelector(selectLoggedIn);
+  const loggedIn = useAppSelector((state) => (
+    state.user.loggedIn)
+  );
 
   // *********** START OF DEFINITIONS ***********
 
@@ -67,7 +67,7 @@ export default function Header() {
     },
     {
       text: 'Logout',
-      route: '/developer',
+      route: '/logout',
       border: false,
     },
   ];

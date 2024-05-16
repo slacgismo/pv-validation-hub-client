@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/config/environment.tsx"  ],
   "exclude": [
     "node_modules"
   ]
