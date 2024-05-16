@@ -4,7 +4,7 @@
 import React, {useState} from 'react';
 import Link from 'next/link';
 
-// We need to use useRouter from next/navigation instead of next/router
+// We need to use useRouter from next/navigation instead of next/navigation
 // as it uses special hook for navigation within app directory
 import {useRouter} from 'next/navigation';
 import Cookies from 'universal-cookie';

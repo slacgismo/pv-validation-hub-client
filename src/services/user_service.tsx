@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import client from './api_service.js';
+import client from '@/services/api_service';
 
 const UserService = {
   useGetUserDetails(url: string, token: string) {
@@ -42,7 +42,9 @@ const UserService = {
       password,
       firstName,
       lastName,
-    }).then((response) => response).catch((error) => console.error(error));
+    }).then((response) => {
+      return response.data.token;
+    }).catch((error) => console.error(error));
   },
   getUserId(token: string) {
     // Set the authorization token

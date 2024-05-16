@@ -10,12 +10,12 @@ import Home from '../src/app/page';
 import {configureStore} from '@reduxjs/toolkit';
 import userReducer from '@/reducers/user';
 
-import {useRouter} from 'next/router';
+import {useRouter} from 'next/navigation';
 
-// Mock the next/router module, disable lint because
+// Mock the next/navigation module, disable lint because
 // for some ungodly reason, the linter doesn't like this
 // eslint-disable-next-line
-jest.mock('next/router', () => ({
+jest.mock('next/navigation', () => ({
   useRouter() {
     return {
       route: '/',

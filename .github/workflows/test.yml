@@ -1,0 +1,24 @@
+name: Build and Test
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+    build-fe:
+        name: Build and Test Frontend
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v2
+            name: Checkout Repository
+
+          - name: install dependencies and build
+            run: |
+                cd frontend
+                npm install
+                npm run build
+
+          - name: run tests
+            run: |
+                cd frontend
+                npm run test

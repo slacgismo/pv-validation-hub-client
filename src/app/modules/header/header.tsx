@@ -161,7 +161,7 @@ function UserLoggedInMenu() {
       <Link className={styles.homeLink} href={'/login'}>
             Sign In
       </Link>
-      <Link className={styles.homeLink} href={'/login/register'}>
+      <Link className={styles.homeLink} href={'/register'}>
             Register
       </Link>
     </Box>
