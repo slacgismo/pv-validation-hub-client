@@ -1,16 +1,25 @@
+// *********** START OF IMPORTS ***********
+
 import {render, fireEvent, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/jest-globals';
 import {describe, it, expect} from '@jest/globals';
-import {Provider} from 'react-redux';
-import {store} from '../src/store/store';
+import {useRouter} from 'next/navigation';
+import fetch from 'jest-fetch-mock';
+
+// *********** MODULE IMPORTS ***********
+
 import Home from '../src/app/page';
+
+// *********** REDUX IMPORTS ***********
 
 import {configureStore} from '@reduxjs/toolkit';
 import userReducer from '@/reducers/user';
+import {Provider} from 'react-redux';
+import {store} from '../src/store/store';
 
-import {useRouter} from 'next/navigation';
+// *********** END OF IMPORTS ***********
 
 // Mock the next/navigation module, disable lint because
 // for some ungodly reason, the linter doesn't like this
@@ -29,6 +38,7 @@ jest.mock('next/navigation', () => ({
 }));
 
 describe('Home page', () => {
+  global.fetch = fetch as any;
   it('renders without crashing', () => {
     render(<Provider store={store}>
       <Home />
@@ -37,6 +47,7 @@ describe('Home page', () => {
 });
 
 describe('Header', () => {
+  global.fetch = fetch as any;
   it('renders header links', async () => {
     render(<Provider store={store}>
       <Home />
@@ -134,6 +145,7 @@ describe('Header', () => {
 });
 
 describe('Footer', () => {
+  global.fetch = fetch as any;
   it('renders footer elements', () => {
     render(<Provider store={store}>
       <Home />
