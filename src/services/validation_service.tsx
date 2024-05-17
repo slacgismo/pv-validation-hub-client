@@ -1,3 +1,4 @@
+import banned from '@/services/bannedWords/banned.json';
 
 /**
  * Validation service
@@ -23,6 +24,27 @@ export default class Validation {
    */
   static isEmailInUse(email: string) {
     console.log(email);
+    return true;
+  }
+
+  /**
+   * Check if a username is an email.
+   * @param {string} entry - The username to check.
+   * @return {boolean} - True if the username is an email, false otherwise.
+   */
+  static hasNoProfanity(entry: string) {
+    const bannedWords = banned;
+
+    // Convert the input string to lowercase and split it into words
+    const words = entry.toLowerCase();
+
+    // Check if any of the words in the input string are in the list of banned words
+    for (const bannedWord of bannedWords) {
+      if (words.includes(bannedWord)) {
+        return false;
+      }
+    }
+
     return true;
   }
 }

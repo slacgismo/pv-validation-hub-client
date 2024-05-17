@@ -68,3 +68,8 @@ body {
 .isolate {
   isolation: isolate;
 }
+
+.headerText {
+  font-size: 1.5rem;
+  font-weight: 600;
+}

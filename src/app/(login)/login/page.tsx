@@ -16,7 +16,6 @@ import Footer from '@/app/modules/footer/footer';
 import {
   Grid, Alert, Box, Button, TextField,
 } from '@mui/material';
-import Typography from '@mui/material/Typography';
 import Validation from '@/services/validation_service';
 import client from '@/services/api_service';
 
@@ -158,13 +157,15 @@ const LoginPage: React.FC = () => {
             autoComplete="off"
             className='shadowedBox'
           >
-            <Box>
-              <Typography variant="h4" gutterBottom>Sign In</Typography>
-              <Typography variant="body1">
-                <Link href="/register">
-                  New to PV Validation Hub
+            <Box className='flex flex-column'>
+              <span className='headerText'>
+                Welcome Back!
+              </span>
+              <span className='rAlign'>
+                <Link href="/register" className='uLink'>
+                  Register
                 </Link>
-              </Typography>
+              </span>
             </Box>
             <Box>
               <TextField
@@ -189,9 +190,20 @@ const LoginPage: React.FC = () => {
                 helperText={loginErrors.password}
               />
             </Box>
-            <Box>
-              <Button variant="contained" onClick={submitHandler}>Login</Button>
-            </Box>
+            <div className='flex flex-row'>
+              <Link href="/login/forgot_username" className='uLink m-1'>
+                Forgot Username?
+              </Link>
+              <Link href="/login/forgot_password" className='uLink m-1'>
+                Forgot Password?
+              </Link>
+              <Button
+                variant="contained"
+                onClick={submitHandler}
+                className="m-1">
+                Login
+              </Button>
+            </div>
           </Box>
         </Grid>
       </main>

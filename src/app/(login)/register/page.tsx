@@ -11,7 +11,6 @@ import Cookies from 'universal-cookie';
 import {
   Box, Button, TextField, Grid,
 } from '@mui/material';
-import Typography from '@mui/material/Typography';
 import Validation from '@/services/validation_service';
 import UserService from '@/services/user_service';
 import Header from '@/app/modules/header/header';
@@ -83,7 +82,6 @@ const SignupPage: React.FC = () => {
     acceptTerms: false,
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
     const {id, value} = e.target;
     if (id === 'acceptTerms') {
       setRegisterStates((prevState) => ({
@@ -115,8 +113,14 @@ const SignupPage: React.FC = () => {
    */
   function isValidEmail(email: string): string {
     const isValid = /\S+@\S+\.\S+/.test(email);
+    const isProfessional = Validation.hasNoProfanity(email);
     if (!isValid) {
       return 'Invalid Email';
+    }
+    if (!isProfessional) {
+      const issue = 'Use of profanity violates our terms of service. ' +
+      'Please select a different email.';
+      return issue;
     }
     return '';
   }
@@ -128,8 +132,14 @@ const SignupPage: React.FC = () => {
    */
   function validateUsername(username: string): string {
     const isValid = Validation.isUserNameTaken(username);
+    const isProfessional = Validation.hasNoProfanity(username);
     if (!isValid) {
       return 'Username already taken!';
+    }
+    if (!isProfessional) {
+      const issue = 'Use of profanity violates our terms of service. ' +
+      'Please select a different username.';
+      return issue;
     }
     return '';
   }
@@ -165,12 +175,33 @@ const SignupPage: React.FC = () => {
     return '';
   }
 
+  /**
+   * Function to validate professional names
+   * @param {string} name - name entry to be validated
+   * @return {string} - error message if names are invalid
+   */
+  function checkNameErrors(
+      name: string): string {
+    const nameLower = name.toLowerCase();
+    const isValid = name.length > 0;
+    const isProfessional = Validation.hasNoProfanity(nameLower);
+
+    if (!isValid) {
+      return 'First and Last Name Required';
+    }
+
+    if (!isProfessional) {
+      const issue = 'Use of profanity violates our terms of service. ' +
+        'Please use a professional name.';
+      return issue;
+    }
+    return '';
+  }
+
   // On submit function, validates all fields
   const submitHandler = (e: React.MouseEvent) => {
-    const firstNameError = registerStates.first_name !== '' ? '' :
-    'First Name Required';
-    const lastNameError = registerStates.last_name !== '' ? '' :
-    'Last Name Required';
+    const firstNameError = checkNameErrors(registerStates.first_name);
+    const lastNameError = checkNameErrors(registerStates.last_name);
     const emailError = isValidEmail(registerStates.email);
     const userNameError = validateUsername(registerStates.username);
     const passwordError = passwordValidation(registerStates.password);
@@ -247,9 +278,9 @@ const SignupPage: React.FC = () => {
           >
             {' '}
             <div className='flex flex-column'>
-              <Typography variant="h4" gutterBottom>
+              <span className='headerText'>
                 Registration
-              </Typography>
+              </span>
               <span className='rAlign'>
                 <Link href="/login" className='uLink'>
                   Sign In
@@ -298,6 +329,7 @@ const SignupPage: React.FC = () => {
             <div>
               <TextField
                 className='isolate'
+                required
                 id="email"
                 label="Email"
                 value={registerStates.email}
@@ -350,6 +382,7 @@ const SignupPage: React.FC = () => {
                 variant="contained"
                 onClick={submitHandler}
                 className='rAlign'
+                disabled={!registerStates.acceptTerms}
               >
                 Register
               </Button>

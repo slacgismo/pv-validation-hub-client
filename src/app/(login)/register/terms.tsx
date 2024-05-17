@@ -43,7 +43,9 @@ const Terms: React.FC<TermsProps> = ({isOpen, closeModal}) => {
         <Markdown>
           {terms}
         </Markdown>
-        <Button onClick={closeModal}>Close</Button>
+        <Button onClick={() => {
+          closeModal();
+        }}>Close</Button>
       </Box>
     </ReactModal>
   );
