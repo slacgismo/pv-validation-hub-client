@@ -1,11 +1,13 @@
 import {configureStore} from '@reduxjs/toolkit';
-import userReducer from '../reducers/user';
+import userReducer from '@/reducers/user';
+import curAnalysis from '@/reducers/curAnalysis';
 // import {createWrapper} from 'next-redux-wrapper';
 import {TypedUseSelectorHook, useSelector} from 'react-redux';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    curAnalysis: curAnalysis,
   },
 });
 

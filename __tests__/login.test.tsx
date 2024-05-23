@@ -1,6 +1,6 @@
 // *********** START OF IMPORTS ***********
 
-import {render, fireEvent, screen} from '@testing-library/react';
+import {render, fireEvent, waitFor, screen, getByTestId} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/jest-globals';
@@ -14,6 +14,8 @@ import Login from '@/app/(login)/login/page';
 import Register from '@/app/(login)/register/page';
 import ForgotUsername from '@/app/(login)/login/forgot_username/page';
 import ForgotPassword from '@/app/(login)/login/forgot_password/page';
+import Validation from '@/services/validation_service';
+import client from '@/services/api_service';
 
 // *********** REDUX IMPORTS ***********
 
@@ -40,6 +42,11 @@ jest.mock('next/navigation', () => ({
   },
 }));
 
+// eslint-disable-next-line
+jest.mock('../src/services/validation_service');
+// eslint-disable-next-line
+jest.mock('../src/services/api_service');
+
 describe('Login page', () => {
   global.fetch = fetch as any;
 
@@ -60,6 +67,93 @@ describe('Login page', () => {
       <Login />
     </Provider>);
   });
+  it('displays error when username is empty', async () => {
+    const {getByTestId} = render(
+        <Provider store={store}>
+          <Login />
+        </Provider>
+    );
+
+    fireEvent.click(getByTestId('loginButton'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Username can\'t be empty')).toBeInTheDocument();
+    });
+  });
+
+  it('displays error when password is empty', async () => {
+    const {getByTestId} = render(
+        <Provider store={store}>
+          <Login />
+        </Provider>
+    );
+
+    fireEvent.click(getByTestId('loginButton'));
+
+    await waitFor(() => {
+      expect(screen.getByText('We need a password')).toBeInTheDocument();
+    });
+  });
+
+  it('displays error when username is not found', async () => {
+    (Validation.isUserNameTaken as jest.Mock).mockReturnValue(false);
+
+    const {getByTestId, getByRole} = render(
+        <Provider store={store}>
+          <Login />
+        </Provider>
+    );
+    fireEvent.change(getByRole('textbox', {name: /username/i}),
+        {target: {value: 'testuser'}});
+    fireEvent.click(getByTestId('loginButton'));
+
+    await waitFor(() => {
+      expect(getByTestId('uname').parentElement).toHaveTextContent(
+          'Username not found'
+      );
+    });
+  });
+
+  it('displays error when email is not found', async () => {
+    (Validation.isEmailInUse as jest.Mock).mockReturnValue(false);
+
+    const {getByTestId, getByRole} = render(
+        <Provider store={store}>
+          <Login />
+        </Provider>
+    );
+
+    fireEvent.change(getByRole('textbox', {name: /username/i}),
+        {target: {value: 'test@example.com'}});
+    fireEvent.click(getByTestId('loginButton'));
+
+    await waitFor(() => {
+      expect(getByTestId('uname').parentElement).toHaveTextContent(
+          'Email not found'
+      );
+    });
+  });
+  /*
+  it('displays error when login fails', async () => {
+    (client.post as jest.Mock).mockRejectedValue(new Error());
+
+    const {getByTestId, getByRole, getByLabelText, findByTestId} = render(
+        <Provider store={store}>
+          <Login />
+        </Provider>
+    );
+
+    fireEvent.change(getByRole('textbox', {name: /username/i}),
+        {target: {value: 'testuser'}});
+    fireEvent.change(getByLabelText(/password/i),
+        {target: {value: 'password'}});
+    fireEvent.click(getByTestId('loginButton'));
+
+    const alert = await findByTestId('loginAlert', {}, {timeout: 5000});
+
+    expect(alert).toBeInTheDocument();
+  });
+  */
 });
 
 describe('Register page', () => {

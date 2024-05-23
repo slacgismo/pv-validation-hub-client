@@ -7,10 +7,10 @@
  * @param {number} analysisId The id of the analysis to get the images for
  * @return {string} The markdown with the image paths replaced
  */
-function replaceImagePaths(markdown: string, analysisId: number) {
+function replaceImagePaths(markdown: string, analysisId: number | string) {
   const regex = /!\[(.*?)\]\(\.\/(.*?)\)/g;
   return markdown.replace(regex,
-      `![$1](${process.env.PUBLIC_URL}/assets/${analysisId}/$2)`);
+      `![$1](/static/assets/${analysisId}/$2)`);
 }
 
 export default replaceImagePaths;

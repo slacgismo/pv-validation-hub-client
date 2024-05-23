@@ -14,7 +14,7 @@ import Cookies from 'universal-cookie';
 import Header from '@/app/modules/header/header';
 import Footer from '@/app/modules/footer/footer';
 import {
-  Grid, Alert, Box, Button, TextField,
+  Grid, Box, Button, TextField,
 } from '@mui/material';
 import Validation from '@/services/validation_service';
 import client from '@/services/api_service';
@@ -143,7 +143,9 @@ const LoginPage: React.FC = () => {
         >
           {
             showAlert &&
-                <Alert severity="error">Login Failed</Alert>
+            <div className="customAlert" data-testid="loginAlert">
+              Login Failed
+            </div>
           }
           <Box
             component="form"
@@ -162,7 +164,7 @@ const LoginPage: React.FC = () => {
                 Welcome Back!
               </span>
               <span className='rAlign'>
-                <Link href="/register" className='uLink'>
+                <Link href="/register" data-testid="reglink" className='uLink'>
                   Register
                 </Link>
               </span>
@@ -176,6 +178,7 @@ const LoginPage: React.FC = () => {
                 onChange={handleChange}
                 error={loginErrors.username !== ''}
                 helperText={loginErrors.username}
+                data-testid="uname"
               />
             </Box>
             <Box>
@@ -188,6 +191,7 @@ const LoginPage: React.FC = () => {
                 onChange={handleChange}
                 error={loginErrors.password !== ''}
                 helperText={loginErrors.password}
+                data-testid="pwd"
               />
             </Box>
             <div className='flex flex-row'>
@@ -200,7 +204,9 @@ const LoginPage: React.FC = () => {
               <Button
                 variant="contained"
                 onClick={submitHandler}
-                className="m-1">
+                className="m-1"
+                data-testid="loginButton"
+              >
                 Login
               </Button>
             </div>

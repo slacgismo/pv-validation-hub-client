@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import client from './api_service.js';
+import client from '@/services/api_service';
 
 const DashboardService = {
   formatResponse(response: any) {

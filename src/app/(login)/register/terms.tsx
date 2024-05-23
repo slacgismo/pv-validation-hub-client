@@ -11,6 +11,7 @@ import {
   Box, Button,
 } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import MS from '@/services/md_service';
 
 // *********** REDUX IMPORTS ***********
 
@@ -25,8 +26,7 @@ const Terms: React.FC<TermsProps> = ({isOpen, closeModal}) => {
   const [terms, setTerms] = useState('');
 
   useEffect(() => {
-    fetch('/static/terms.md')
-        .then((response) => response.text())
+    MS.fetchMarkdown('/static/terms.md')
         .then((text) => setTerms(text))
         .catch((error) => console.error(error));
   }, [isOpen]);
@@ -40,7 +40,7 @@ const Terms: React.FC<TermsProps> = ({isOpen, closeModal}) => {
     >
       <Box className="modalContent">
         <Typography variant="h4">Terms and Conditions</Typography>
-        <Markdown>
+        <Markdown className='reactMarkdown'>
           {terms}
         </Markdown>
         <Button onClick={() => {

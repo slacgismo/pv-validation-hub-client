@@ -1,13 +1,21 @@
 import {useEffect, useState} from 'react';
-import {useParams} from 'next/navigation';
-import client from './api_service.js';
+import client from '@/services/api_service';
+
+interface AnalysisDetails {
+  analysisId: number | string;
+  analysis_name: string;
+}
 
 const AnalysisService = {
-  useGetCardDetails() {
-    const {analysisId} = useParams();
-    const [analysisDetails, setAnalysisDetails] = useState({});
+  useGetCardDetails(analysisId: number | string) {
+    const [analysisDetails, setAnalysisDetails] = useState(
+      {
+        analysisId: 'development',
+        analysis_name: 'Dev Analysis',
+      } as AnalysisDetails
+    );
     const [isAnalysisLoading, setAnalysisIsLoading] = useState(true);
-    const [analysiserror, setAnalysisError] = useState(null);
+    const [analysisError, setAnalysisError] = useState(null);
     useEffect(() => {
       client.get(`analysis/${analysisId}`)
           .then((response: any) => {
@@ -30,7 +38,7 @@ const AnalysisService = {
             }
           });
     }, [analysisId]);
-    return [isAnalysisLoading, analysiserror, analysisDetails, analysisId];
+    return {isAnalysisLoading, analysisError, analysisDetails};
   },
   uploadAlgorithm(analysisId: number, token: string, file: File) {
     if (analysisId !== null && analysisId !== undefined &&

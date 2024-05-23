@@ -1,4 +1,4 @@
-import client from './api_service.js';
+import client from '@/services/api_service';
 
 const SubmissionService = {
   getAllSubmissionsForUser(userId: number) {

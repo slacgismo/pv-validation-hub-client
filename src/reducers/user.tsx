@@ -1,4 +1,3 @@
-// userSlice.ts
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '@/store/store';
 
