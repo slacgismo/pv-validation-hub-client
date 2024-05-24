@@ -1,7 +1,7 @@
 'use client';
 // *********** START OF IMPORTS ***********
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Avatar,
   Card,
@@ -86,7 +86,13 @@ const ProfilePage: React.FC = () => {
   const router = useRouter();
   const user = CookieService.getUserCookie();
   const url = user !== null && user !== undefined ? '/account' : '';
-  // eslint-disable-next-line no-unused-vars
+
+  useEffect(() => {
+    if (user === null || user === undefined) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
   const userInfo = UserService.useGetUserDetails(url, user.token);
 
   // prepare for user profile fields update
