@@ -191,7 +191,7 @@ function UserInfoMenu({userInfoMenu}: UserInfoMenuProps) {
       <Tooltip title="Open settings">
         <IconButton ref={anchorRef} onClick={handleOpenMenu} sx={{p: 0}}>
           <Avatar alt="User"
-            src={`${process.env.PUBLIC_URL}/assets/profilecovers/ducky.png`} />
+            src={`/static/assets/profilecovers/ducky.png`} />
         </IconButton>
       </Tooltip>
 

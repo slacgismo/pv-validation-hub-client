@@ -1,9 +1,23 @@
 import {useEffect, useState} from 'react';
 import client from '@/services/api_service';
 
+interface UserDetails {
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  githubLink: string;
+}
+
 const UserService = {
   useGetUserDetails(url: string, token: string) {
-    const [userDetails, setUserDetails] = useState({});
+    const [userDetails, setUserDetails] = useState<UserDetails>({
+      username: '',
+      email: '',
+      first_name: '',
+      last_name: '',
+      githubLink: '',
+    });
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -19,11 +33,17 @@ const UserService = {
           })
           .catch((responseError) => {
             setError(responseError);
-            setUserDetails({});
+            setUserDetails({
+              username: '',
+              email: '',
+              first_name: '',
+              last_name: '',
+              githubLink: '',
+            });
             setIsLoading(false);
           });
     }, [url]);
-    return [isLoading, error, userDetails];
+    return {isLoading, error, userDetails};
   },
   async updateUserProfile(token: string, updatedProfile: any) {
     const url = '/account';
