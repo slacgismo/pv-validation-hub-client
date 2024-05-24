@@ -16,7 +16,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 // *********** MODULE IMPORTS ***********
 
-import SubmissionService from '@/services/submission_service.jsx';
+import SubmissionService from '@/services/submission_service';
 import UserService from '@/services/user_service';
 import CookieService from '@/services/cookie_service';
 
