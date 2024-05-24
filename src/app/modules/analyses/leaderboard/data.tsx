@@ -22,7 +22,7 @@ import Markdown from 'markdown-to-jsx';
  */
 export default function Data({dataDescription, downloadableLink}:
     { dataDescription: string, downloadableLink: string | null}) {
-  const handleDownloadClick = (url: string) => {
+  const handleDownloadClick = (url: string | null) => {
     console.log('TODO: Implement download functionality');
     console.log('Downloading file from:', url);
   };
