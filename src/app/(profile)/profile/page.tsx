@@ -84,15 +84,17 @@ const ProfileCardContent = styled(CardContent)(({theme}) => ({
 const ProfilePage: React.FC = () => {
   // todo(jrl): abstract user cookie and token information to a separate service
   const router = useRouter();
-  const user = CookieService.getUserCookie();
+  const [user, setUser] = useState({token: ''});
   const url = user !== null && user !== undefined ? '/account' : '';
 
   useEffect(() => {
-    if (user === null || user === undefined) {
+    const retUser = CookieService.getUserCookie();
+    if (retUser === null || retUser === undefined) {
       router.push('/login');
     }
-  }, [user, router]);
-
+    setUser(retUser);
+  }, [router]);
+  // eslint-disable-next-line no-unused-vars
   const userInfo = UserService.useGetUserDetails(url, user.token);
 
   // prepare for user profile fields update
