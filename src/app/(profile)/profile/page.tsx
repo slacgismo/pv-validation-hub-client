@@ -139,7 +139,7 @@ const ProfilePage: React.FC = () => {
                   <Avatar
                     sx={{height: 170, width: 174}}
                     alt={userInfo.userDetails.first_name}
-                    src={'/static/assets/profilecovers/ducky.png'}
+                    src={'/static/assets/profilecovers/ducky.jpg'}
                   />
                 </CardMedia>
                 <CardContent >
