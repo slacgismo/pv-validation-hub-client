@@ -2,7 +2,7 @@
 // *********** START OF IMPORTS ***********
 import Link from 'next/link';
 import styles from '../modulecss/header.module.css';
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 
 // *********** MODULE IMPORTS ***********
 
@@ -17,10 +17,13 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
+import CookieService from '@/services/cookie_service';
 
 // *********** REDUX IMPORTS ***********
 
 import {useAppSelector} from '@/store/store';
+import {useDispatch} from 'react-redux';
+import {logIn} from '@/reducers/user';
 
 // *********** END OF IMPORTS ***********
 
@@ -53,9 +56,19 @@ interface NavMenuPage {
  * @return {JSX.Element} The rendered Header component.
  */
 export default function Header() {
+  const dispatch = useDispatch();
   const loggedIn = useAppSelector((state) => (
     state.user.loggedIn)
   );
+
+  useEffect(() => {
+    if (!loggedIn) {
+      const userCookie = CookieService.getUserCookie();
+      if (userCookie && userCookie.token) {
+        dispatch(logIn());
+      }
+    }
+  }, [dispatch, loggedIn]);
 
   // *********** START OF DEFINITIONS ***********
 
@@ -92,7 +105,7 @@ export default function Header() {
 
   return (
     <Box sx={{display: 'flex '}}>
-      <AppBar position="fixed" sx={{backgroundColor: 'white'}}>
+      <AppBar position="fixed" sx={{backgroundColor: '#31A69B'}}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Logo redirect="/" />
@@ -139,7 +152,7 @@ const NavMenu: React.FC<NavMenuProps> = ({pages}) => {
   return (
     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
       {pages.map((page, index) => (
-        <Link className={styles.menuLink}
+        <Link className={`${styles.menuLink} ${styles.headerBackground}`}
           key={`${index}-${page.route}`}
           href={page.route}>
           {page.text}
@@ -157,14 +170,14 @@ const NavMenu: React.FC<NavMenuProps> = ({pages}) => {
  */
 function UserLoggedInMenu() {
   return (
-    <Box sx={{'flexGrow': 0}}>
-      <Link className={styles.homeLink} href={'/login'}>
-            Sign In
-      </Link>
-      <Link className={styles.homeLink} href={'/register'}>
+    <div className='flex flex-row flex-nowrap'>
+      <Link className={`${styles.homeLink} p-3`} href={'/register'}>
             Register
       </Link>
-    </Box>
+      <Link className={`${styles.homeLink} p-3`} href={'/login'}>
+            Sign In
+      </Link>
+    </div>
   );
 }
 
