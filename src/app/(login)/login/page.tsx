@@ -108,10 +108,16 @@ const LoginPage: React.FC = () => {
         username,
         password,
       }).then((response) => {
+        if (response.data.token === undefined) {
+          console.error('Login failed');
+          console.error(response);
+          return;
+        }
         cookies.set(
             'user',
             {
               token: response.data.token,
+              sameSite: 'strict',
             },
             {path: '/', sameSite: 'strict'},
         );

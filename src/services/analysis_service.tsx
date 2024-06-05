@@ -1,44 +1,8 @@
-import {useEffect, useState} from 'react';
 import client from '@/services/api_service';
 
-interface AnalysisDetails {
-  analysisId: number | string;
-  analysis_name: string;
-}
-
 const AnalysisService = {
-  useGetCardDetails(analysisId: number | string) {
-    const [analysisDetails, setAnalysisDetails] = useState(
-      {
-        analysisId: 'development',
-        analysis_name: 'Dev Analysis',
-      } as AnalysisDetails
-    );
-    const [isAnalysisLoading, setAnalysisIsLoading] = useState(true);
-    const [analysisError, setAnalysisError] = useState(null);
-    useEffect(() => {
-      client.get(`analysis/${analysisId}`)
-          .then((response: any) => {
-            setAnalysisIsLoading(false);
-            console.log(response.data);
-            setAnalysisDetails(response.data);
-          })
-          .catch((error: any) => {
-            if (window.location.hostname.includes('localhost') &&
-              (analysisId === 'development')) {
-              setAnalysisDetails({
-                analysisId: 'development',
-                analysis_name: 'Dev Analysis',
-              });
-              setAnalysisIsLoading(false);
-              console.log('Loading development analysis');
-            } else {
-              setAnalysisError(error);
-              setAnalysisIsLoading(false);
-            }
-          });
-    }, [analysisId]);
-    return {isAnalysisLoading, analysisError, analysisDetails};
+  getCardDetails(analysisId: number | string) {
+    return client.get(`analysis/${analysisId}`);
   },
   uploadAlgorithm(analysisId: number, token: string, file: File) {
     if (analysisId !== null && analysisId !== undefined &&

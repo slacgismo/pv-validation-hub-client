@@ -27,6 +27,7 @@ import MS from '@/services/md_service';
 // *********** REDUX IMPORTS ***********
 
 import {useAppSelector} from '@/store/store';
+import {useDispatch} from 'react-redux';
 
 // *********** END OF IMPORTS ***********
 
@@ -39,7 +40,13 @@ interface fileObj {
   name?: string;
 }
 
+interface AnalysisDetailsCard {
+  analysisId: string | number;
+  analysis_name: string;
+}
+
 const AnalysisPage: React.FC = () => {
+  const dispatch = useDispatch();
   const selectedAnalysis = useAppSelector(
       (state) => state.curAnalysis.selectedAnalysis
   );
@@ -51,15 +58,16 @@ const AnalysisPage: React.FC = () => {
   const [uploadSuccess, setUploadSuccess] = useState<uploadSuccess>({
     success: null,
   });
+  const [analysisId, setAnalysisId] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [analysisDetailsCard,
+    setAnalysisDetailsCard] = useState<AnalysisDetailsCard>({
+      analysisId: '',
+      analysis_name: '',
+    });
 
   const [isOpen, setIsOpen] = useState(false);
-
-  const analysisDetails = AnalysisService.useGetCardDetails(selectedAnalysis);
-  const isLoading = analysisDetails.isAnalysisLoading;
-  // eslint-disable-next-line
-  const error = analysisDetails.analysisError;
-  const analysisDetailsCard = analysisDetails.analysisDetails;
-  const analysisId = analysisDetailsCard.analysisId;
 
   // Set the md descriptions
 
@@ -74,31 +82,62 @@ const AnalysisPage: React.FC = () => {
   });
 
   useEffect(() => {
-    console.log('analysis', analysisId, typeof analysisId);
-    if (analysisId !== undefined && analysisId !== null &&
-            ((typeof(analysisId) === 'number' && analysisId > 0) ||
-            analysisId === 'development')) {
-      setCoverImageDir(`/static/assets/${analysisId}/banner.png`);
-      console.log(coverImageDir);
+    AnalysisService.getCardDetails(selectedAnalysis)
+        .then((response: any) => {
+          setIsLoading(false);
+          console.log('resp:', response.data);
+          setAnalysisDetailsCard(response.data);
+          setAnalysisId(response.data.analysis_id);
+        })
+        .catch((e: any) => {
+          if (window.location.hostname.includes('localhost') &&
+          (analysisId === 'development')) {
+            setAnalysisDetailsCard({
+              analysisId: 'development',
+              analysis_name: 'Dev Analysis',
+            });
+            setAnalysisId('development');
+            setIsLoading(false);
+            console.log('Loading development analysis');
+          } else {
+            setError(e);
+            console.error('Error:', error);
+            setIsLoading(false);
+            setAnalysisDetailsCard({
+              analysisId: 'development',
+              analysis_name: 'Dev Analysis',
+            });
+          }
+        });
+  }, [selectedAnalysis, dispatch, analysisId, error]);
 
-      MS.fetchMarkdown(`/static/assets/${analysisId}/dataset.md`)
+  useEffect(() => {
+    console.log('analysis', selectedAnalysis, typeof selectedAnalysis);
+    if (selectedAnalysis !== undefined && selectedAnalysis !== null &&
+            ((typeof(selectedAnalysis) === 'number' && selectedAnalysis > 0) ||
+            selectedAnalysis === 'development')) {
+      setCoverImageDir(`/static/assets/${selectedAnalysis}/banner.png`);
+      console.log('cid', coverImageDir);
+
+      MS.fetchMarkdown(`/static/assets/${selectedAnalysis}/dataset.md`)
           .then((text) => setDatasetDescription(text))
           .catch((err) => console.log(err));
 
-      MS.fetchMarkdown(`/static/assets/${analysisId}/description.md`)
-          .then((text) => replaceImagePaths(text, analysisId))
+      MS.fetchMarkdown(`/static/assets/${selectedAnalysis}/description.md`)
+          .then((text) => replaceImagePaths(text, selectedAnalysis))
           .then((text) => setLongDescription(text))
           .catch((err) => console.log(err));
 
-      MS.fetchMarkdown(`/static/assets/${analysisId}/SubmissionInstructions.md`)
-          .then((text) => replaceImagePaths(text, analysisId))
+      MS.fetchMarkdown(
+          `/static/assets/${selectedAnalysis}/SubmissionInstructions.md`
+      )
+          .then((text) => replaceImagePaths(text, selectedAnalysis))
           .then((text) => setRulesetDescription(text))
           .catch((err) => console.log(err));
     } else {
       console.error('Analysis ID not found');
     }
-    // eslint-disable-next-line
-  }, [analysisId]);
+  }, [selectedAnalysis, coverImageDir]);
 
   const closeModal = () => {
     setIsOpen(false);

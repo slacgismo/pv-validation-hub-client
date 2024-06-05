@@ -75,7 +75,7 @@ export default function Header() {
   const userInfoMenu: UserInfoMenuItem[] = [
     {
       text: 'Settings',
-      route: '/settings',
+      route: '/profile',
       border: true,
     },
     {
@@ -136,7 +136,7 @@ function Logo({redirect}: {redirect: string}) {
   return (
 
     <Link className={styles.homeLink} href={redirect}>
-          PVHub Home
+          PVHub Home (Beta)
     </Link>
 
   );

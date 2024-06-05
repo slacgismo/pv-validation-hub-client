@@ -68,7 +68,8 @@ describe('Header', () => {
       link.textContent === 'Register')
     );
     const homeLink = allLinks.find((link) => (
-      link.textContent === 'PVHub Home')
+      typeof(link.textContent) === 'string' &&
+      link.textContent.includes('PVHub Home') )
     );
     const analysesLink = allLinks.find((link) => (
       link.textContent === 'Analytical Tasks')
