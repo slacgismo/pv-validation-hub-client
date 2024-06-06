@@ -117,7 +117,7 @@ const LoginPage: React.FC = () => {
             'user',
             {
               token: response.data.token,
-              sameSite: 'strict',
+              sameSite: 'lax',
             },
             {path: '/', sameSite: 'strict'},
         );

@@ -1,7 +1,7 @@
 'use client';
 // *********** START OF IMPORTS ***********
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, Suspense} from 'react';
 import {
   Box, Grid, Button, Tab, Tabs, Typography, CircularProgress,
 } from '@mui/material';
@@ -10,6 +10,7 @@ import ReactModal from 'react-modal';
 import Cookies from 'universal-cookie';
 import {FileUploader} from 'react-drag-drop-files';
 import {useRouter} from 'next/navigation';
+import {useSearchParams} from 'next/navigation';
 
 // *********** MODULE IMPORTS ***********
 
@@ -26,7 +27,6 @@ import MS from '@/services/md_service';
 
 // *********** REDUX IMPORTS ***********
 
-import {useAppSelector} from '@/store/store';
 import {useDispatch} from 'react-redux';
 
 // *********** END OF IMPORTS ***********
@@ -46,13 +46,19 @@ interface AnalysisDetailsCard {
 }
 
 const AnalysisPage: React.FC = () => {
-  const dispatch = useDispatch();
-  const selectedAnalysis = useAppSelector(
-      (state) => state.curAnalysis.selectedAnalysis
-  );
+  const searchParams = useSearchParams();
   const navigate = useRouter();
   const cookies = new Cookies();
   const user = cookies.get('user');
+  const dispatch = useDispatch();
+
+  if (searchParams.get('analysisId') === null) {
+    console.error('Analysis ID not found');
+    navigate.push('/analyses');
+  }
+
+  const selectedAnalysis: string | number = parseInt(
+      searchParams.get('analysisId') || '', 10);
 
   const [value, setValue] = useState(0);
   const [uploadSuccess, setUploadSuccess] = useState<uploadSuccess>({
@@ -90,8 +96,9 @@ const AnalysisPage: React.FC = () => {
           setAnalysisId(response.data.analysis_id);
         })
         .catch((e: any) => {
-          if (window.location.hostname.includes('localhost') &&
-          (analysisId === 'development')) {
+          if (window.location.hostname.includes('localhost') && (
+            analysisId === 'development'
+          )) {
             setAnalysisDetailsCard({
               analysisId: 'development',
               analysis_name: 'Dev Analysis',
@@ -297,9 +304,9 @@ const AnalysisPage: React.FC = () => {
                   </TabPanel>
 
                   <TabPanel value={value} index={2}>
-                    <Leaderboard
-                      analysisId={analysisId}
-                    />
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <Leaderboard />
+                    </Suspense>
                   </TabPanel>
 
                   <TabPanel value={value} index={3}>

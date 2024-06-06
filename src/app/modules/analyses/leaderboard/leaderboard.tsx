@@ -1,11 +1,13 @@
 'use client';
 // *********** START OF IMPORTS ***********
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, CircularProgress} from '@mui/material';
 import {DataGrid, GridToolbar} from '@mui/x-data-grid';
 import {GridColDef} from '@mui/x-data-grid';
 import Link from 'next/link';
+import {useSearchParams} from 'next/navigation';
+import {useRouter} from 'next/navigation';
 
 // *********** MODULE IMPORTS ***********
 
@@ -20,8 +22,29 @@ import DashboardService from '@/services/dashboard_service';
  * @param {number} analysisId
  * @return {JSX.Element}
  */
-export default function Leaderboard({analysisId}:
-  {analysisId: number | string}) {
+export default function Leaderboard() {
+  const searchParams = useSearchParams();
+  const navigate = useRouter();
+
+  if (searchParams.get('analysisId') === null) {
+    console.error('Analysis ID not found');
+    navigate.push('/analyses');
+  }
+
+  const analysisId: string | number = parseInt(
+      searchParams.get('analysisId') || '', 10);
+  const [leaderboardDetails, setLeaderboardDetails] = useState<{
+      id: number;
+      error_rate: number;
+      created_by: string;
+      execution_time: number;
+      status: string;
+      metrics: string;
+      error: number;
+    }[]>([]);
+  const [isLeaderboardLoading, setLeaderboardIsLoading] = useState(true);
+  // eslint-disable-next-line
+  const [leaderboardError, setLeaderboardError] = useState(null);
   console.log('TODO: Add dynamic functionality here. We need to combine ',
       'dynamic column generation from the backend with the base column ',
       'list here.');
@@ -37,10 +60,10 @@ export default function Leaderboard({analysisId}:
       renderCell: (params: any) => {
         const {value} = params;
         if (value !== null || value !== undefined) {
-          const link = `/profile/${value.id}`;
+          const link = `/profile?u=${value}`;
           return (
             <Link href={link} className="standardLink">
-              {value.username}
+              {value}
             </Link>
           );
         } else {
@@ -56,8 +79,7 @@ export default function Leaderboard({analysisId}:
       groupable: false,
       width: 100,
       valueGetter: (params: any) => {
-        const value = `${params.row.error_rate}%`;
-        return value !== null && value !== undefined ? value : 0;
+        return params !== null && params !== undefined ? params : 0;
       },
     },
     {
@@ -67,8 +89,7 @@ export default function Leaderboard({analysisId}:
       align: 'center',
       width: 200,
       valueGetter: (params: any) => {
-        const value = params.row.error;
-        return value !== null && value !== undefined ? value : 'N/A';
+        return params !== null && params !== undefined ? params : 'N/A';
       },
     },
     {
@@ -78,8 +99,7 @@ export default function Leaderboard({analysisId}:
       align: 'center',
       width: 200,
       valueGetter: (params: any) => {
-        const value = params.row.execution_time;
-        return value !== null && value !== undefined ? value : 0;
+        return params !== null && params !== undefined ? params : 0;
       },
     },
     {
@@ -91,15 +111,57 @@ export default function Leaderboard({analysisId}:
       width: 360,
     },
   ];
-  const url = `/analysis/${analysisId}/leaderboard`;
-  const [isLoading, rows] = DashboardService.useGetLeaderBoard(url);
+  useEffect(() => {
+    if (typeof analysisId === 'number') {
+      const url = `/analysis/${analysisId}/leaderboard`;
+      console.log('Leaderboard URL:', url);
+      DashboardService.getLeaderBoard(url)
+          .then((leaderboardResponse) => {
+            setLeaderboardIsLoading(false);
+            return DashboardService.formatResponse(leaderboardResponse.data);
+          })
+          .then((formattedResponse) => {
+            console.log('Formatted response:', formattedResponse);
+            setLeaderboardDetails(formattedResponse);
+          })
+          .catch((error) => {
+            setLeaderboardError(error);
+            setLeaderboardDetails([]);
+            setLeaderboardIsLoading(false);
+          });
+    } else if (analysisId === 'development') {
+      setLeaderboardDetails([{
+        id: 0,
+        error_rate: 0,
+        created_by: 'Development',
+        execution_time: 0,
+        status: 'Development',
+        metrics: 'Development',
+        error: 0,
+      }]);
+      setLeaderboardIsLoading(false);
+    } else {
+      setLeaderboardDetails([]);
+      setLeaderboardIsLoading(false);
+      console.error('Invalid analysis ID');
+      console.error('Analysis ID:', analysisId);
+      console.error('Analysis failed to load.');
+    }
+  }, [analysisId]);
+
+  useEffect(() => {
+    console.log('Leaderboard details:', leaderboardDetails);
+  }, [leaderboardDetails]);
+
   return (
-    isLoading || rows === undefined ? <CircularProgress /> :
+    isLeaderboardLoading || (
+      leaderboardDetails === undefined || leaderboardDetails.length === 0
+    ) ? <CircularProgress /> :
       (
         <Box sx={{height: 600}}>
           <DataGrid
             columns={columns}
-            rows={Array.isArray(rows) ? rows : []}
+            rows={Array.isArray(leaderboardDetails) ? leaderboardDetails : []}
             slots={{
               toolbar: GridToolbar,
             }}

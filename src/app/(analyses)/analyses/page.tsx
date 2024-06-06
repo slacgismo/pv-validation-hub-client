@@ -46,7 +46,7 @@ const AnalysesPage: React.FC = () => {
   // Use dispatch to update selectedAnalysis
   const handleAnalysisSelection = (analysisId: string | number) => {
     dispatch(setSelectedAnalysis(analysisId));
-    navigate.push('/analyses/analysis');
+    navigate.push(`/analyses/analysis?analysisId=${analysisId}`);
   };
 
 

@@ -247,7 +247,7 @@ const SignupPage: React.FC = () => {
             'user',
             {
               token: response,
-              sameSite: 'strict',
+              sameSite: 'lax',
             },
             {path: '/', sameSite: 'strict'},
         );

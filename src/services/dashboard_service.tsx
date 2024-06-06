@@ -19,6 +19,7 @@ const DashboardService = {
           error: response[i].mae,
         };
         id += 1;
+        console.log('id:', id);
         finalResponse.push(element);
       }
     }
@@ -58,34 +59,9 @@ const DashboardService = {
     }, [analysisUrl]);
     return [isAnalysesLoading, analysesError, analysesDetails];
   },
-  useGetLeaderBoard(leaderBoardUrl: string) {
+  getLeaderBoard(leaderBoardUrl: string) {
     console.log(leaderBoardUrl);
-    const [leaderboardDetails, setLeaderboardDetails] = useState<{
-      id: number;
-      error_rate: number;
-      created_by: string;
-      execution_time: number;
-      status: string;
-      metrics: string;
-      error: number;
-    }[]>([]);
-    const [isLeaderboardLoading, setLeaderboardIsLoading] = useState(true);
-    const [leaderboardError, setLeaderboardError] = useState(null);
-
-    useEffect(() => {
-      client.get(leaderBoardUrl)
-          .then((leaderboardResponse) => {
-            setLeaderboardIsLoading(false);
-            setLeaderboardDetails(
-                this.formatResponse(leaderboardResponse.data));
-          })
-          .catch((error) => {
-            setLeaderboardError(error);
-            setLeaderboardDetails([]);
-            setLeaderboardIsLoading(false);
-          });
-    }, [leaderBoardUrl]);
-    return [isLeaderboardLoading, leaderboardError, leaderboardDetails];
+    return client.get(leaderBoardUrl);
   },
   useGetSubmissions(submissionUrl: string, token: string) {
     const [isSubmissionLoading, setSubmissionLoading] = useState(true);
