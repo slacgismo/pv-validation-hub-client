@@ -25,7 +25,7 @@ import {logIn} from '@/reducers/user';
 
 // *********** END OF IMPORTS ***********
 
-interface RegisterStates {
+type RegisterStates = {
   first_name: string;
   last_name: string;
   email: string;
@@ -35,7 +35,7 @@ interface RegisterStates {
   acceptTerms: boolean;
 }
 
-interface RegisterErrors {
+type RegisterErrors = {
   first_name: string;
   last_name: string;
   email: string;
@@ -248,6 +248,7 @@ const SignupPage: React.FC = () => {
             {
               token: response,
               sameSite: 'lax',
+              username: registerStates.username,
             },
             {path: '/', sameSite: 'strict'},
         );

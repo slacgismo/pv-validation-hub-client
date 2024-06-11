@@ -24,7 +24,7 @@ import CookieService from '@/services/cookie_service';
 
 // *********** END OF IMPORTS ***********
 
-interface Submissions {
+type Submissions = {
     submission_id: number;
     status: string;
     submitted_at: number;

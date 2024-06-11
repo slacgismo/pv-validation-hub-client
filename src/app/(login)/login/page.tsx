@@ -27,7 +27,7 @@ import {logIn} from '@/reducers/user';
 
 // *********** END OF IMPORTS ***********
 
-interface LoginStates {
+type LoginStates = {
   username: string;
   password: string;
 }
@@ -118,10 +118,11 @@ const LoginPage: React.FC = () => {
             {
               token: response.data.token,
               sameSite: 'lax',
+              username: response.data.username,
             },
             {path: '/', sameSite: 'strict'},
         );
-        dispatch(logIn());
+        dispatch(logIn(username));
         router.push('/');
       }).catch((error) => {
         setShowAlert(true);

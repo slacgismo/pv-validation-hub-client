@@ -1,49 +1,30 @@
-import {useEffect, useState} from 'react';
 import client from '@/services/api_service';
-
-interface UserDetails {
-  username: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  githubLink: string;
-}
+import CookieService from '@/services/cookie_service';
 
 const UserService = {
-  useGetUserDetails(url: string, token: string) {
-    const [userDetails, setUserDetails] = useState<UserDetails>({
-      username: '',
-      email: '',
-      first_name: '',
-      last_name: '',
-      githubLink: '',
-    });
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
+  getUserDetails(url: string, uname: string) {
+    console.log('url: ', url);
+    console.log('uname: ', uname);
+    let user = uname;
+    if (url.includes('/account/public/') !== true) {
+      console.error('Invalid URL');
+      return '400: Invalid URL';
+    }
 
-    // set authorization token
-    client.defaults.headers.common.Authorization = `Token ${token}`;
+    if (uname === null || uname === undefined) {
+      console.error('No username provided: defaulting to current user');
+      user = CookieService.getUserCookie();
+      user = user.username;
+      if (user === null || user === undefined) {
+        console.error('No user found');
+        return '400: Invalid username';
+      } else {
+        return user;
+      }
+    }
 
-    // set request
-    useEffect(() => {
-      client.get(url)
-          .then((response) => {
-            setUserDetails(response.data);
-            setIsLoading(false);
-          })
-          .catch((responseError) => {
-            setError(responseError);
-            setUserDetails({
-              username: '',
-              email: '',
-              first_name: '',
-              last_name: '',
-              githubLink: '',
-            });
-            setIsLoading(false);
-          });
-    }, [url]);
-    return {isLoading, error, userDetails};
+    return client.post(url,
+        {username: user});
   },
   async updateUserProfile(token: string, updatedProfile: any) {
     const url = '/account';

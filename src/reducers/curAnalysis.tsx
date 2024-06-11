@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-interface AnalysisState {
+type AnalysisState = {
   selectedAnalysis: string | number;
 }
 

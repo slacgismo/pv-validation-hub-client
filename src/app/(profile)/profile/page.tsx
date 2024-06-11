@@ -19,7 +19,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogAction from '@mui/material/DialogActions';
 import {useRouter} from 'next/navigation';
-
+import {useSearchParams} from 'next/navigation';
 
 // *********** MODULE IMPORTS ***********
 
@@ -31,6 +31,15 @@ import UserService from '@/services/user_service';
 // *********** REDUX IMPORTS ***********
 
 // *********** END OF IMPORTS ***********
+
+type UserDetails = {
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  githubLink: string;
+  addtlLinks: string[];
+}
 
 const UpdateDialog = styled(Dialog)(({theme}) => ({
   '& .MuiDialogContent-root': {
@@ -84,23 +93,60 @@ const ProfileCardContent = styled(CardContent)(({theme}) => ({
 const ProfilePage: React.FC = () => {
   // todo(jrl): abstract user cookie and token information to a separate service
   const router = useRouter();
-  const [user, setUser] = useState({token: ''});
-  const url = user !== null && user !== undefined ? '/account' : '';
+  const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const retUser = CookieService.getUserCookie();
-    if (retUser === null || retUser === undefined) {
-      router.push('/login');
-    }
-    setUser(retUser);
-  }, [router]);
-  // eslint-disable-next-line no-unused-vars
-  const userInfo = UserService.useGetUserDetails(url, user.token);
+  const userProfile = searchParams.get('uname');
+
+  const [user, setUser] = useState(userProfile);
+  const [userToken, setUserToken] = useState({token: ''});
 
   // prepare for user profile fields update
   const [githubLink, setUserGithubLink] = useState('');
   const [emailLink, setUserEmailLink] = useState('');
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const url = '/account/public/';
+
+  const urlUpdate = (
+    userToken !== null
+  ) && (
+    userToken !== undefined
+  ) ? '/account/update/' : '';
+
+  const [userDetails, setUserDetails] = useState<UserDetails>({
+    username: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+    githubLink: '',
+    addtlLinks: [],
+  });
+
+  useEffect(() => {
+    const retUser = CookieService.getUserCookie();
+    if (retUser === null || retUser === undefined) {
+      router.push('/login');
+    } else {
+      setUserToken(retUser);
+    }
+    if (userProfile === null || userProfile === undefined) {
+      setUser(retUser.username);
+    }
+  }, [router, userProfile]);
+
+  useEffect( () => {
+    UserService.getUserDetails(url, user)
+        .then((response) => {
+          console.log('userInfo: ', response);
+          setUserDetails(response.data);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error('Error: ', error);
+          setIsLoading(false);
+        });
+  }, [userProfile, user, url]);
 
   const handleTextChange = (setState: any) => (
       event: React.ChangeEvent<HTMLInputElement>
@@ -108,26 +154,26 @@ const ProfilePage: React.FC = () => {
     setState(event.target.value);
   };
 
-  const handleProfileUpdateClick = () => {
+  const handleProfileUpdateClick = (userToken) => {
     const updatedProfile = {
-      email: emailLink === '' ? userInfo.userDetails.email : emailLink,
+      email: emailLink === '' ? userDetails.email : emailLink,
       githubLink: githubLink === '' ?
-      userInfo.userDetails.githubLink : githubLink,
+      userDetails.githubLink : githubLink,
     };
       // todo: check return value
       // eslint-disable-next-line no-unused-vars
-    const ret = UserService.updateUserProfile(user.token, updatedProfile);
+    const ret = UserService.updateUserProfile(
+        userToken.token, updatedProfile, urlUpdate
+    );
     setUpdateDialogOpen(true);
   };
 
-  console.log('response: ', userInfo.userDetails);
-
   const renderContent = () => {
     switch (true) {
-      case (user === undefined) || (user === null):
+      case (userToken === undefined) || (userToken === null):
         router.push('/login');
         break;
-      case userInfo.isLoading:
+      case isLoading:
         return <CircularProgress />;
       default:
         return (
@@ -138,14 +184,14 @@ const ProfilePage: React.FC = () => {
                   sx={{marginTop: 1, marginBottom: 2}}>
                   <Avatar
                     sx={{height: 170, width: 174}}
-                    alt={userInfo.userDetails.first_name}
+                    alt={userDetails.firstName}
                     src={'/static/assets/profilecovers/ducky.jpg'}
                   />
                 </CardMedia>
                 <CardContent >
                   <Typography variant="h5">
-                    {`${userInfo.userDetails.first_name} 
-                    ${userInfo.userDetails.last_name}`}
+                    {`${userDetails.firstName} 
+                    ${userDetails.lastName}`}
                   </Typography>
                   <br />
                 </CardContent>
@@ -156,24 +202,24 @@ const ProfilePage: React.FC = () => {
                 <ProfileCardContent>
                   <InfoRow
                     title="Full Name"
-                    defaultValue={`${userInfo.userDetails.first_name} 
-                    ${userInfo.userDetails.last_name}`}
+                    defaultValue={`${userDetails.firstName} 
+                    ${userDetails.lastName}`}
                     disabled
                   />
                   <InfoRow
                     title="Email"
-                    defaultValue={userInfo.userDetails.email}
+                    defaultValue={userDetails.email}
                     disabled={false}
                     onChange={handleTextChange(setUserEmailLink)}
                   />
                   <InfoRow
                     title="Username"
-                    defaultValue={userInfo.userDetails.username}
+                    defaultValue={userDetails.username}
                     disabled
                   />
                   <InfoRow
                     title="Github"
-                    defaultValue={userInfo.userDetails.githubLink}
+                    defaultValue={userDetails.githubLink}
                     disabled={false}
                     onChange={handleTextChange(setUserGithubLink)}
                   />

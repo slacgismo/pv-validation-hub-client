@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-interface SubmissionState {
+type SubmissionState = {
   selectedSubmission: string | number;
 }
 

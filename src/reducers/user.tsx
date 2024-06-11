@@ -1,23 +1,27 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '@/store/store';
 
-interface UserState {
+type UserState = {
   loggedIn: boolean;
+  username: string;
 }
 
 const initialState: UserState = {
   loggedIn: false,
+  username: '',
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    logIn: (state) => {
+    logIn: (state, action) => {
       state.loggedIn = true;
+      state.username = action.payload;
     },
     logOut: (state) => {
       state.loggedIn = false;
+      state.username = '';
     },
   },
 });

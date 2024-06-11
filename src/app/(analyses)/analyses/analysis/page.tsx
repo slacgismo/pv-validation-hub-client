@@ -31,16 +31,16 @@ import {useDispatch} from 'react-redux';
 
 // *********** END OF IMPORTS ***********
 
-interface uploadSuccess {
+type uploadSuccess = {
   success: boolean | null | 'emptyDisplay';
 }
 
-interface fileObj {
+type fileObj = {
   file: File | null;
   name?: string;
 }
 
-interface AnalysisDetailsCard {
+type AnalysisDetailsCard = {
   analysisId: string | number;
   analysis_name: string;
 }

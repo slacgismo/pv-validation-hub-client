@@ -29,26 +29,26 @@ import {logIn} from '@/reducers/user';
 
 // *********** START OF INTERFACES ***********
 
-interface NavMenuPage {
+  type NavMenuPage = {
     route: string;
     text: string;
   }
 
-  interface NavMenuProps {
+  type NavMenuProps = {
     pages: NavMenuPage[];
   }
 
-  interface UserInfoMenuItem {
+  type UserInfoMenuItem = {
     text: string;
     route: string;
     border: boolean;
   }
 
-  interface UserInfoMenuProps {
+  type UserInfoMenuProps = {
     userInfoMenu: UserInfoMenuItem[];
   }
 
-// *********** END OF INTERFACES ***********
+// *********** END OF TYPES ***********
 
 /**
  * The Header component is the header of the app.
@@ -60,12 +60,15 @@ export default function Header() {
   const loggedIn = useAppSelector((state) => (
     state.user.loggedIn)
   );
+  const curUser = useAppSelector((state) => (
+    state.user.username)
+  );
 
   useEffect(() => {
     if (!loggedIn) {
       const userCookie = CookieService.getUserCookie();
       if (userCookie && userCookie.token) {
-        dispatch(logIn());
+        dispatch(logIn(userCookie.username));
       }
     }
   }, [dispatch, loggedIn]);
@@ -75,7 +78,7 @@ export default function Header() {
   const userInfoMenu: UserInfoMenuItem[] = [
     {
       text: 'Settings',
-      route: '/profile',
+      route: `/profile?uname=${curUser}`,
       border: true,
     },
     {

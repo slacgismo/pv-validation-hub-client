@@ -17,7 +17,7 @@ import MS from '@/services/md_service';
 
 // *********** END OF IMPORTS ***********
 
-interface TermsProps {
+type TermsProps = {
   isOpen: boolean;
   closeModal: Function;
 }

@@ -23,7 +23,7 @@ import {useAppSelector} from '@/store/store';
 
 // *********** END OF IMPORTS ***********
 
-interface ErrorData {
+type ErrorData = {
   error_rate?: string;
   error_code?: string;
   error_type?: string;
