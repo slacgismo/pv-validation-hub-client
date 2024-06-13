@@ -15,7 +15,7 @@ const MarimoProcessor = ({htmlFile}: {htmlFile: string}) => {
   return (
     <div className="iframeContainer">
       <iframe
-        src='/static/template.html'
+        src={htmlFile}
         width="100%"
         height="100%"
       />
