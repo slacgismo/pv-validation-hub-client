@@ -10,10 +10,9 @@ const SubmissionService = {
   },
   getSubmissionResults(submissionId: number | string) {
     if (typeof(submissionId) === 'string') {
-      return 'Invalid submission ID';
+      throw new Error('Invalid submission ID');
     }
-    return client.get(`/submissions/submission_results/${submissionId}`)
-        .then((response) => response.data);
+    return client.get(`/submissions/submission_results/${submissionId}`);
   },
   getSubmissionErrors(submissionId: number | string) {
     if (typeof(submissionId) === 'string') {

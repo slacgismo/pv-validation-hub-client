@@ -76,10 +76,12 @@ export default function SubmissionList({onClick}: {onClick: any}) {
       {submissions.sort(
           (a, b) => Number(new Date(b.submitted_at)) -
             Number(new Date(a.submitted_at)),
-      ).map((submission) => {
-        const labelId = `checkbox-list-label-${submission.submission_id}`;
+      ).map((sub) => {
+        const sid = sub.submission_id;
+        const labelId = `checkbox-list-label-${sid}`;
+        const pub = false;
         return (
-          <ListItem key={submission.submission_id} disablePadding>
+          <ListItem key={sid} disablePadding>
             <ListItemButton dense>
               <ListItemIcon>
                 <Checkbox
@@ -90,14 +92,16 @@ export default function SubmissionList({onClick}: {onClick: any}) {
                 />
               </ListItemIcon>
               <ListItemIcon>
-                {getIcon(submission.status)}
+                {getIcon(sub.status)}
               </ListItemIcon>
               <ListItemText
                 id={labelId}
-                primary={`Submission ${submission.submission_id}`} />
-              <ListItemIcon onClick={() => onClick(submission.submission_id)}>
+                primary={`Submission ${sid}`} />
+              <ListItemIcon onClick={() => onClick(sid)}>
                 <Link
-                  href="/mysubmissions/private_report"
+                  href={
+                    `/mysubmissions/private_report?sid=${sid}&pub=${pub}`
+                  }
                   className="standardLink">
                 View Report
                 </Link>
