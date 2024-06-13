@@ -1,7 +1,7 @@
 'use client';
 // *********** START OF IMPORTS ***********
 
-import React, {useState, useEffect, Suspense} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Box, Grid, Button, Tab, Tabs, Typography, CircularProgress,
 } from '@mui/material';
@@ -122,7 +122,10 @@ const AnalysisPage: React.FC = () => {
     console.log('analysis', selectedAnalysis, typeof selectedAnalysis);
     if (selectedAnalysis !== undefined && selectedAnalysis !== null &&
             ((typeof(selectedAnalysis) === 'number' && selectedAnalysis > 0) ||
-            selectedAnalysis === 'development')) {
+            (
+              typeof(selectedAnalysis) === 'string' &&
+              selectedAnalysis === 'development'
+            ))) {
       setCoverImageDir(`/static/assets/${selectedAnalysis}/banner.png`);
       console.log('cid', coverImageDir);
 
@@ -304,9 +307,7 @@ const AnalysisPage: React.FC = () => {
                   </TabPanel>
 
                   <TabPanel value={value} index={2}>
-                    <Suspense fallback={<div>Loading...</div>}>
-                      <Leaderboard />
-                    </Suspense>
+                    <Leaderboard />
                   </TabPanel>
 
                   <TabPanel value={value} index={3}>

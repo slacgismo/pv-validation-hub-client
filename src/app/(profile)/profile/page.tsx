@@ -91,11 +91,10 @@ const ProfileCardContent = styled(CardContent)(({theme}) => ({
 }));
 
 const ProfilePage: React.FC = () => {
-  // todo(jrl): abstract user cookie and token information to a separate service
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const userProfile = searchParams.get('uname');
+  const userProfile: string = searchParams.get('uname') || '';
 
   const [user, setUser] = useState(userProfile);
   const [userToken, setUserToken] = useState({token: ''});
@@ -154,7 +153,7 @@ const ProfilePage: React.FC = () => {
     setState(event.target.value);
   };
 
-  const handleProfileUpdateClick = (userToken) => {
+  const handleProfileUpdateClick = (userToken: any) => {
     const updatedProfile = {
       email: emailLink === '' ? userDetails.email : emailLink,
       githubLink: githubLink === '' ?

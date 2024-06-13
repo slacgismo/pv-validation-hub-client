@@ -5,28 +5,30 @@ const UserService = {
   getUserDetails(url: string, uname: string) {
     console.log('url: ', url);
     console.log('uname: ', uname);
-    let user = uname;
+    let user = {
+      username: uname,
+    };
     if (url.includes('/account/public/') !== true) {
       console.error('Invalid URL');
-      return '400: Invalid URL';
+      throw new Error('Client: Invalid URL');
     }
 
     if (uname === null || uname === undefined) {
       console.error('No username provided: defaulting to current user');
       user = CookieService.getUserCookie();
-      user = user.username;
-      if (user === null || user === undefined) {
+      if (user.username === null || user.username === undefined) {
         console.error('No user found');
-        return '400: Invalid username';
-      } else {
-        return user;
+        throw new Error('Client: Invalid username');
       }
     }
 
     return client.post(url,
-        {username: user});
+        {username: user.username});
   },
-  async updateUserProfile(token: string, updatedProfile: any) {
+  async updateUserProfile(
+      token: string,
+      updatedProfile: any,
+      urlUpdate: string) {
     const url = '/account';
     // set authorization token
     client.defaults.headers.common.Authorization = `Token ${token}`;

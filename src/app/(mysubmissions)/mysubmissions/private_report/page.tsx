@@ -135,6 +135,8 @@ const PrivateReportPage: React.FC = () => {
                         src={url}
                         alt={`img${index}`}
                         loading="lazy"
+                        width={400}
+                        height={400}
                       />
                       <Typography variant="subtitle1">
                     Plot
@@ -146,6 +148,11 @@ const PrivateReportPage: React.FC = () => {
               </ImageList>
             </ListItem>
           </List>
+          <React.Fragment>
+            <p>
+              html here
+            </p>
+          </React.Fragment>
         </div>
       </main>
       <Footer />

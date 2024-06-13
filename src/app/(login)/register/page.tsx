@@ -252,7 +252,7 @@ const SignupPage: React.FC = () => {
             },
             {path: '/', sameSite: 'strict'},
         );
-        dispatch(logIn());
+        dispatch(logIn(registerStates.username));
         router.push('/');
       }
     }

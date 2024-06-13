@@ -2,8 +2,9 @@
 
 import type {Metadata} from 'next';
 import './globals.css';
-import React from 'react';
+import React, {Suspense} from 'react';
 import {ReduxProvider} from './modules/provider';
+import CircularProgress from '@mui/material/CircularProgress';
 
 // *********** MODULE IMPORTS ***********
 
@@ -30,7 +31,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          <Suspense fallback={<CircularProgress />}>
+            {children}
+          </Suspense>
+        </ReduxProvider>
       </body>
     </html>
   );
