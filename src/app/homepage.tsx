@@ -7,6 +7,7 @@ import {Typography} from '@mui/material';
 
 import Header from '@/app/modules/header/header';
 import Footer from '@/app/modules/footer/footer';
+import DemoBoard from '@/app/modules/homepage/demoTable';
 
 // *********** REDUX IMPORTS ***********
 
@@ -21,20 +22,37 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex min-h-screen flex-col
+      <main className="flex min-h-screen min-w-screen flex-col
     items-center justify-between p-24">
         <div className="flex flex-col items-center">
-          <Typography variant="h1" className="text-5xl font-bold">
-          Welcome to the PV Validation Hub!
-          </Typography>
-          <Typography variant="h3" className="text-2xl mt-4">
-          A place for PV validation resources.
-          </Typography>
         </div>
-        <div>
-          <p className="text-lg mt-4">
-            Other blurbs about the PV Validation Hub.
-          </p>
+        <div className='grid grid-cols-2 gap-4 justify-center content-center'>
+          <div className="m-2
+          flex
+          flex-column
+          shadow tableBorder
+          bg-white
+          completeFit
+          justify-center">
+            <DemoBoard />
+          </div>
+          <div className="flex flex-col items-center">
+            <div className="flex flex-row">
+              <Typography variant="h1" className="
+              text-5xl
+              font-bold
+              sTextColor">
+           PV-
+              </Typography>
+              <Typography variant="h1" className="text-5xl font-bold">
+           Validation Hub!
+              </Typography>
+            </div>
+            <p className="text-lg mt-4 pl-36 items-center">
+            Helping developers to validate their pv science algorithms,
+            and helping analysts select algorithms for use in their pipelines
+            </p>
+          </div>
         </div>
         <div>
           <p className="text-lg mt-4">

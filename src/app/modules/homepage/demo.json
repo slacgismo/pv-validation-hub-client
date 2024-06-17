@@ -1,0 +1,47 @@
+[
+    {
+        "id": 1,
+        "file_completion": 100,
+        "created_by": "John Doe",
+        "execution_time": 42.021,
+        "status": "completed",
+        "metrics": ["time_series"],
+        "error": 26.207
+      },
+      {
+        "id": 2,
+        "file_completion": 87,
+        "created_by": "YourFavPVCompany",
+        "execution_time": 30.123,
+        "status": "completed",
+        "metrics": ["time_series", "latitude", "longitude"],
+        "error": 28.207
+      },
+      {
+        "id": 3,
+        "file_completion": 97,
+        "created_by": "Jane Doe",
+        "execution_time": 49.543,
+        "status": "completed",
+        "metrics": ["latitude", "longitude"],
+        "error": 22.207
+      },
+      {
+        "id": 4,
+        "file_completion": 100,
+        "created_by": "Bob",
+        "execution_time": 12.345,
+        "status": "completed",
+        "metrics": ["data_sampling_frequency"],
+        "error": 20.207
+      },
+      {
+        "id": 5,
+        "file_completion": 50,
+        "created_by": "MrAccurate",
+        "execution_time": 88.8,
+        "status": "completed",
+        "metrics": ["time_series", "latitude", "longitude", "data_sampling_frequency"],
+        "error": 30.31415968
+      }
+]

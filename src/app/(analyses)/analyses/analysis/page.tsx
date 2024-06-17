@@ -57,8 +57,12 @@ const AnalysisPage: React.FC = () => {
     navigate.push('/analyses');
   }
 
-  const selectedAnalysis: string | number = parseInt(
-      searchParams.get('analysisId') || '', 10);
+  let selectedAnalysis: string | number = searchParams.get('analysisId');
+
+  if (selectedAnalysis !== 'development') {
+    selectedAnalysis = parseInt(
+        selectedAnalysis || '', 10);
+  }
 
   const [value, setValue] = useState(0);
   const [uploadSuccess, setUploadSuccess] = useState<uploadSuccess>({
@@ -88,25 +92,25 @@ const AnalysisPage: React.FC = () => {
   });
 
   useEffect(() => {
-    AnalysisService.getCardDetails(selectedAnalysis)
-        .then((response: any) => {
-          setIsLoading(false);
-          console.log('resp:', response.data);
-          setAnalysisDetailsCard(response.data);
-          setAnalysisId(response.data.analysis_id);
-        })
-        .catch((e: any) => {
-          if (window.location.hostname.includes('localhost') && (
-            analysisId === 'development'
-          )) {
-            setAnalysisDetailsCard({
-              analysisId: 'development',
-              analysis_name: 'Dev Analysis',
-            });
-            setAnalysisId('development');
+    if (window.location.hostname.includes('localhost') || (
+      analysisId === 'development'
+    )) {
+      setAnalysisDetailsCard({
+        analysisId: 'development',
+        analysis_name: 'Dev Analysis',
+      });
+      setAnalysisId('development');
+      setIsLoading(false);
+      console.log('Loading development analysis');
+    } else {
+      AnalysisService.getCardDetails(selectedAnalysis)
+          .then((response: any) => {
             setIsLoading(false);
-            console.log('Loading development analysis');
-          } else {
+            console.log('resp:', response.data);
+            setAnalysisDetailsCard(response.data);
+            setAnalysisId(response.data.analysis_id);
+          })
+          .catch((e: any) => {
             setError(e);
             console.error('Error:', error);
             setIsLoading(false);
@@ -114,8 +118,8 @@ const AnalysisPage: React.FC = () => {
               analysisId: 'development',
               analysis_name: 'Dev Analysis',
             });
-          }
-        });
+          });
+    }
   }, [selectedAnalysis, dispatch, analysisId, error]);
 
   useEffect(() => {

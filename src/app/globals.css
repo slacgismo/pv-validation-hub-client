@@ -184,3 +184,20 @@ body {
   border: 5px solid #f8f9fa;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
 }
+
+.tableBorder {
+  border: 1px solid #F95738;
+}
+
+.sTextColor {
+  color: #F95738;
+}
+
+.leftDivideHalf {
+  margin-left: 50dvw;
+}
+
+.completeFit {
+  width: 100%;
+  height: 100%;
+}
