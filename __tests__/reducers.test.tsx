@@ -3,6 +3,7 @@
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/jest-globals';
 import {describe, it, expect, beforeEach} from '@jest/globals';
+import 'jest-location-mock';
 
 // *********** MODULE IMPORTS ***********
 

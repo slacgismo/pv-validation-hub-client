@@ -1,17 +1,24 @@
 // *********** START OF IMPORTS ***********
 
 import React from 'react';
-import {Typography} from '@mui/material';
+import Link from 'next/link';
+import {EmblaOptionsType} from 'embla-carousel';
 
 // *********** MODULE IMPORTS ***********
 
 import Header from '@/app/modules/header/header';
 import Footer from '@/app/modules/footer/footer';
 import DemoBoard from '@/app/modules/homepage/demoTable';
+import EmblaCarousel from '@/app/modules/carousels/carouselBuilder';
 
-// *********** REDUX IMPORTS ***********
+// *********** CSS IMPORTS ***********
+
+import '@/app/modules/modulecss/carousel.module.css';
 
 // *********** END OF IMPORTS ***********
+
+const OPTIONS: EmblaOptionsType = {align: 'start'};
+const SLIDES = [0, 1, 2, 3, 4, 5];
 
 /**
  * The Home component is the main page of the app.
@@ -33,31 +40,66 @@ export default function Home() {
           shadow tableBorder
           bg-white
           completeFit
+          shadowed
           justify-center">
             <DemoBoard />
           </div>
           <div className="flex flex-col items-center">
-            <div className="flex flex-row">
-              <Typography variant="h1" className="
-              text-5xl
-              font-bold
+            <div className="text-5xl font-bold">
+              <span className="
               sTextColor">
            PV-
-              </Typography>
-              <Typography variant="h1" className="text-5xl font-bold">
+              </span>
            Validation Hub!
-              </Typography>
             </div>
             <p className="text-lg mt-4 pl-36 items-center">
             Helping developers to validate their pv science algorithms,
             and helping analysts select algorithms for use in their pipelines
             </p>
+            <div className="flex flex-row mt-4">
+              <Link href="/analyses" className="
+              smShadowed
+              tableBorder
+              bg-white">
+              View Tasks
+              </Link>
+              <Link href="/login" className="
+              smShadowed
+              tableBorder
+              bg-white
+              ml-3">
+              Upload Algorithm
+              </Link>
+            </div>
           </div>
         </div>
         <div>
-          <p className="text-lg mt-4">
-            carousel here
-          </p>
+          <div className="
+          text-4xl
+          font-bold
+          mt-10
+          justify-center
+          text-center
+          content-center
+          ">
+            We help you validate your {' '}
+            <span className="
+              sTextColor">
+           PV
+            </span>
+            {' '}data science algorithms
+            <div className="
+            max-w-prose
+            text-lg
+            font-normal
+            text-center
+            ">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+            </div>
+          </div>
+          <EmblaCarousel slides={SLIDES} options={OPTIONS} />
         </div>
 
       </main>

@@ -20,6 +20,7 @@ export const metadata: Metadata = {
 /**
  * The RootLayout component is the root layout of the app.
  * It wraps the app in the HTML and body tags.
+ * Susepense is required here due to whole pages dependant on useSearchParams.
  * @param {Readonly<{children: React.ReactNode}>} props The props of the RootLayout component.
  * @return {JSX.Element} The RootLayout component.
  */
@@ -30,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className='theme-light'>
         <ReduxProvider>
           <Suspense fallback={<CircularProgress />}>
             {children}

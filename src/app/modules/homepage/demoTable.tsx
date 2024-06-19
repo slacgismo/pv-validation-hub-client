@@ -47,6 +47,8 @@ export default function DemoBoard() {
     {
       field: 'file_completion',
       headerName: 'File Completion',
+      headerAlign: 'center',
+      align: 'center',
       flex: 1,
       filterable: false,
       sortable: false,
@@ -79,6 +81,8 @@ export default function DemoBoard() {
     {
       field: 'metrics',
       headerName: 'Metrics',
+      headerAlign: 'center',
+      align: 'center',
       filterable: false,
       sortable: false,
       groupable: false,

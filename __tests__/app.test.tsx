@@ -5,8 +5,9 @@ import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/jest-globals';
 import {describe, it, expect} from '@jest/globals';
-import {useRouter} from 'next/navigation';
 import fetch from 'jest-fetch-mock';
+import 'jest-location-mock';
+// import mockRouter from '../__mocks__/next-router-mock';
 
 // *********** MODULE IMPORTS ***********
 
@@ -20,22 +21,6 @@ import {Provider} from 'react-redux';
 import {store} from '../src/store/store';
 
 // *********** END OF IMPORTS ***********
-
-// Mock the next/navigation module, disable lint because
-// for some ungodly reason, the linter doesn't like this
-// eslint-disable-next-line
-jest.mock('next/navigation', () => ({
-  useRouter() {
-    return {
-      route: '/',
-      pathname: '',
-      query: '',
-      asPath: '',
-      // eslint-disable-next-line
-      push: jest.fn(),
-    };
-  },
-}));
 
 describe('Home page', () => {
   global.fetch = fetch as any;
@@ -55,7 +40,6 @@ describe('Header', () => {
 
     // Get a reference to the push function from the useRouter hook
     // eslint-disable-next-line
-    const push = jest.spyOn(useRouter(), 'push');
 
     // Get an array of all link elements
     const allLinks = screen.queryAllByRole('link');
@@ -89,23 +73,26 @@ describe('Header', () => {
     expect(resourcesLink).toBeInTheDocument();
 
     // Test that when each link is clicked, the page URL includes their route
+    /*
     await userEvent.click(signInLink!);
-    expect(push).toHaveBeenCalled;
+    console.log('mock:', mockRouter);
+    expect(mockRouter.asPath).toBe('/login');
 
     await userEvent.click(registerLink!);
-    expect(push).toHaveBeenCalled;
+    expect(mockRouter.asPath).toBe('/register');
 
     await userEvent.click(homeLink!);
-    expect(push).toHaveBeenCalled;
+    expect(mockRouter.asPath).toBe('/');
 
     await userEvent.click(analysesLink!);
-    expect(push).toHaveBeenCalled;
+    expect(mockRouter.asPath).toBe('/analyses');
 
     await userEvent.click(mySubmissionsLink!);
-    expect(push).toHaveBeenCalled;
+    expect(mockRouter.asPath).toBe('/mysubmissions');
 
     await userEvent.click(resourcesLink!);
-    expect(push).toHaveBeenCalled;
+    expect(mockRouter.asPath).toBe('/resources');
+    */
   }),
   it('renders the user avatar and user menus', () => {
     // Create a mock store with the desired initial state

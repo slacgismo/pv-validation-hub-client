@@ -7,6 +7,7 @@ import '@testing-library/jest-dom/jest-globals';
 import {describe, it, expect} from '@jest/globals';
 import {useRouter} from 'next/navigation';
 import fetch from 'jest-fetch-mock';
+import 'jest-location-mock';
 
 // *********** MODULE IMPORTS ***********
 
