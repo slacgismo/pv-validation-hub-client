@@ -50,16 +50,23 @@ export default function CustomizedCard({
         key={card.analysis_id}
         onClick={() => onClick(card.analysis_id, card.analysis_name)}
         data-testid={testId}
+        className='shadowed tableBorder'
       >
-        <CardHeader
-          sx={{height: 61}}
-          title={card.analysis_name}
-        />
         <CardMedia
           component="img"
           height="194"
           src={cardDir}
           alt={card.analysis_name}
+          className='
+          tableBorder
+          analysisCard
+          m-5
+          smShadowed
+          '
+        />
+        <CardHeader
+          sx={{height: 61}}
+          title={card.analysis_name}
         />
         <CardContent>
           { /* eslint-disable-next-line */ }

@@ -24,11 +24,12 @@ const LogoutPage: React.FC = (props) => {
     items-center justify-between p-24">
         <div>You have selected a link that is navigating
         you away from pv-validation-hub.org</div>
-        <div>The link is for: {extURL}</div>
-        <Link href={extURL} />
+        <div>The link is for:{' '}
+          <Link href={extURL} className='standardLink'>{extURL}</Link>
+        </div>
 
         <div>You can return to the main page by clicking the link below:</div>
-        <Link href={'/'}>Return to main page</Link>
+        <Link href={'/'} className='standardLink'>Return to main page</Link>
       </main>
       <Footer />
     </div>

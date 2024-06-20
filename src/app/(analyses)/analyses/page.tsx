@@ -72,7 +72,10 @@ const AnalysesPage: React.FC = () => {
           <Grid container spacing={2}>
             <Grid item>
               <Box sx={{flexGrow: 1, marginTop: 3}}>
-                <Typography variant="body1" gutterBottom>
+                <Typography
+                  variant="body1"
+                  gutterBottom
+                  className='reactMarkdown'>
                   {analysesBlurb}
                 </Typography>
               </Box>

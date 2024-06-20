@@ -30,7 +30,7 @@ All analyses require the same core files:
 
 banner.png ==> The main image banner seen on the analysis page.
 cardCover.png ==> The image viewed on the analysis card on the Analytical Tasks page.
-shortdesc.md ==> very short blurb for the card on the Analytical Tasks page.
+shortdesc.md ==> very short blurb for the card on the Analytical Tasks page, maximum of 100 characters.
 
 dataset.md ==> dataset description for the dataset tab on the analysis page. 
 description.md ==> overview for the analysis tab on the analysis page. 
@@ -49,7 +49,9 @@ When you are satisfied with your changes, copy all your files and paste them int
 
 Then, make a pull-request back to the main repository. When it is reviewed, approved and merged in, it will automatically deploy the updates to pv-validation-hub.org!
 
-For updating an existing analysis, copy all of the files from the directory you wish to update into the development update. Follow the same steps as before to make any changes as needed and confirm it looks as desired, and then copy the files back. 
+For updating an existing analysis, copy all of the files from the directory you wish to update into the development update. Follow the same steps as before to make any changes as needed and confirm it looks as desired, and then copy the files back.
+
+There is also the `blurbs` directory, which contains the main md file for the blurb on the `/analyses` page. Customizing this file will adjust the blurb displayed on the main task selection page.
 
 ## Issues
 
