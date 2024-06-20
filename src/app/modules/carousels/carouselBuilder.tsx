@@ -11,13 +11,23 @@ import {
   NextButton,
   usePrevNextButtons,
 } from '@/app/modules/carousels/carouselArrows';
+import CarouselCard from '@/app/modules/carousels/cardBuilder';
 
 // *********** REDUX IMPORTS ***********
 
 // *********** END OF IMPORTS ***********
 
+type Slide = {
+  id: number,
+  title: string,
+  image: string,
+  description: string,
+  link: string,
+  linkText: string,
+}
+
 type PropType = {
-  slides: number[]
+  slides: Slide[]
   options?: EmblaOptionsType
 }
 
@@ -39,11 +49,28 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     <section className="embla">
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
-          {slides.map((index) => (
-            <div className="embla__slide" key={index}>
-              <div className="embla__slide__number">{index + 1}</div>
-            </div>
-          ))}
+          {slides.map((slide, index) => {
+            const {id,
+              title,
+              image,
+              description,
+              link,
+              linkText,
+            } = slide;
+            return (
+              <div className="embla__slide embla__slide__number" key={index}>
+                <CarouselCard
+                  id={id}
+                  title={title}
+                  image={image}
+                  description={description}
+                  link={link}
+                  linkText={linkText}
+                />
+              </div>
+            );
+          }
+          )}
         </div>
       </div>
 

@@ -141,10 +141,10 @@ START OF EMBLA CAROUSEL STYLES
 }
 
 .embla__slide__number {
-  box-shadow: inset 0 0 0 0.2rem var(--brand-primary);
+  box-shadow: inset 0.2rem 0.2rem 0.2rem 0.2rem var(--brand-primary);
+  background-color: white;
   border-radius: 1.8rem;
-  font-size: 4rem;
-  font-weight: 600;
+  margin-left: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -428,6 +428,10 @@ body {
 
 .smShadowed {
   box-shadow: 5px 3px 3px black;
+}
+
+.carouselImage {
+  height: 8rem
 }
 
 

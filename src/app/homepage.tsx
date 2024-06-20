@@ -10,6 +10,7 @@ import Header from '@/app/modules/header/header';
 import Footer from '@/app/modules/footer/footer';
 import DemoBoard from '@/app/modules/homepage/demoTable';
 import EmblaCarousel from '@/app/modules/carousels/carouselBuilder';
+import Cards from '@/app/modules/carousels/carousel.json';
 
 // *********** CSS IMPORTS ***********
 
@@ -18,7 +19,7 @@ import '@/app/modules/modulecss/carousel.module.css';
 // *********** END OF IMPORTS ***********
 
 const OPTIONS: EmblaOptionsType = {align: 'start'};
-const SLIDES = [0, 1, 2, 3, 4, 5];
+const SLIDES = Cards;
 
 /**
  * The Home component is the main page of the app.
