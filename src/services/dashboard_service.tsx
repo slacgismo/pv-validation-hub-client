@@ -11,7 +11,7 @@ const DashboardService = {
       for (let i = 0; i < response.length; i += 1) {
         const element = {
           id,
-          error_rate: response[i].error_rate,
+          file_completion: response[i].error_rate,
           created_by: response[i].created_by.username,
           execution_time: response[i].mrt,
           status: response[i].status,
@@ -20,6 +20,7 @@ const DashboardService = {
         };
         id += 1;
         console.log('id:', id);
+        console.log('ele', element);
         finalResponse.push(element);
       }
     }

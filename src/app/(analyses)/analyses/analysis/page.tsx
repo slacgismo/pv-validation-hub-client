@@ -6,7 +6,6 @@ import {
   Box, Grid, Button, Tab, Tabs, Typography, CircularProgress,
 } from '@mui/material';
 import {Container} from '@mui/system';
-import ReactModal from 'react-modal';
 import Cookies from 'universal-cookie';
 import {FileUploader} from 'react-drag-drop-files';
 import {useRouter} from 'next/navigation';
@@ -57,11 +56,19 @@ const AnalysisPage: React.FC = () => {
     navigate.push('/analyses');
   }
 
-  let selectedAnalysis: string | number = searchParams.get('analysisId');
+  let selectedAnalysis: string | number | null = searchParams.get('analysisId');
 
-  if (selectedAnalysis !== 'development') {
+  if ((
+    selectedAnalysis !== 'development'
+  ) && (
+    selectedAnalysis !== null
+  ) && (
+    !isNaN(parseInt(selectedAnalysis))
+  )) {
     selectedAnalysis = parseInt(
-        selectedAnalysis || '', 10);
+        selectedAnalysis.toString() || '', 10);
+  } else {
+    navigate.push('/analyses');
   }
 
   const [value, setValue] = useState(0);
@@ -77,7 +84,6 @@ const AnalysisPage: React.FC = () => {
       analysis_name: '',
     });
 
-  const [isOpen, setIsOpen] = useState(false);
 
   // Set the md descriptions
 
@@ -92,7 +98,7 @@ const AnalysisPage: React.FC = () => {
   });
 
   useEffect(() => {
-    if (window.location.hostname.includes('localhost') || (
+    if (window.location.hostname.includes('localhost') && (
       analysisId === 'development'
     )) {
       setAnalysisDetailsCard({
@@ -102,6 +108,8 @@ const AnalysisPage: React.FC = () => {
       setAnalysisId('development');
       setIsLoading(false);
       console.log('Loading development analysis');
+    } else if (selectedAnalysis === null) {
+      navigate.push('/analyses');
     } else {
       AnalysisService.getCardDetails(selectedAnalysis)
           .then((response: any) => {
@@ -120,7 +128,7 @@ const AnalysisPage: React.FC = () => {
             });
           });
     }
-  }, [selectedAnalysis, dispatch, analysisId, error]);
+  }, [selectedAnalysis, dispatch, navigate, analysisId, error]);
 
   useEffect(() => {
     console.log('analysis', selectedAnalysis, typeof selectedAnalysis);
@@ -153,16 +161,6 @@ const AnalysisPage: React.FC = () => {
     }
   }, [selectedAnalysis, coverImageDir]);
 
-  const closeModal = () => {
-    setIsOpen(false);
-    setUploadSuccess({
-      'success': 'emptyDisplay',
-    });
-  };
-
-  const openModal = () => {
-    setIsOpen(true);
-  };
 
   // lmao, you can't use "tar.gz", only "gz", anything after the last "." works
   const fileTypes = ['ZIP', 'GZ'];
@@ -260,48 +258,27 @@ const AnalysisPage: React.FC = () => {
                           onChange={handleChange}
                           aria-label="basic tabs example"
                         >
-                          <Tab label="Overview" />
-                          <Tab label="Data" />
                           <Tab label="Leaderboard" />
-                          <Tab label="Instructions" />
-                          {
-                            // <Tab label="Discussion" />
-                          }
+                          <Tab label="Description" />
+                          <Tab label="Submission Instructions" />
+                          <Tab label="Data" />
+                          <Tab label="Submit Algorithm" />
                         </Tabs>
                       </Grid>
 
                       <Grid item xs={6} md={2}>
-                        <Button
-                          variant="contained"
-                          onClick={() => {
-                            if (user === undefined || user === null) {
-                              navigate.push('/login');
-                            }
-                            openModal();
-                          }}
-                          sx={{
-                            backgroundColor: 'black',
-                            width: '100%',
-                            height: '70%',
-                            marginTop: 1,
-                          }}
-                        >
-                          <Typography >
-                            Upload Algorithm
-                          </Typography>
-                        </Button>
                       </Grid>
                     </Grid>
                   </Box>
 
-                  <TabPanel value={value} index={0}>
+                  <TabPanel value={value} index={1}>
                     <Overview
                       title={`Overview of ${analysisDetailsCard.analysis_name}`}
                       description={longDescription}
                     />
                   </TabPanel>
 
-                  <TabPanel value={value} index={1}>
+                  <TabPanel value={value} index={3}>
                                     (
                     <Data
                       dataDescription={datasetDescription}
@@ -310,90 +287,73 @@ const AnalysisPage: React.FC = () => {
                                     )
                   </TabPanel>
 
-                  <TabPanel value={value} index={2}>
+                  <TabPanel value={value} index={0}>
                     <Leaderboard />
                   </TabPanel>
 
-                  <TabPanel value={value} index={3}>
+                  <TabPanel value={value} index={2}>
                     <Rules
                       title={analysisDetailsCard.analysis_name}
                       description={rulesetDescription}
                     />
                   </TabPanel>
-                </Box>
-
-                <ReactModal
-                  isOpen={isOpen}
-                  contentLabel="Upload Algorithm"
-                  ariaHideApp={false}
-                  parentSelector={() => (
-                    document.querySelector('#mainElement') as HTMLElement
-                  )}
-                >
-                  <Box sx={{
-                    top: '50%',
-                    position: 'absolute',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                  }}
-                  >
-                    <Grid container spacing={2}>
-                      <Grid item xs={11}>
-                        <Typography sx={{marginLeft: 10}} variant="h5">
+                  <TabPanel value={value} index={4}>
+                    <div>
+                      <Grid container spacing={2}>
+                        <Grid item xs={11}>
+                          <Typography sx={{marginLeft: 10}} variant="h5">
                           PVHub Algorithm Upload
-                        </Typography>
+                          </Typography>
+                        </Grid>
                       </Grid>
-                      <Grid item xs={1}>
-                        <Button onClick={closeModal}>Exit</Button>
-                      </Grid>
-                    </Grid>
-                    <Box sx={{marginTop: 2, marginBottom: 2}}>
-                      <FileUploader
-                        multiple={false}
-                        handleChange={uploadFile}
-                        name="file"
-                        types={fileTypes}
-                      />
-                    </Box>
-                    <Typography
-                      sx={{marginLeft: 20}}
-                      color="gray"
-                      variant="body1">
-                      {file ? `File name: ${file.name}` :
+                      <Box sx={{marginTop: 2, marginBottom: 2}}>
+                        <FileUploader
+                          multiple={false}
+                          handleChange={uploadFile}
+                          name="file"
+                          types={fileTypes}
+                        />
+                      </Box>
+                      <Typography
+                        sx={{marginLeft: 20}}
+                        color="gray"
+                        variant="body1">
+                        {file ? `File name: ${file.name}` :
                       'No files staged for upload yet.'}
-                    </Typography>
-                    {uploadSuccess.success === true && (
-                      <Typography color="green" variant="body1">
+                      </Typography>
+                      {uploadSuccess.success === true && (
+                        <Typography color="green" variant="body1">
                       Upload Successful! Please check your developer
                       page for the status of your upload,
                       or upload another file.
-                      </Typography>
-                    )}
-                    {uploadSuccess.success === false && (
-                      <Typography color="red" variant="body1">
+                        </Typography>
+                      )}
+                      {uploadSuccess.success === false && (
+                        <Typography color="red" variant="body1">
                       Upload failed. Please reload the page and try again.
                       If you continue to receive issues with the upload,
                       please file an issue at our github page,
-                        {' '}
-                        {/* eslint-disable-next-line max-len */}
-                        <a href="https://github.com/slacgismo/pv-validation-hub">https://github.com/slacgismo/pv-validation-hub</a>
+                          {' '}
+                          {/* eslint-disable-next-line max-len */}
+                          <a href="https://github.com/slacgismo/pv-validation-hub">https://github.com/slacgismo/pv-validation-hub</a>
                       .
-                      </Typography>
-                    )}
-                    <Button
-                      disabled={!handleActive()}
-                      variant="contained"
-                      onClick={handleUpload}>
+                        </Typography>
+                      )}
+                      <Button
+                        disabled={!handleActive()}
+                        variant="contained"
+                        onClick={handleUpload}>
                       Upload
-                    </Button>
-                    <Button
-                      disabled={!handleActive()}
-                      variant="contained"
-                      onClick={handleClear}>
+                      </Button>
+                      <Button
+                        disabled={!handleActive()}
+                        variant="contained"
+                        onClick={handleClear}>
                       Clear
-                    </Button>
-                  </Box>
-                </ReactModal>
+                      </Button>
+                    </div>
+                  </TabPanel>
+                </Box>
               </Container>
             )
         }

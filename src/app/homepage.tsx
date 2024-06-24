@@ -61,14 +61,18 @@ export default function Home() {
               <Link href="/analyses" className="
               smShadowed
               tableBorder
-              bg-white">
+              bg-white
+              p-1
+              ">
               View Tasks
               </Link>
               <Link href="/login" className="
               smShadowed
               tableBorder
               bg-white
-              ml-3">
+              ml-3
+              p-1
+              ">
               Upload Algorithm
               </Link>
             </div>
@@ -82,6 +86,7 @@ export default function Home() {
           justify-center
           text-center
           content-center
+          mb-5
           ">
             We help you validate your {' '}
             <span className="
@@ -89,16 +94,6 @@ export default function Home() {
            PV
             </span>
             {' '}data science algorithms
-            <div className="
-            max-w-prose
-            text-lg
-            font-normal
-            text-center
-            ">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
-            </div>
           </div>
           <EmblaCarousel slides={SLIDES} options={OPTIONS} />
         </div>

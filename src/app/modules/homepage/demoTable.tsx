@@ -11,6 +11,7 @@ import {Typography} from '@mui/material';
 
 import demo from '@/app/modules/homepage/demo.json';
 import CustomGraphics from '@/app/modules/svg/customGraphics';
+import ColorPalette from '@/app/modules/svg/colorPalette.json';
 
 // *********** REDUX IMPORTS ***********
 
@@ -93,11 +94,12 @@ export default function DemoBoard() {
         // You can adjust the rendering logic based on your actual data structure
         return (
           <Box>
-            {params.value.map((name, index) => {
+            {params.value.map((name: string, index: number) => {
               const key=`${index}-${name}`;
+              const hex=ColorPalette[index];
               return (
                 // eslint-disable-next-line
-                CustomGraphics.useSvg('red', name, key) // useSVG is a custom hook that returns an SVG component
+                CustomGraphics.useSvg(hex, name, key) // useSVG is a custom hook that returns an SVG component
               );
             })}
           </Box>

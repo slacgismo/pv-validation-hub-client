@@ -2,7 +2,7 @@
     {
         "id": 1,
         "title": "Analytical Tasks and Leaderboards",
-        "description": "Test your algorithms against predefines tasks and compare how it performs to others in your field",
+        "description": "Test your algorithms against predefined tasks and compare how it performs with others in your field",
         "image": "/static/assets/profilecovers/ducky.jpg",
         "link": "/analyses",
         "linkText": "Sign Up Now"

@@ -12,6 +12,8 @@ import {useRouter} from 'next/navigation';
 // *********** MODULE IMPORTS ***********
 
 import DashboardService from '@/services/dashboard_service';
+import CustomGraphics from '@/app/modules/svg/customGraphics';
+import ColorPalette from '@/app/modules/svg/colorPalette.json';
 
 // *********** REDUX IMPORTS ***********
 
@@ -34,14 +36,14 @@ export default function Leaderboard() {
   const analysisId: string | number = parseInt(
       searchParams.get('analysisId') || '', 10);
   const [leaderboardDetails, setLeaderboardDetails] = useState<{
-      id: number;
-      error_rate: number;
-      created_by: string;
-      execution_time: number;
-      status: string;
-      metrics: string;
-      error: number;
-    }[]>([]);
+    id: number;
+    file_completion: number;
+    created_by: string;
+    execution_time: number;
+    status: string;
+    metrics: Array<string>;
+    error: number;
+  }[]>([]);
   const [isLeaderboardLoading, setLeaderboardIsLoading] = useState(true);
   // eslint-disable-next-line
   const [leaderboardError, setLeaderboardError] = useState(null);
@@ -53,13 +55,13 @@ export default function Leaderboard() {
     {
       field: 'created_by',
       headerName: 'Developer Group',
-      width: 250,
+      flex: 1.5,
       filterable: false,
       sortable: false,
       groupable: false,
       renderCell: (params: any) => {
         const {value} = params;
-        if (value !== null || value !== undefined) {
+        if (value !== null && value !== undefined && value !== 'N/A') {
           const link = `/profile?u=${value}`;
           return (
             <Link href={link} className="standardLink">
@@ -72,12 +74,51 @@ export default function Leaderboard() {
       },
     },
     {
-      field: 'error_rate',
-      headerName: 'Error Rate',
+      field: 'submitted_at',
+      headerName: 'Submission Date',
+      flex: 1.5,
       filterable: false,
       sortable: false,
       groupable: false,
-      width: 100,
+      renderCell: (params: any) => {
+        const {value} = params;
+        if (value !== null || value !== undefined) {
+          return (
+            <div className="">
+              {value}
+            </div>
+          );
+        } else {
+          return 'N/A';
+        }
+      },
+    },
+    {
+      field: 'file_completion',
+      headerName: 'File Completion',
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      filterable: false,
+      sortable: false,
+      groupable: false,
+      headerClassName: 'text-center',
+      valueGetter: (params: any) => {
+        return (
+          (
+            params !== null
+          ) && (
+            params !== undefined
+          ) ? (100 - params) + '%' : 0 + '%'
+        );
+      },
+    },
+    {
+      field: 'execution_time',
+      headerName: 'Execution Time',
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
       valueGetter: (params: any) => {
         return params !== null && params !== undefined ? params : 0;
       },
@@ -87,28 +128,56 @@ export default function Leaderboard() {
       headerName: 'Error',
       headerAlign: 'center',
       align: 'center',
-      width: 200,
+      flex: 1,
       valueGetter: (params: any) => {
         return params !== null && params !== undefined ? params : 'N/A';
       },
     },
     {
-      field: 'execution_time',
-      headerName: 'Execution Time',
-      headerAlign: 'center',
-      align: 'center',
-      width: 200,
-      valueGetter: (params: any) => {
-        return params !== null && params !== undefined ? params : 0;
-      },
-    },
-    {
       field: 'metrics',
       headerName: 'Metrics',
+      headerAlign: 'center',
+      align: 'center',
       filterable: false,
       sortable: false,
       groupable: false,
-      width: 360,
+      headerClassName: 'text-center',
+      flex: 1.5,
+      renderCell: (params) => {
+        // params.value needs to be an array of strings.
+        let metrics;
+        let id;
+        console.log(params.value, 'type:', typeof(params.value), params.id);
+        if (Array.isArray(params.value)) {
+          try {
+            // Attempt to parse the JSON string
+            metrics = params.value;
+            id = params.id;
+          } catch (error) {
+            console.error('Failed to retrieve a metrics array:', error);
+            metrics = [];
+            id = 0;
+          }
+        } else {
+          console.error('Failed to retrieve a metrics array.',
+              ' Instead received: ', params.value
+          );
+          metrics = [];
+          id = 0;
+        }
+        return (
+          <Box>
+            {metrics.map((name: string, index: number) => {
+              const key=`${index}-${name}-${id}`;
+              const hex=ColorPalette[index];
+              return (
+                // eslint-disable-next-line
+                CustomGraphics.useSvg(hex, name, key) // useSVG is a custom hook that returns an SVG component
+              );
+            })}
+          </Box>
+        );
+      },
     },
   ];
   useEffect(() => {
@@ -118,11 +187,24 @@ export default function Leaderboard() {
       DashboardService.getLeaderBoard(url)
           .then((leaderboardResponse) => {
             setLeaderboardIsLoading(false);
-            return DashboardService.formatResponse(leaderboardResponse.data);
+            const resp = leaderboardResponse.data;
+            return DashboardService.formatResponse(resp.submissions);
           })
           .then((formattedResponse) => {
             console.log('Formatted response:', formattedResponse);
-            setLeaderboardDetails(formattedResponse);
+            if (formattedResponse.length > 0) {
+              setLeaderboardDetails(formattedResponse);
+            } else {
+              setLeaderboardDetails([{
+                id: 0,
+                file_completion: 0,
+                created_by: 'N/A',
+                execution_time: 0,
+                status: 'N/A',
+                metrics: ['N/A'],
+                error: 0,
+              }]);
+            }
           })
           .catch((error) => {
             setLeaderboardError(error);
@@ -132,11 +214,11 @@ export default function Leaderboard() {
     } else if (analysisId === 'development') {
       setLeaderboardDetails([{
         id: 0,
-        error_rate: 0,
+        file_completion: 0,
         created_by: 'Development',
         execution_time: 0,
         status: 'Development',
-        metrics: 'Development',
+        metrics: ['Development'],
         error: 0,
       }]);
       setLeaderboardIsLoading(false);
