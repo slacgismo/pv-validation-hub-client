@@ -27,6 +27,11 @@ type ErrorData = {
   error_message?: string;
 }
 
+// eslint-disable-next-line
+type SubmissionData = {
+  submitted_at: string;
+}
+
 const PrivateReportPage: React.FC = () => {
   const searchParams = useSearchParams();
   const selectedSubmission = searchParams.get('sid') || 'development';
@@ -52,7 +57,7 @@ const PrivateReportPage: React.FC = () => {
       } else {
         try {
           const errors = await
-          SubmissionService.getSubmissionErrors(selectedSubmission);
+          SubmissionService.getSubmissionErrors(parseInt(selectedSubmission));
           console.log('Error data:', errors);
           if (errors === 'Invalid submission ID') {
             console.error('Invalid submission ID');

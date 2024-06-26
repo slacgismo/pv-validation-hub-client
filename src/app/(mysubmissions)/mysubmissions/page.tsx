@@ -29,10 +29,6 @@ const MySubmissionsPage: React.FC = () => {
     dispatch(setSelectedSubmission(''));
   }, [dispatch]);
 
-  const onSubmissionClick = (submissionId: number) => {
-    dispatch(setSelectedSubmission(submissionId));
-  };
-
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -63,7 +59,7 @@ const MySubmissionsPage: React.FC = () => {
                 display="flex"
               >
                 <Toolbar />
-                <SubmissionList onClick={onSubmissionClick}/>
+                <SubmissionList />
               </Box>
             </Grid>
           </Grid>

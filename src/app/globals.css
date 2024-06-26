@@ -447,4 +447,34 @@ body {
   flex: 1 0 content;
 }
 
+.pal-yellow {
+  color: #F0E442;
+}
 
+.pal-red {
+  color: #DC267F;
+}
+
+.pal-black {
+  color: #000000;
+}
+
+.pal-green {
+  color: #117733;
+}
+
+.pal-blue {
+  color: #648FFF;
+}
+
+.pal-orange {
+  color: #FE6100;
+}
+
+.pal-gold {
+  color: #FFB000;
+}
+
+.pal-purple {
+  color: #785EF0;
+}

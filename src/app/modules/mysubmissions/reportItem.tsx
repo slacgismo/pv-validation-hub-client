@@ -8,10 +8,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import ErrorIcon from '@mui/icons-material/Error';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
-import DoneIcon from '@mui/icons-material/Done';
 import Checkbox from '@mui/material/Checkbox';
 
 // *********** MODULE IMPORTS ***********
@@ -24,10 +20,17 @@ import CookieService from '@/services/cookie_service';
 
 // *********** END OF IMPORTS ***********
 
+type Analysis = {
+  analysis_id: number;
+  analysis_name: string;
+}
+
 type Submissions = {
     submission_id: number;
     status: string;
     submitted_at: number;
+    alt_name: string;
+    analysis: Analysis;
   }
 
 /**
@@ -36,7 +39,7 @@ type Submissions = {
  * @constructor
  * @return {JSX.Element}
  */
-export default function SubmissionList({onClick}: {onClick: any}) {
+export default function SubmissionList() {
   const [submissions, setSubmissions] = useState<Submissions[]>([]);
 
   useEffect(() => {
@@ -56,16 +59,23 @@ export default function SubmissionList({onClick}: {onClick: any}) {
   }, []);
 
   const getIcon = (status: string) => {
-    console.log(status);
     switch (status) {
       case 'submitted':
-        return <CheckCircleOutlineIcon />;
+        return (<span className='pal-black'>
+          Queued
+        </span>);
       case 'running':
-        return <QueryBuilderIcon />;
+        return (<span className='pal-yellow'>
+          In Progress
+        </span>);
       case 'failed':
-        return <ErrorIcon />;
+        return (<span className='pal-red'>
+          Failed
+        </span>);
       case 'finished':
-        return <DoneIcon />;
+        return (<span className='pal-green'>
+          Success
+        </span>);
       default:
         return null;
     }
@@ -80,30 +90,47 @@ export default function SubmissionList({onClick}: {onClick: any}) {
         const sid = sub.submission_id;
         const labelId = `checkbox-list-label-${sid}`;
         const pub = false;
+        const analysisName = sub.analysis.analysis_name;
+        const subDate = new Date(
+            sub.submitted_at
+        ).toLocaleString('en-US');
+        let subName;
+        if (sub.alt_name.length > 0) {
+          subName = sub.alt_name;
+        } else {
+          subName = `Submission_${sid}_${sub.submitted_at}`;
+        }
         return (
           <ListItem key={sid} disablePadding>
             <ListItemButton dense>
-              <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{'aria-labelledby': labelId}}
-                />
-              </ListItemIcon>
+              <Checkbox
+                edge="start"
+                tabIndex={-1}
+                disableRipple
+                inputProps={{'aria-labelledby': labelId}}
+              />
+              <ListItemText
+                id={labelId}
+                primary={subName}
+                className='
+                min-w-36
+                '/>
+              <ListItemText
+                id={labelId}
+                primary={analysisName} />
+              <ListItemText
+                id={labelId}
+                primary={subDate} />
               <ListItemIcon>
                 {getIcon(sub.status)}
               </ListItemIcon>
-              <ListItemText
-                id={labelId}
-                primary={`Submission ${sid}`} />
-              <ListItemIcon onClick={() => onClick(sid)}>
+              <ListItemIcon>
                 <Link
                   href={
                     `/mysubmissions/private_report?sid=${sid}&pub=${pub}`
                   }
                   className="standardLink">
-                View Report
+                View Now
                 </Link>
               </ListItemIcon>
             </ListItemButton>
