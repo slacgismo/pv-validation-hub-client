@@ -4,7 +4,11 @@ const AnalysisService = {
   getCardDetails(analysisId: number | string) {
     return client.get(`analysis/${analysisId}`);
   },
-  uploadAlgorithm(analysisId: number, token: string, file: File) {
+  uploadAlgorithm(
+      analysisId: number,
+      token: string,
+      file: File,
+      altName: string) {
     if (analysisId !== null && analysisId !== undefined &&
           file !== null && file !== undefined) {
       const url = `/submissions/analysis/${analysisId}/submission`;
@@ -16,6 +20,17 @@ const AnalysisService = {
       // analysis_id is the expected format on the backend
       formData.append('algorithm', file);
       formData.append('analysis_id', analysisId.toString()); // Convert analysisId to a string
+
+      console.log('outside: ', altName);
+      if ( typeof(altName) === 'string' &&
+      altName !== undefined &&
+      altName !== null &&
+      altName.length > 0 ) {
+        console.log(altName);
+        formData.append('alt_name', altName);
+      } else {
+        formData.append('alt_name', '');
+      }
 
       // Return the Promise from client.post
       return client.post(url, formData, {

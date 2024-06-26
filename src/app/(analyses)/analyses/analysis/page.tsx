@@ -3,11 +3,9 @@
 
 import React, {useState, useEffect} from 'react';
 import {
-  Box, Grid, Button, Tab, Tabs, Typography, CircularProgress,
+  Box, Grid, Tab, Tabs, Typography, CircularProgress,
 } from '@mui/material';
 import {Container} from '@mui/system';
-import Cookies from 'universal-cookie';
-import {FileUploader} from 'react-drag-drop-files';
 import {useRouter} from 'next/navigation';
 import {useSearchParams} from 'next/navigation';
 
@@ -21,6 +19,7 @@ import Leaderboard from '@/app/modules/analyses/leaderboard/leaderboard';
 import Overview from '@/app/modules/analyses/leaderboard/overview';
 import Rules from '@/app/modules/analyses/leaderboard/rules';
 import AnalysisService from '@/services/analysis_service';
+import SubmissionUploader from '@/app/modules/analyses/upload/uploader';
 import replaceImagePaths from '@/config/mdurl';
 import MS from '@/services/md_service';
 
@@ -30,14 +29,6 @@ import {useDispatch} from 'react-redux';
 
 // *********** END OF IMPORTS ***********
 
-type uploadSuccess = {
-  success: boolean | null | 'emptyDisplay';
-}
-
-type fileObj = {
-  file: File | null;
-  name?: string;
-}
 
 type AnalysisDetailsCard = {
   analysisId: string | number;
@@ -47,8 +38,7 @@ type AnalysisDetailsCard = {
 const AnalysisPage: React.FC = () => {
   const searchParams = useSearchParams();
   const navigate = useRouter();
-  const cookies = new Cookies();
-  const user = cookies.get('user');
+
   const dispatch = useDispatch();
 
   if (searchParams.get('analysisId') === null) {
@@ -72,9 +62,7 @@ const AnalysisPage: React.FC = () => {
   }
 
   const [value, setValue] = useState(0);
-  const [uploadSuccess, setUploadSuccess] = useState<uploadSuccess>({
-    success: null,
-  });
+
   const [analysisId, setAnalysisId] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -92,10 +80,6 @@ const AnalysisPage: React.FC = () => {
   const [rulesetDescription, setRulesetDescription] = useState('');
   const [coverImageDir, setCoverImageDir] = useState('');
 
-  const [file, setFile] = useState<fileObj>({
-    file: null,
-    name: '',
-  });
 
   useEffect(() => {
     if (window.location.hostname.includes('localhost') && (
@@ -162,61 +146,6 @@ const AnalysisPage: React.FC = () => {
   }, [selectedAnalysis, coverImageDir]);
 
 
-  // lmao, you can't use "tar.gz", only "gz", anything after the last "." works
-  const fileTypes = ['ZIP', 'GZ'];
-
-  const uploadFile = (fileObject: File) => {
-    setFile({
-      file: fileObject,
-    });
-  };
-
-  const handleUpload = () => {
-    let responsePromise;
-    if (typeof(analysisId) === 'number' && file.file !== null) {
-      responsePromise = AnalysisService.uploadAlgorithm(
-          analysisId,
-          user.token,
-          file.file);
-    } else if (analysisId === 'development') {
-      responsePromise = Promise.resolve({
-        status: 200,
-      });
-      console.log('Dev Analysis Mode');
-    } else {
-      responsePromise = Promise.reject(new Error('Analysis ID not found'));
-    }
-
-    responsePromise
-        .then((response) => {
-          console.log('response:', response);
-          if (response.status === 200) {
-            setUploadSuccess({
-              success: true,
-            });
-            setFile({
-              file: null,
-            });
-          } else {
-            setUploadSuccess({
-              success: false,
-            });
-          }
-        })
-        .catch((errorCode) => {
-          console.error('Upload failed:', errorCode);
-          setUploadSuccess({
-            success: false,
-          });
-        });
-  };
-
-  const handleActive = () => file !== null;
-
-  const handleClear = () => setFile({
-    file: null,
-  });
-
   const handleChange = (event: any, newValue: number) => {
     setValue(newValue);
   };
@@ -244,8 +173,15 @@ const AnalysisPage: React.FC = () => {
                   </Box>
                 </Box>
 
-                <Box sx={{width: '100%'}}>
+                <Box
+                  sx={{width: '100%'}}
+                  className='
+                  mt-1
+                  tableBorder
+                  smShadowed
+                '>
                   <Box
+                    className='flex'
                     sx={{
                       borderBottom: 1,
                       borderColor: 'divider',
@@ -257,12 +193,33 @@ const AnalysisPage: React.FC = () => {
                           value={value}
                           onChange={handleChange}
                           aria-label="basic tabs example"
+                          className='flex w-full'
                         >
-                          <Tab label="Leaderboard" />
-                          <Tab label="Description" />
-                          <Tab label="Submission Instructions" />
-                          <Tab label="Data" />
-                          <Tab label="Submit Algorithm" />
+                          <Tab
+                            label="Leaderboard"
+                            className='
+                          panelTab
+                          '/>
+                          <Tab
+                            label="Description"
+                            className='
+                          panelTab
+                          '/>
+                          <Tab
+                            label="Submission Instructions"
+                            className='
+                          panelTab
+                          '/>
+                          <Tab
+                            label="Data"
+                            className='
+                          panelTab
+                          '/>
+                          <Tab
+                            label="Submit Algorithm"
+                            className='
+                          panelTab
+                          '/>
                         </Tabs>
                       </Grid>
 
@@ -271,14 +228,20 @@ const AnalysisPage: React.FC = () => {
                     </Grid>
                   </Box>
 
-                  <TabPanel value={value} index={1}>
+                  <TabPanel
+                    value={value}
+                    index={1}
+                  >
                     <Overview
                       title={`Overview of ${analysisDetailsCard.analysis_name}`}
                       description={longDescription}
                     />
                   </TabPanel>
 
-                  <TabPanel value={value} index={3}>
+                  <TabPanel
+                    value={value}
+                    index={3}
+                  >
                                     (
                     <Data
                       dataDescription={datasetDescription}
@@ -287,71 +250,27 @@ const AnalysisPage: React.FC = () => {
                                     )
                   </TabPanel>
 
-                  <TabPanel value={value} index={0}>
+                  <TabPanel
+                    value={value}
+                    index={0}
+                  >
                     <Leaderboard />
                   </TabPanel>
 
-                  <TabPanel value={value} index={2}>
+                  <TabPanel
+                    value={value}
+                    index={2}
+                  >
                     <Rules
                       title={analysisDetailsCard.analysis_name}
                       description={rulesetDescription}
                     />
                   </TabPanel>
-                  <TabPanel value={value} index={4}>
-                    <div>
-                      <Grid container spacing={2}>
-                        <Grid item xs={11}>
-                          <Typography sx={{marginLeft: 10}} variant="h5">
-                          PVHub Algorithm Upload
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                      <Box sx={{marginTop: 2, marginBottom: 2}}>
-                        <FileUploader
-                          multiple={false}
-                          handleChange={uploadFile}
-                          name="file"
-                          types={fileTypes}
-                        />
-                      </Box>
-                      <Typography
-                        sx={{marginLeft: 20}}
-                        color="gray"
-                        variant="body1">
-                        {file ? `File name: ${file.name}` :
-                      'No files staged for upload yet.'}
-                      </Typography>
-                      {uploadSuccess.success === true && (
-                        <Typography color="green" variant="body1">
-                      Upload Successful! Please check your developer
-                      page for the status of your upload,
-                      or upload another file.
-                        </Typography>
-                      )}
-                      {uploadSuccess.success === false && (
-                        <Typography color="red" variant="body1">
-                      Upload failed. Please reload the page and try again.
-                      If you continue to receive issues with the upload,
-                      please file an issue at our github page,
-                          {' '}
-                          {/* eslint-disable-next-line max-len */}
-                          <a href="https://github.com/slacgismo/pv-validation-hub">https://github.com/slacgismo/pv-validation-hub</a>
-                      .
-                        </Typography>
-                      )}
-                      <Button
-                        disabled={!handleActive()}
-                        variant="contained"
-                        onClick={handleUpload}>
-                      Upload
-                      </Button>
-                      <Button
-                        disabled={!handleActive()}
-                        variant="contained"
-                        onClick={handleClear}>
-                      Clear
-                      </Button>
-                    </div>
+                  <TabPanel
+                    value={value}
+                    index={4}
+                  >
+                    <SubmissionUploader analysisId={analysisId} />
                   </TabPanel>
                 </Box>
               </Container>

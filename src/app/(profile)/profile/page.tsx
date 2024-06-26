@@ -27,6 +27,7 @@ import Header from '@/app/modules/header/header';
 import Footer from '@/app/modules/footer/footer';
 import CookieService from '@/services/cookie_service';
 import UserService from '@/services/user_service';
+import Elink from '@/app/modules/elink/elink';
 
 // *********** REDUX IMPORTS ***********
 
@@ -222,6 +223,7 @@ const ProfilePage: React.FC = () => {
                     disabled={false}
                     onChange={handleTextChange(setUserGithubLink)}
                   />
+                  <Elink url={userDetails.githubLink} />
                 </ProfileCardContent>
                 <CardActions>
                   <Button

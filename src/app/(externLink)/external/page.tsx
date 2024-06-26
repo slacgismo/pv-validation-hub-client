@@ -17,6 +17,7 @@ import {useSearchParams} from 'next/navigation';
 const LogoutPage: React.FC = (props) => {
   const searchParams = useSearchParams();
   const extURL = searchParams.get('exturl') || '';
+  // Add check for http or https headers and add them if missing
   return (
     <div className="flex flex-col min-h-screen">
       <Header />

@@ -9,6 +9,10 @@ const DashboardService = {
     console.log(response);
     if (response.length > 0) {
       for (let i = 0; i < response.length; i += 1) {
+        const formattedSubmittedAt = new Date(
+            response[i].submitted_at
+        ).toLocaleString('en-US');
+
         const element = {
           id,
           file_completion: response[i].error_rate,
@@ -17,6 +21,7 @@ const DashboardService = {
           status: response[i].status,
           metrics: response[i].data_requirements,
           error: response[i].mae,
+          submitted_at: formattedSubmittedAt,
         };
         id += 1;
         console.log('id:', id);

@@ -409,6 +409,10 @@ body {
   border: 2px solid #F95738;
 }
 
+.tableBorderDot {
+  border: 2px dotted #F95738;
+}
+
 .sTextColor {
   color: #F95738;
 }
@@ -437,6 +441,10 @@ body {
 .analysisCard {
   max-width: 80%;
   max-height: 80%;
+}
+
+.panelTab {
+  flex: 1 0 content;
 }
 
 

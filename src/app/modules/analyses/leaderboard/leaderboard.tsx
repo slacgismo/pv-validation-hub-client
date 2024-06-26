@@ -147,7 +147,6 @@ export default function Leaderboard() {
         // params.value needs to be an array of strings.
         let metrics;
         let id;
-        console.log(params.value, 'type:', typeof(params.value), params.id);
         if (Array.isArray(params.value)) {
           try {
             // Attempt to parse the JSON string
