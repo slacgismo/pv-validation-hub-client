@@ -160,7 +160,10 @@ export default function SubmissionUploader(
             name='altName'
             maxLength={50}
             onChange={(e) => handleNameChange(e)}
-          />
+            className='
+            tableBorder
+            smShadowed
+            '/>
         </label>
         {uploadSuccess.success === true && (
           <Typography

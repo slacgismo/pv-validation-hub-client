@@ -3,12 +3,9 @@
 
 import React, {useState, useEffect} from 'react';
 import Link from 'next/link';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
+import {GridColDef} from '@mui/x-data-grid';
+import {DataGrid, GridToolbar} from '@mui/x-data-grid';
 
 // *********** MODULE IMPORTS ***********
 
@@ -26,10 +23,10 @@ type Analysis = {
 }
 
 type Submissions = {
-    submission_id: number;
-    status: string;
-    submitted_at: number;
-    alt_name: string;
+    id: number;
+    subStatus: string;
+    submittedAt: number;
+    altName: string;
     analysis: Analysis;
   }
 
@@ -40,6 +37,143 @@ type Submissions = {
  * @return {JSX.Element}
  */
 export default function SubmissionList() {
+  const headers: GridColDef[] = [
+    {
+      field: 'altName',
+      headerName: 'Submissions',
+      flex: 2,
+      filterable: false,
+      sortable: false,
+      groupable: false,
+      renderCell: (params: any) => {
+        const {value, id, row} = params;
+        const {submittedAt} = row;
+        if (value !== null &&
+          value !== undefined &&
+          value !== 'N/A' &&
+          value.length > 0) {
+          return (
+            <div>
+              <Checkbox
+                edge="start"
+                tabIndex={-1}
+                disableRipple
+                inputProps={{'aria-labelledby': id}}
+              />
+              {value}
+            </div>
+          );
+        } else if ((id !== null &&
+          id !== undefined) &&
+      (submittedAt !== null &&
+        submittedAt !== undefined)) {
+          return (
+            <div>
+              <Checkbox
+                edge="start"
+                tabIndex={-1}
+                disableRipple
+                inputProps={{'aria-labelledby': params.id}}
+              />
+              {`Submission_${id}_${submittedAt}`}
+            </div>
+          );
+        } else {
+          return 'N/A';
+        }
+      },
+    },
+    {
+      field: 'analysis',
+      headerName: 'Tasks',
+      flex: 1,
+      filterable: false,
+      sortable: false,
+      groupable: false,
+      renderCell: (params: any) => {
+        const {value} = params;
+        if (value !== null || value !== undefined) {
+          return (
+            <div className="">
+              {value.analysis_name}
+            </div>
+          );
+        } else {
+          return 'N/A';
+        }
+      },
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      filterable: false,
+      sortable: false,
+      groupable: false,
+      headerClassName: 'text-center',
+      renderCell: (params: any) => {
+        const {value} = params;
+        return (
+          <div>
+            {getIcon(value)}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'submittedAt',
+      headerName: 'Submission Date',
+      headerAlign: 'center',
+      align: 'center',
+      flex: 2,
+      valueGetter: (params: any) => {
+        const formatDate = new Date(
+            params
+        ).toLocaleString('en-US');
+        return params !== null && params !== undefined ? formatDate : 'N/A';
+      },
+    },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      renderCell: (params: any) => {
+        return (
+          <span className="standardLink">
+              Coming Soon!
+          </span>
+        );
+      },
+    },
+    {
+      field: 'private_report',
+      headerName: 'Private Report',
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      renderCell: (params: any) => {
+        const {id} = params;
+        const pub = false;
+        if (id !== null && id !== undefined && id !== 'N/A') {
+          return (
+            <Link
+              href={
+                `/mysubmissions/private_report?sid=${id}&pub=${pub}`
+              }
+              className="standardLink">
+        View Now
+            </Link>
+          );
+        } else {
+          return 'N/A';
+        }
+      },
+    },
+  ];
   const [submissions, setSubmissions] = useState<Submissions[]>([]);
 
   useEffect(() => {
@@ -48,7 +182,9 @@ export default function SubmissionList() {
       const userId = await UserService.getUserId(user.token);
       SubmissionService.getAllSubmissionsForUser(userId)
           .then((fetchedSubmissions) => {
-            setSubmissions(fetchedSubmissions);
+            // eslint-disable-next-line
+            const formattedSubs = SubmissionService.formatAllSubmissionsForUser(fetchedSubmissions);
+            setSubmissions(formattedSubs);
           })
           .catch((error) => {
             console.error('Error fetching submissions:', error);
@@ -82,61 +218,20 @@ export default function SubmissionList() {
   };
 
   return (
-    <List sx={{width: '100%', bgcolor: 'background.paper'}}>
-      {submissions.sort(
-          (a, b) => Number(new Date(b.submitted_at)) -
-            Number(new Date(a.submitted_at)),
-      ).map((sub) => {
-        const sid = sub.submission_id;
-        const labelId = `checkbox-list-label-${sid}`;
-        const pub = false;
-        const analysisName = sub.analysis.analysis_name;
-        const subDate = new Date(
-            sub.submitted_at
-        ).toLocaleString('en-US');
-        let subName;
-        if (sub.alt_name.length > 0) {
-          subName = sub.alt_name;
-        } else {
-          subName = `Submission_${sid}_${sub.submitted_at}`;
-        }
-        return (
-          <ListItem key={sid} disablePadding>
-            <ListItemButton dense>
-              <Checkbox
-                edge="start"
-                tabIndex={-1}
-                disableRipple
-                inputProps={{'aria-labelledby': labelId}}
-              />
-              <ListItemText
-                id={labelId}
-                primary={subName}
-                className='
-                min-w-36
-                '/>
-              <ListItemText
-                id={labelId}
-                primary={analysisName} />
-              <ListItemText
-                id={labelId}
-                primary={subDate} />
-              <ListItemIcon>
-                {getIcon(sub.status)}
-              </ListItemIcon>
-              <ListItemIcon>
-                <Link
-                  href={
-                    `/mysubmissions/private_report?sid=${sid}&pub=${pub}`
-                  }
-                  className="standardLink">
-                View Now
-                </Link>
-              </ListItemIcon>
-            </ListItemButton>
-          </ListItem>
-        );
-      })}
-    </List>
+    <div className='
+    min-w-full
+    bg-white
+    tableBorder
+    shadowed
+    '>
+      <DataGrid
+        columns={headers}
+        rows={Array.isArray(submissions) ? submissions : []}
+        slots={{
+          toolbar: GridToolbar,
+        }}
+        hideFooterPagination={true}
+      />
+    </div>
   );
 }

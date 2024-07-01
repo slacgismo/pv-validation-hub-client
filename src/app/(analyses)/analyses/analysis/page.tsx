@@ -179,6 +179,7 @@ const AnalysisPage: React.FC = () => {
                   mt-1
                   tableBorder
                   smShadowed
+                  bg-white
                 '>
                   <Box
                     className='flex'
