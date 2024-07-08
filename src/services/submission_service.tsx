@@ -5,7 +5,22 @@ const SubmissionService = {
     if (typeof(userId) === 'string') {
       throw new Error('Invalid user ID');
     }
-    return client.get(`/submissions/user/${userId}/submissions`)
+    // 0 is the analysis ID for all submissions
+    return client.get(`/submissions/user/${userId}/submissions/0`)
+        .then((response) => response.data);
+  },
+  getAvailableAnalyses() {
+    return client.get('/analyses')
+        .then((response) => response.data);
+  },
+  getSelectedSubmissionsForUser(userId: number, analysisId: number) {
+    if (typeof(userId) === 'string') {
+      throw new Error('Invalid user ID');
+    }
+    if (typeof(analysisId) === 'string') {
+      throw new Error('Invalid analysis ID');
+    }
+    return client.get(`/submissions/user/${userId}/submissions/${analysisId}`)
         .then((response) => response.data);
   },
   formatAllSubmissionsForUser(response: any) {

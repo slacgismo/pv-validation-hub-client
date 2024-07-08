@@ -45,6 +45,9 @@ const AnalysisService = {
     return Promise.reject(
         new Error('analysisId and file cannot be null or undefined'));
   },
+  getAllAnalyses() {
+    return client.get('/analysis/home');
+  },
 };
 
 export default AnalysisService;

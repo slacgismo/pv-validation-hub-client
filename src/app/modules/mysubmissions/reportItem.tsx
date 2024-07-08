@@ -10,6 +10,7 @@ import {DataGrid, GridToolbar} from '@mui/x-data-grid';
 // *********** MODULE IMPORTS ***********
 
 import SubmissionService from '@/services/submission_service';
+import AnalysisService from '@/services/analysis_service';
 import UserService from '@/services/user_service';
 import CookieService from '@/services/cookie_service';
 
@@ -37,6 +38,7 @@ type Submissions = {
  * @return {JSX.Element}
  */
 export default function SubmissionList() {
+  const [availableAnalyses, setAvailableAnalyses] = useState<Analysis[]>([]);
   const headers: GridColDef[] = [
     {
       field: 'altName',
@@ -176,6 +178,26 @@ export default function SubmissionList() {
   ];
   const [submissions, setSubmissions] = useState<Submissions[]>([]);
 
+  const onClick = (e) => {
+    console.log('Clicked:', typeof(e.target.getAttribute('data-analysisId')));
+    const analysisId = parseInt(e.target.getAttribute('data-analysisId'));
+    const fetchSubmissions = async () => {
+      const user = CookieService.getUserCookie();
+      const userId = await UserService.getUserId(user.token);
+      SubmissionService.getSelectedSubmissionsForUser(userId, analysisId)
+          .then((fetchedSubmissions) => {
+            // eslint-disable-next-line
+            const formattedSubs = SubmissionService.formatAllSubmissionsForUser(fetchedSubmissions);
+            setSubmissions(formattedSubs);
+          })
+          .catch((error) => {
+            console.error('Error fetching submissions:', error);
+          });
+    };
+
+    fetchSubmissions();
+  };
+
   useEffect(() => {
     const fetchSubmissions = async () => {
       const user = CookieService.getUserCookie();
@@ -188,6 +210,14 @@ export default function SubmissionList() {
           })
           .catch((error) => {
             console.error('Error fetching submissions:', error);
+          });
+      AnalysisService.getAllAnalyses()
+          .then((analyses) => {
+            console.log('analyses: ', analyses);
+            setAvailableAnalyses(analyses.data);
+          })
+          .catch((error) => {
+            console.error('Error fetching analyses:', error);
           });
     };
 
@@ -220,18 +250,58 @@ export default function SubmissionList() {
   return (
     <div className='
     min-w-full
+    '>
+      <h1 className='text-3xl font-bold text-center mb-5'>
+        My Submissions
+      </h1>
+      <div className='flex justify-center'>
+        <button
+          className='
+              smShadowed
+              tableBorder
+              bg-white
+              p-1
+              hover:bg-pal-500
+          '
+          data-analysisId={0}
+          onClick={onClick}>
+          All Submissions
+        </button>
+        {availableAnalyses.map((analysis) => {
+          return (
+            <button
+              key={analysis.analysis_id}
+              className='
+              smShadowed
+              tableBorder
+              bg-white
+              ml-3
+              p-1
+              hover:bg-pal-500
+              '
+              data-analysisId={analysis.analysis_id}
+              onClick={onClick}>
+              {analysis.analysis_name}
+            </button>
+          );
+        })}
+      </div>
+      <div className='
+    min-w-full
     bg-white
     tableBorder
     shadowed
+    mt-5
     '>
-      <DataGrid
-        columns={headers}
-        rows={Array.isArray(submissions) ? submissions : []}
-        slots={{
-          toolbar: GridToolbar,
-        }}
-        hideFooterPagination={true}
-      />
+        <DataGrid
+          columns={headers}
+          rows={Array.isArray(submissions) ? submissions : []}
+          slots={{
+            toolbar: GridToolbar,
+          }}
+          hideFooterPagination={true}
+        />
+      </div>
     </div>
   );
 }

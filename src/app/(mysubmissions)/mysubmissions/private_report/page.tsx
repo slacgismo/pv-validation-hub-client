@@ -116,8 +116,11 @@ const PrivateReportPage: React.FC = () => {
           <Box sx={{flexGrow: 1}}>
             <AppBar
               position="static"
-              className="items-center"
-            >
+              className="
+              items-center
+              bg-pal-pastel
+              pal-black
+              ">
               <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
             Error Rate:
                 {' '}
@@ -142,6 +145,13 @@ const PrivateReportPage: React.FC = () => {
                   </Typography>
                 </>
               )}
+            </AppBar>
+            <AppBar
+              position="static"
+              className="
+              items-center
+              "
+            >
             </AppBar>
           </Box>
 
