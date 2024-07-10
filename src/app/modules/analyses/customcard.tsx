@@ -50,7 +50,7 @@ export default function CustomizedCard({
         key={card.analysis_id}
         onClick={() => onClick(card.analysis_id, card.analysis_name)}
         data-testid={testId}
-        className='shadowed tableBorder'
+        className='tableBorder'
       >
         <CardMedia
           component="img"
@@ -61,7 +61,6 @@ export default function CustomizedCard({
           tableBorder
           analysisCard
           m-5
-          smShadowed
           '
         />
         <CardHeader

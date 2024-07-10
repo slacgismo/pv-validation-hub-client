@@ -62,7 +62,7 @@ export default function CarouselCard({
           fill={true}
           alt=''
           src={image}
-          className='smShadowed'
+          className=''
         />
       </div>
       <div className='text-xl font-bold'>

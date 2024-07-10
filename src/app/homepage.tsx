@@ -41,7 +41,6 @@ export default function Home() {
           shadow tableBorder
           bg-white
           completeFit
-          shadowed
           justify-center">
             <DemoBoard />
           </div>
@@ -59,7 +58,6 @@ export default function Home() {
             </p>
             <div className="flex flex-row mt-4">
               <Link href="/analyses" className="
-              smShadowed
               tableBorder
               bg-white
               p-1
@@ -67,7 +65,6 @@ export default function Home() {
               View Tasks
               </Link>
               <Link href="/login" className="
-              smShadowed
               tableBorder
               bg-white
               ml-3

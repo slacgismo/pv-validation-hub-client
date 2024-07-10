@@ -3,7 +3,6 @@
 
 import React, {useState, useEffect} from 'react';
 import Link from 'next/link';
-import Checkbox from '@mui/material/Checkbox';
 import {GridColDef} from '@mui/x-data-grid';
 import {DataGrid, GridToolbar} from '@mui/x-data-grid';
 
@@ -13,6 +12,7 @@ import SubmissionService from '@/services/submission_service';
 import AnalysisService from '@/services/analysis_service';
 import UserService from '@/services/user_service';
 import CookieService from '@/services/cookie_service';
+import {EditableInput} from '@/app/modules/global/editableComponents';
 
 // *********** REDUX IMPORTS ***********
 
@@ -39,6 +39,34 @@ type Submissions = {
  */
 export default function SubmissionList() {
   const [availableAnalyses, setAvailableAnalyses] = useState<Analysis[]>([]);
+  const [submissions, setSubmissions] = useState<Submissions[]>([]);
+
+  const handleNameChange = (id: number, newValue: string) => {
+    setSubmissions((prevSubmissions) =>
+      prevSubmissions.map((submission) =>
+        submission.id === id ? {...submission, altName: newValue} : submission
+      )
+    );
+  };
+
+  const handleSetName = async (id: number, newValue: string) => {
+    const user = CookieService.getUserCookie();
+    const userId = await UserService.getUserId(user.token);
+    await SubmissionService.updateName(user.token, userId, id, newValue);
+  };
+
+  const handleArchive = async (id: number, archived: boolean) => {
+    console.log('Archiving:', id, archived);
+    const user = CookieService.getUserCookie();
+    const userId = await UserService.getUserId(user.token);
+    await SubmissionService.archiveSubmission(user.token, userId, id, archived);
+
+    // Remove the submission from the list
+    setSubmissions((prevSubmissions) =>
+      prevSubmissions.filter((submission) => submission.id !== id)
+    );
+  };
+
   const headers: GridColDef[] = [
     {
       field: 'altName',
@@ -50,35 +78,30 @@ export default function SubmissionList() {
       renderCell: (params: any) => {
         const {value, id, row} = params;
         const {submittedAt} = row;
+
+        const onChange = (newValue: string) => handleNameChange(id, newValue);
+        const onClick = () => handleSetName(id, value);
+
+
         if (value !== null &&
           value !== undefined &&
           value !== 'N/A' &&
           value.length > 0) {
           return (
-            <div>
-              <Checkbox
-                edge="start"
-                tabIndex={-1}
-                disableRipple
-                inputProps={{'aria-labelledby': id}}
-              />
-              {value}
-            </div>
+            <EditableInput
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              onClick={onClick} />
           );
         } else if ((id !== null &&
           id !== undefined) &&
       (submittedAt !== null &&
         submittedAt !== undefined)) {
           return (
-            <div>
-              <Checkbox
-                edge="start"
-                tabIndex={-1}
-                disableRipple
-                inputProps={{'aria-labelledby': params.id}}
-              />
-              {`Submission_${id}_${submittedAt}`}
-            </div>
+            <EditableInput
+              value={`Submission_${id}_${submittedAt}`}
+              onChange={(e) => onChange(e.target.value)}
+              onClick={onClick} />
           );
         } else {
           return 'N/A';
@@ -140,14 +163,20 @@ export default function SubmissionList() {
     {
       field: 'actions',
       headerName: 'Actions',
-      headerAlign: 'center',
-      align: 'center',
       flex: 1,
+      filterable: false,
+      sortable: false,
+      groupable: false,
       renderCell: (params: any) => {
+        const {id, row} = params;
+        const {archived} = row;
+
+        const onClick = () => handleArchive(id, !archived);
+
         return (
-          <span className="standardLink">
-              Coming Soon!
-          </span>
+          <button onClick={onClick} className='standardLink'>
+            {archived ? 'Unarchive' : 'Archive'}
+          </button>
         );
       },
     },
@@ -176,15 +205,33 @@ export default function SubmissionList() {
       },
     },
   ];
-  const [submissions, setSubmissions] = useState<Submissions[]>([]);
 
-  const onClick = (e) => {
-    console.log('Clicked:', typeof(e.target.getAttribute('data-analysisId')));
-    const analysisId = parseInt(e.target.getAttribute('data-analysisId'));
+  const onClick = (e: any) => {
+    console.log('Clicked:', e.target.getAttribute('data-analysisid'));
+    const analysisId = parseInt(e.target.getAttribute('data-analysisid'));
     const fetchSubmissions = async () => {
       const user = CookieService.getUserCookie();
       const userId = await UserService.getUserId(user.token);
       SubmissionService.getSelectedSubmissionsForUser(userId, analysisId)
+          .then((fetchedSubmissions) => {
+            // eslint-disable-next-line
+            const formattedSubs = SubmissionService.formatAllSubmissionsForUser(fetchedSubmissions);
+            setSubmissions(formattedSubs);
+          })
+          .catch((error) => {
+            console.error('Error fetching submissions:', error);
+          });
+    };
+
+    fetchSubmissions();
+  };
+
+  const onClickArchived = (e: any) => {
+    console.log('Clicked:', e.target.getAttribute('data-analysisid'));
+    const fetchSubmissions = async () => {
+      const user = CookieService.getUserCookie();
+      const userId = await UserService.getUserId(user.token);
+      SubmissionService.getArchivedSubmissionsForUser(userId)
           .then((fetchedSubmissions) => {
             // eslint-disable-next-line
             const formattedSubs = SubmissionService.formatAllSubmissionsForUser(fetchedSubmissions);
@@ -257,13 +304,12 @@ export default function SubmissionList() {
       <div className='flex justify-center'>
         <button
           className='
-              smShadowed
               tableBorder
               bg-white
               p-1
               hover:bg-pal-500
           '
-          data-analysisId={0}
+          data-analysisid={0}
           onClick={onClick}>
           All Submissions
         </button>
@@ -272,25 +318,35 @@ export default function SubmissionList() {
             <button
               key={analysis.analysis_id}
               className='
-              smShadowed
               tableBorder
               bg-white
               ml-3
               p-1
               hover:bg-pal-500
               '
-              data-analysisId={analysis.analysis_id}
+              data-analysisid={analysis.analysis_id}
               onClick={onClick}>
               {analysis.analysis_name}
             </button>
           );
         })}
+        <button
+          className='
+              tableBorder
+              bg-white
+              ml-3
+              p-1
+              hover:bg-pal-500
+          '
+          data-analysisid={'archived'}
+          onClick={onClickArchived}>
+          Archived
+        </button>
       </div>
       <div className='
     min-w-full
     bg-white
     tableBorder
-    shadowed
     mt-5
     '>
         <DataGrid

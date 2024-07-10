@@ -162,7 +162,6 @@ export default function SubmissionUploader(
             onChange={(e) => handleNameChange(e)}
             className='
             tableBorder
-            smShadowed
             '/>
         </label>
         {uploadSuccess.success === true && (
