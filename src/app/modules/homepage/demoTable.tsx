@@ -34,9 +34,8 @@ export default function DemoBoard() {
       renderCell: (params: any) => {
         const {value} = params;
         if (value !== null || value !== undefined) {
-          const link = `/profile?u=${value}`;
           return (
-            <div href={link} className="standardLink">
+            <div className="standardLink">
               {value}
             </div>
           );
