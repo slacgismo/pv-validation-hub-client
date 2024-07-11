@@ -34,7 +34,6 @@ jobs:
 
       - name: install dependencies and build
         run: |
-          cd pv-validation-hub-client
           npm install
           npm run build
 
