@@ -58,7 +58,11 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
               linkText,
             } = slide;
             return (
-              <div className="embla__slide embla__slide__number" key={index}>
+              <div className="
+              embla__slide
+              embla__slide__number
+              tableBorder"
+              key={index}>
                 <CarouselCard
                   id={id}
                   title={title}

@@ -23,6 +23,13 @@ const SubmissionService = {
     return client.get(`/submissions/user/${userId}/submissions/${analysisId}`)
         .then((response) => response.data);
   },
+  getArchivedSubmissionsForUser(userId: number) {
+    if (typeof(userId) === 'string') {
+      throw new Error('Invalid user ID');
+    }
+    return client.get(`/submissions/user/${userId}/submissions/archived`)
+        .then((response) => response.data);
+  },
   formatAllSubmissionsForUser(response: any) {
     const finalResponse = [];
     console.log('Printing response');
@@ -36,6 +43,7 @@ const SubmissionService = {
           altName: response[i].alt_name,
           subStatus: response[i].status,
           analysis: response[i].analysis,
+          archived: response[i].archived,
         };
         finalResponse.push(element);
       }
@@ -55,6 +63,70 @@ const SubmissionService = {
     }
     return client.get(`/error/error_report/private/${submissionId}`)
         .then((response) => response.data);
+  },
+  updateName(
+      token: string,
+      userId: number,
+      submissionId: number,
+      altName: string
+  ) {
+    if (
+      submissionId !== null &&
+      submissionId !== undefined &&
+      token !== null &&
+      token !== undefined
+    ) {
+      const url = `/submissions/set_submission_name/${userId}/${submissionId}`;
+      const data = {alt_name: altName};
+
+      // set authorization token
+      client.defaults.headers.common.Authorization = `Token ${token}`;
+
+      // Return the Promise from client.post
+      return client.post(url, data, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+
+    // If submissionId or token is null or undefined, return a rejected Promise
+    return Promise.reject(
+        new Error('submissionId and token cannot be null or undefined')
+    );
+  },
+  archiveSubmission(
+      token: string,
+      userId: number,
+      submissionId: number,
+      archived: boolean
+  ) {
+    if (
+      submissionId !== null &&
+      submissionId !== undefined &&
+      token !== null &&
+      token !== undefined
+    ) {
+      const url = `/submissions/archive_submission/${userId}/${submissionId}`;
+      const data = {archived: archived};
+
+      // set authorization token
+      client.defaults.headers.common.Authorization = `Token ${token}`;
+
+      // Return the Promise from client.post
+      return client.post(url, data, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+
+    // If submissionId or token is null or undefined, return a rejected Promise
+    return Promise.reject(
+        new Error('submissionId and token cannot be null or undefined')
+    );
   },
 };
 
