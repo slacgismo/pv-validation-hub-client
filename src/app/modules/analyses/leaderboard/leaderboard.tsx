@@ -33,8 +33,27 @@ export default function Leaderboard() {
     navigate.push('/analyses');
   }
 
-  const analysisId: string | number = parseInt(
-      searchParams.get('analysisId') || '', 10);
+  let analysisId: string | number | null = searchParams.get('analysisId');
+
+  if ((
+    analysisId !== 'development'
+  ) && (
+    analysisId !== null
+  )) {
+    analysisId = parseInt(
+        analysisId.toString() || '', 10);
+  } else if ((
+    analysisId !== null
+  ) && (
+    isNaN(parseInt(analysisId))
+  ) && (
+    analysisId === 'development'
+  )) {
+    console.log('Development analysis');
+  } else {
+    console.log('NO!', analysisId);
+    navigate.push('/analyses');
+  }
   const [leaderboardDetails, setLeaderboardDetails] = useState<{
     id: number;
     file_completion: number;

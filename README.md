@@ -6,7 +6,7 @@ Welcome to the Validation Hub's frontend client! For users looking to inform us 
 
 ## Getting Started
 
-The frontend client has three distinct working modes: analysis development, local development, and production.The analysis developmental mode lacks most of the features of the validation hub, but it allows the developer to build and run the client as a standalone system to quickly build out an analysis' documentation structure. For local and production development, please see the docs on the main ![pv-validation-hub](https://github.com/slacgismo/pv-validation-hub) repository.
+The frontend client has three distinct working modes: analysis development, local development, and production.The front-end analysis developmental mode lacks most of the features of the validation hub, but it allows the developer to build and run the client as a standalone system to quickly build out an analysis' documentation structure. For local and production development, please see the docs on the main ![pv-validation-hub](https://github.com/slacgismo/pv-validation-hub) repository.
 
 ## Analysis Development
 
@@ -29,11 +29,15 @@ All analyses and their related files are stored in `<path-to-repo>/public/static
 All analyses require the same core files:
 
 banner.png ==> The main image banner seen on the analysis page.
+
 cardCover.png ==> The image viewed on the analysis card on the Analytical Tasks page.
+
 shortdesc.md ==> very short blurb for the card on the Analytical Tasks page, maximum of 100 characters.
 
 dataset.md ==> dataset description for the dataset tab on the analysis page. 
+
 description.md ==> overview for the analysis tab on the analysis page. 
+
 SubmissionInstructions.md ==> Instructions on how to format your submission to be able to run in our system, on the instructions tab on the analysis page. 
 
 You can add reference images used in your markdown files in this directory as well.

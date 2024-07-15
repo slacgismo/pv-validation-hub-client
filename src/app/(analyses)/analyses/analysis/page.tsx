@@ -25,8 +25,6 @@ import MS from '@/services/md_service';
 
 // *********** REDUX IMPORTS ***********
 
-import {useDispatch} from 'react-redux';
-
 // *********** END OF IMPORTS ***********
 
 
@@ -39,8 +37,6 @@ const AnalysisPage: React.FC = () => {
   const searchParams = useSearchParams();
   const navigate = useRouter();
 
-  const dispatch = useDispatch();
-
   if (searchParams.get('analysisId') === null) {
     console.error('Analysis ID not found');
     navigate.push('/analyses');
@@ -52,12 +48,19 @@ const AnalysisPage: React.FC = () => {
     selectedAnalysis !== 'development'
   ) && (
     selectedAnalysis !== null
-  ) && (
-    !isNaN(parseInt(selectedAnalysis))
   )) {
     selectedAnalysis = parseInt(
         selectedAnalysis.toString() || '', 10);
+  } else if ((
+    selectedAnalysis !== null
+  ) && (
+    isNaN(parseInt(selectedAnalysis))
+  ) && (
+    selectedAnalysis === 'development'
+  )) {
+    console.log('Development analysis');
   } else {
+    console.log('NO!', selectedAnalysis);
     navigate.push('/analyses');
   }
 
@@ -83,7 +86,7 @@ const AnalysisPage: React.FC = () => {
 
   useEffect(() => {
     if (window.location.hostname.includes('localhost') && (
-      analysisId === 'development'
+      selectedAnalysis === 'development'
     )) {
       setAnalysisDetailsCard({
         analysisId: 'development',
@@ -112,7 +115,7 @@ const AnalysisPage: React.FC = () => {
             });
           });
     }
-  }, [selectedAnalysis, dispatch, navigate, analysisId, error]);
+  }, [selectedAnalysis, error, navigate]);
 
   useEffect(() => {
     console.log('analysis', selectedAnalysis, typeof selectedAnalysis);
@@ -147,6 +150,7 @@ const AnalysisPage: React.FC = () => {
 
 
   const handleChange = (event: any, newValue: number) => {
+    console.log('new value:', newValue);
     setValue(newValue);
   };
 
