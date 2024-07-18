@@ -34,12 +34,21 @@ export default function Leaderboard() {
   }
 
   let analysisId: string | number | null = searchParams.get('analysisId');
+  let validAnalysisParam = false;
+
+  // Check if the analysis ID is a number and store as variable due to typescript
+  // limitations doing it directly in my next if statement
+  if (
+    analysisId !== null && analysisId !== 'development'
+  ) {
+    validAnalysisParam = isNaN(parseInt(analysisId.toString()));
+  }
 
   if ((
     analysisId !== 'development'
   ) && (
     analysisId !== null
-  )) {
+  ) && !validAnalysisParam) {
     analysisId = parseInt(
         analysisId.toString() || '', 10);
   } else if ((
@@ -66,11 +75,11 @@ export default function Leaderboard() {
   const [isLeaderboardLoading, setLeaderboardIsLoading] = useState(true);
   // eslint-disable-next-line
   const [leaderboardError, setLeaderboardError] = useState(null);
-  console.log('TODO: Add dynamic functionality here. We need to combine ',
-      'dynamic column generation from the backend with the base column ',
-      'list here.');
+  const [
+    analysisErrorTypes, setAnalysisErrorTypes,
+  ] = useState<{ [key: string]: string }>({'error': 'Error'});
 
-  const columns: GridColDef[] = [
+  const baseColumns: GridColDef[] = [
     {
       field: 'created_by',
       headerName: 'Developer Group',
@@ -143,11 +152,11 @@ export default function Leaderboard() {
       },
     },
     {
-      field: 'error',
-      headerName: 'Error',
+      field: 'python_version',
+      headerName: 'Python',
       headerAlign: 'center',
       align: 'center',
-      flex: 1,
+      flex: 0.5,
       valueGetter: (params: any) => {
         return params !== null && params !== undefined ? params : 'N/A';
       },
@@ -198,7 +207,49 @@ export default function Leaderboard() {
       },
     },
   ];
+
+  const [columns, setColumns] = useState(baseColumns);
+
+  const resetDefaultColumns = (columnArray: GridColDef[]) => {
+    setColumns(baseColumns);
+    columnArray.push({
+      field: 'error',
+      headerName: 'Error',
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      valueGetter: (params: any) => {
+        return params !== null && params !== undefined ? params : 'N/A';
+      },
+    });
+    setColumns(columnArray);
+  };
+
+  const setDynamicColumns = (columnArray: GridColDef[]) => {
+    setColumns(baseColumns);
+    for (const key in analysisErrorTypes) {
+      if (key in analysisErrorTypes) {
+        columnArray.push({
+          field: key,
+          headerName: `${analysisErrorTypes[key]}`,
+          headerAlign: 'center',
+          align: 'center',
+          flex: 0.5,
+          valueGetter: (params: any) => {
+            return params !== null && params !== undefined ? params : 'N/A';
+          },
+        });
+      }
+    }
+    setColumns(columnArray);
+  };
+
   useEffect(() => {
+    // use map to create a new array of columns due to arrays in variables sharing the same memory pointer
+    const columnArray = baseColumns.map((column) => {
+      return column;
+    }
+    );
     if (typeof analysisId === 'number') {
       const url = `/analysis/${analysisId}/leaderboard`;
       console.log('Leaderboard URL:', url);
@@ -225,9 +276,19 @@ export default function Leaderboard() {
             }
           })
           .catch((error) => {
+            resetDefaultColumns(columnArray);
             setLeaderboardError(error);
             setLeaderboardDetails([]);
             setLeaderboardIsLoading(false);
+          });
+      DashboardService.getAnalysisDetails(analysisId)
+          .then((response) => {
+            console.log('Analysis details:', response.data.display_errors);
+            setAnalysisErrorTypes(response.data.display_errors);
+          })
+          .catch((error) => {
+            console.error('Failed to get analysis details:', error);
+            resetDefaultColumns(columnArray);
           });
     } else if (analysisId === 'development') {
       setLeaderboardDetails([{
@@ -239,10 +300,11 @@ export default function Leaderboard() {
         metrics: ['Development'],
         error: 0,
       }]);
-      setLeaderboardIsLoading(false);
+      resetDefaultColumns(columnArray);
     } else {
       setLeaderboardDetails([]);
       setLeaderboardIsLoading(false);
+      resetDefaultColumns(columnArray);
       console.error('Invalid analysis ID');
       console.error('Analysis ID:', analysisId);
       console.error('Analysis failed to load.');
@@ -252,6 +314,15 @@ export default function Leaderboard() {
   useEffect(() => {
     console.log('Leaderboard details:', leaderboardDetails);
   }, [leaderboardDetails]);
+
+  useEffect(() => {
+    // use map to create a new array of columns due to arrays in variables sharing the same memory pointer
+    const columnArray = baseColumns.map((column) => {
+      return column;
+    }
+    );
+    setDynamicColumns(columnArray);
+  }, [analysisErrorTypes]);
 
   return (
     isLeaderboardLoading || (

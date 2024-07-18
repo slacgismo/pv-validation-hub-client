@@ -13,16 +13,28 @@ const DashboardService = {
             response[i].submitted_at
         ).toLocaleString('en-US');
 
-        const element = {
+        const element: any = {
           id,
           file_completion: response[i].error_rate,
           created_by: response[i].created_by.username,
           execution_time: response[i].mrt,
           status: response[i].status,
           metrics: response[i].data_requirements,
-          error: response[i].mae,
+          error: null,
           submitted_at: formattedSubmittedAt,
+          python_version: response[i].python_version,
         };
+        const keys = Object.keys(response[i].result);
+        const resObj = response[i].result;
+        console.log('keys:', keys);
+        if (keys.length > 0) {
+          for (const key in resObj) {
+            // writing style workaround, I DO want all the keys
+            if (key in resObj) {
+              element[key] = resObj[key];
+            }
+          }
+        }
         id += 1;
         console.log('id:', id);
         console.log('ele', element);
@@ -68,6 +80,9 @@ const DashboardService = {
   getLeaderBoard(leaderBoardUrl: string) {
     console.log(leaderBoardUrl);
     return client.get(leaderBoardUrl);
+  },
+  getAnalysisDetails(analysisId: number) {
+    return client.get(`/analysis/${analysisId}`);
   },
   useGetSubmissions(submissionUrl: string, token: string) {
     const [isSubmissionLoading, setSubmissionLoading] = useState(true);
