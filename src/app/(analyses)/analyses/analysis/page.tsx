@@ -14,7 +14,6 @@ import {useSearchParams} from 'next/navigation';
 import Header from '@/app/modules/header/header';
 import Footer from '@/app/modules/footer/footer';
 import TabPanel from '@/app/modules/analyses/tabpanel';
-import Data from '@/app/modules/analyses/leaderboard/data';
 import Leaderboard from '@/app/modules/analyses/leaderboard/leaderboard';
 import Overview from '@/app/modules/analyses/leaderboard/overview';
 import Rules from '@/app/modules/analyses/leaderboard/rules';
@@ -43,12 +42,21 @@ const AnalysisPage: React.FC = () => {
   }
 
   let selectedAnalysis: string | number | null = searchParams.get('analysisId');
+  let validAnalysisParam = false;
+
+  // Check if the analysis ID is a number and store as variable due to typescript
+  // limitations doing it directly in my next if statement
+  if (
+    selectedAnalysis !== null && selectedAnalysis !== 'development'
+  ) {
+    validAnalysisParam = isNaN(parseInt(selectedAnalysis.toString()));
+  }
 
   if ((
     selectedAnalysis !== 'development'
   ) && (
     selectedAnalysis !== null
-  )) {
+  ) && !validAnalysisParam) {
     selectedAnalysis = parseInt(
         selectedAnalysis.toString() || '', 10);
   } else if ((
@@ -78,7 +86,6 @@ const AnalysisPage: React.FC = () => {
 
   // Set the md descriptions
 
-  const [datasetDescription, setDatasetDescription] = useState('');
   const [longDescription, setLongDescription] = useState('');
   const [rulesetDescription, setRulesetDescription] = useState('');
   const [coverImageDir, setCoverImageDir] = useState('');
@@ -127,10 +134,6 @@ const AnalysisPage: React.FC = () => {
             ))) {
       setCoverImageDir(`/static/assets/${selectedAnalysis}/banner.png`);
       console.log('cid', coverImageDir);
-
-      MS.fetchMarkdown(`/static/assets/${selectedAnalysis}/dataset.md`)
-          .then((text) => setDatasetDescription(text))
-          .catch((err) => console.log(err));
 
       MS.fetchMarkdown(`/static/assets/${selectedAnalysis}/description.md`)
           .then((text) => replaceImagePaths(text, selectedAnalysis))
@@ -215,11 +218,6 @@ const AnalysisPage: React.FC = () => {
                           panelTab
                           '/>
                           <Tab
-                            label="Data"
-                            className='
-                          panelTab
-                          '/>
-                          <Tab
                             label="Submit Algorithm"
                             className='
                           panelTab
@@ -244,18 +242,6 @@ const AnalysisPage: React.FC = () => {
 
                   <TabPanel
                     value={value}
-                    index={3}
-                  >
-                                    (
-                    <Data
-                      dataDescription={datasetDescription}
-                      downloadableLink={null}
-                    />
-                                    )
-                  </TabPanel>
-
-                  <TabPanel
-                    value={value}
                     index={0}
                   >
                     <Leaderboard />
@@ -272,7 +258,7 @@ const AnalysisPage: React.FC = () => {
                   </TabPanel>
                   <TabPanel
                     value={value}
-                    index={4}
+                    index={3}
                   >
                     <SubmissionUploader analysisId={analysisId} />
                   </TabPanel>

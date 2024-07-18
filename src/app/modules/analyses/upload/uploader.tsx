@@ -1,7 +1,7 @@
 'use client';
 // *********** START OF IMPORTS ***********
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Box, Grid, Button, Typography,
 } from '@mui/material';
@@ -46,6 +46,21 @@ export default function SubmissionUploader(
   });
 
   const [altName, setAltName] = useState('');
+  const [pythonVersions, setPythonVersions] = useState([]);
+  const [pythonVersion, setPythonVersion] = useState('3.11');
+
+  useEffect(() => {
+    AnalysisService.getPythonVersions()
+        .then((response) => {
+          console.log('versions:', response);
+          if (response.status === 200) {
+            setPythonVersions(response.data);
+          }
+        })
+        .catch((errorCode) => {
+          console.error('Failed to get python versions:', errorCode);
+        });
+  }, []);
 
   const handleNameChange = (e: any) => {
     console.log('event: ', e);
@@ -55,6 +70,16 @@ export default function SubmissionUploader(
       val = '';
     }
     setAltName(val);
+  };
+
+  const handleSelectChange = (e: any) => {
+    console.log('event: ', e);
+    let val = e.target.value;
+    if (typeof(val) !== 'string' || val === undefined || val === null) {
+      console.error('Name submission must be a string.');
+      val = '';
+    }
+    setPythonVersion(val);
   };
 
   const clearName = () => {
@@ -68,7 +93,8 @@ export default function SubmissionUploader(
           analysisId,
           user.token,
           file.file,
-          altName);
+          altName,
+          pythonVersion);
     } else if (analysisId === 'development') {
       responsePromise = Promise.resolve({
         status: 200,
@@ -163,6 +189,21 @@ export default function SubmissionUploader(
             className='
             tableBorder
             '/>
+        </label>
+        <label>
+        Select Python Version: <select
+            name='pythonVersion'
+            value={pythonVersion}
+            onChange={(e) => handleSelectChange(e)}
+            className='
+            tableBorder
+            '>
+            {pythonVersions.map((version: string) => (
+              <option key={version} value={version}>
+                {version}
+              </option>
+            ))}
+          </select>
         </label>
         {uploadSuccess.success === true && (
           <Typography
