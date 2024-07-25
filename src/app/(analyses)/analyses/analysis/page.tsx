@@ -89,6 +89,7 @@ const AnalysisPage: React.FC = () => {
   const [longDescription, setLongDescription] = useState('');
   const [rulesetDescription, setRulesetDescription] = useState('');
   const [coverImageDir, setCoverImageDir] = useState('');
+  const [analysesBlurb, setAnalysesBlurb] = useState('');
 
 
   useEffect(() => {
@@ -146,6 +147,13 @@ const AnalysisPage: React.FC = () => {
           .then((text) => replaceImagePaths(text, selectedAnalysis))
           .then((text) => setRulesetDescription(text))
           .catch((err) => console.log(err));
+
+      MS.fetchMarkdown(
+          `/static/assets/${selectedAnalysis}/shortdesc.md`)
+          .then((text) => {
+            setAnalysesBlurb(text);
+          })
+          .catch((error) => console.error(error));
     } else {
       console.error('Analysis ID not found');
     }
@@ -175,19 +183,39 @@ const AnalysisPage: React.FC = () => {
                   <div
                     className='
                       grid
-                      grid-cols-1
+                      grid-cols-2
                       place-items-center
                   '>
-                    <Typography color="black" variant="h4" gutterBottom>
-                      {analysisDetailsCard.analysis_name}
-                    </Typography>
+                    <div>
+                      <Typography
+                        color="black"
+                        variant="h4"
+                        gutterBottom
+                        className='
+                      justify-center
+                      text-center
+                      '>
+                        {analysisDetailsCard.analysis_name}
+                      </Typography>
+                      <Typography
+                        color="black"
+                        gutterBottom
+                        className='
+                      justify-center
+                      text-center
+                      mt-4
+                      '>
+                        {analysesBlurb}
+                      </Typography>
+                    </div>
+
                     {/* eslint-disable-next-line @next/next/no-img-element*/}
                     <div
                       style={{backgroundImage: `url(${coverImageDir})`}}
                       className='
                         relative
-                        bg-repeat
-                        bg-contain
+                        bg-cover
+                        bg-no-repeat
                         bannerImage
                         '/>
                   </div>
