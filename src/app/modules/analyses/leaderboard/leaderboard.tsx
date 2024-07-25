@@ -309,6 +309,7 @@ export default function Leaderboard() {
       console.error('Analysis ID:', analysisId);
       console.error('Analysis failed to load.');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [analysisId]);
 
   useEffect(() => {
@@ -322,6 +323,7 @@ export default function Leaderboard() {
     }
     );
     setDynamicColumns(columnArray);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [analysisErrorTypes]);
 
   return (

@@ -434,6 +434,11 @@ body {
   max-height: 80%;
 }
 
+.bannerImage {
+  height: 10rem;
+  width:  69rem;
+}
+
 .panelTab {
   flex: 1 0 content;
 }

@@ -168,16 +168,29 @@ const AnalysisPage: React.FC = () => {
               <Container id="analysis">
                 <Box sx={{
                   flexGrow: 1,
-                  marginTop: 3,
-                  height: 200,
-                  backgroundImage: `url(${coverImageDir})`,
+                  marginTop: 1,
+                  marginBottom: 3,
                 }}
                 >
-                  <Box sx={{flexGrow: 1, marginTop: 4, marginLeft: 2}}>
+                  <div
+                    className='
+                      grid
+                      grid-cols-1
+                      place-items-center
+                  '>
                     <Typography color="black" variant="h4" gutterBottom>
                       {analysisDetailsCard.analysis_name}
                     </Typography>
-                  </Box>
+                    {/* eslint-disable-next-line @next/next/no-img-element*/}
+                    <div
+                      style={{backgroundImage: `url(${coverImageDir})`}}
+                      className='
+                        relative
+                        bg-repeat
+                        bg-contain
+                        bannerImage
+                        '/>
+                  </div>
                 </Box>
 
                 <Box
