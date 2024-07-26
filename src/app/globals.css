@@ -443,6 +443,10 @@ body {
   flex: 1 0 content;
 }
 
+/* 
+  Pallete colors 
+*/
+
 .pal-yellow {
   color: #F0E442;
 }

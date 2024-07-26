@@ -23,6 +23,21 @@
     &:hover {
         background-color: #f8f8f8;
     }
+  }
+
+  .menuDisabled {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: grey;
+    text-decoration: none;
+    font-family: sans-serif;
+    font-weight: 400;
+    background-color: #31A69B;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: #f8f8f8;
+  }
 
   .headerBackground {
     background-color: #31A69B;

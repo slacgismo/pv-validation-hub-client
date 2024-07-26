@@ -32,10 +32,12 @@ import {logIn} from '@/reducers/user';
   type NavMenuPage = {
     route: string;
     text: string;
+    requireLogin: boolean;
   }
 
   type NavMenuProps = {
     pages: NavMenuPage[];
+    isLoggedIn: boolean;
   }
 
   type UserInfoMenuItem = {
@@ -94,14 +96,17 @@ export default function Header() {
     {
       text: 'Analytical Tasks',
       route: '/analyses',
+      requireLogin: false,
     },
     {
       text: 'My Submissions',
       route: '/mysubmissions',
+      requireLogin: true,
     },
     {
       text: 'Resources',
       route: '/resources',
+      requireLogin: false,
     },
   ];
     // *********** END OF DEFINITIONS ***********
@@ -112,7 +117,7 @@ export default function Header() {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Logo redirect="/" />
-            <NavMenu pages={navPages} />
+            <NavMenu pages={navPages} isLoggedIn={loggedIn}/>
             {
                 !loggedIn ?
                   <UserLoggedInMenu /> :
@@ -149,18 +154,35 @@ function Logo({redirect}: {redirect: string}) {
  * The NavMenu component is the navigation menu of the app.
  * It displays the navigation menu items.
  * @param {NavMenuProps} pages The pages to display in the navigation menu.
+ * @param {boolean} isLoggedIn Whether the user is logged in.
  * @return {JSX.Element} The rendered NavMenu component.
  */
-const NavMenu: React.FC<NavMenuProps> = ({pages}) => {
+const NavMenu: React.FC<NavMenuProps> = ({pages, isLoggedIn}) => {
   return (
     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-      {pages.map((page, index) => (
-        <Link className={`${styles.menuLink} ${styles.headerBackground}`}
-          key={`${index}-${page.route}`}
-          href={page.route}>
-          {page.text}
-        </Link>
-      ))}
+      {pages.map((page, index) => {
+        if (page.requireLogin && !isLoggedIn) {
+          console.log('disabled link');
+          return (
+            <Link className={`
+              ${styles.menuDisabled} 
+              ${styles.headerBackground}
+              `}
+            key={`${index}-${page.route}`}
+            href={'/login'}>
+              {page.text}
+            </Link>
+          );
+        } else {
+          return (
+            <Link className={`${styles.menuLink} ${styles.headerBackground}`}
+              key={`${index}-${page.route}`}
+              href={page.route}>
+              {page.text}
+            </Link>
+          );
+        }
+      })}
     </Box>
   );
 };

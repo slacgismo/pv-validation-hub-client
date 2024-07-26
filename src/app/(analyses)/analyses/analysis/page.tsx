@@ -21,8 +21,13 @@ import AnalysisService from '@/services/analysis_service';
 import SubmissionUploader from '@/app/modules/analyses/upload/uploader';
 import replaceImagePaths from '@/config/mdurl';
 import MS from '@/services/md_service';
+import CookieService from '@/services/cookie_service';
 
 // *********** REDUX IMPORTS ***********
+
+import {useAppSelector} from '@/store/store';
+import {useDispatch} from 'react-redux';
+import {logIn} from '@/reducers/user';
 
 // *********** END OF IMPORTS ***********
 
@@ -35,6 +40,11 @@ type AnalysisDetailsCard = {
 const AnalysisPage: React.FC = () => {
   const searchParams = useSearchParams();
   const navigate = useRouter();
+  const dispatch = useDispatch();
+
+  const loggedIn = useAppSelector((state) => (
+    state.user.loggedIn)
+  );
 
   if (searchParams.get('analysisId') === null) {
     console.error('Analysis ID not found');
@@ -91,6 +101,14 @@ const AnalysisPage: React.FC = () => {
   const [coverImageDir, setCoverImageDir] = useState('');
   const [analysesBlurb, setAnalysesBlurb] = useState('');
 
+  useEffect(() => {
+    if (!loggedIn) {
+      const userCookie = CookieService.getUserCookie();
+      if (userCookie && userCookie.token) {
+        dispatch(logIn(userCookie.username));
+      }
+    }
+  }, [dispatch, loggedIn]);
 
   useEffect(() => {
     if (window.location.hostname.includes('localhost') && (
@@ -258,11 +276,19 @@ const AnalysisPage: React.FC = () => {
                             className='
                           panelTab
                           '/>
-                          <Tab
-                            label="Submit Algorithm"
-                            className='
+                          {
+                            loggedIn ? <Tab
+                              label="Submit Algorithm"
+                              className='
                           panelTab
-                          '/>
+                          '/> : <Tab
+                                label="Submit Algorithm"
+                                disabled
+                                className='
+                        panelTab
+                        '/>
+                          }
+
                         </Tabs>
                       </Grid>
 
