@@ -60,7 +60,6 @@ export default function Leaderboard() {
   )) {
     console.log('Development analysis');
   } else {
-    console.log('NO!', analysisId);
     navigate.push('/analyses');
   }
   const [leaderboardDetails, setLeaderboardDetails] = useState<{
@@ -69,7 +68,7 @@ export default function Leaderboard() {
     created_by: string;
     execution_time: number;
     status: string;
-    metrics: Array<string>;
+    dataRequirements: Array<string>;
     error: number;
   }[]>([]);
   const [isLeaderboardLoading, setLeaderboardIsLoading] = useState(true);
@@ -162,8 +161,8 @@ export default function Leaderboard() {
       },
     },
     {
-      field: 'metrics',
-      headerName: 'Metrics',
+      field: 'dataRequirements',
+      headerName: 'Data Requirements',
       headerAlign: 'center',
       align: 'center',
       filterable: false,
@@ -173,28 +172,29 @@ export default function Leaderboard() {
       flex: 1.5,
       renderCell: (params) => {
         // params.value needs to be an array of strings.
-        let metrics;
+        let dataRequirements;
         let id;
         if (Array.isArray(params.value)) {
           try {
             // Attempt to parse the JSON string
-            metrics = params.value;
+            dataRequirements = params.value;
             id = params.id;
           } catch (error) {
-            console.error('Failed to retrieve a metrics array:', error);
-            metrics = [];
+            console.error('Failed to retrieve a dataRequirements array:',
+                error);
+            dataRequirements = [];
             id = 0;
           }
         } else {
-          console.error('Failed to retrieve a metrics array.',
+          console.error('Failed to retrieve a dataRequirements array.',
               ' Instead received: ', params.value
           );
-          metrics = [];
+          dataRequirements = [];
           id = 0;
         }
         return (
           <Box>
-            {metrics.map((name: string, index: number) => {
+            {dataRequirements.map((name: string, index: number) => {
               const key=`${index}-${name}-${id}`;
               const hex=ColorPalette[index];
               return (
@@ -252,7 +252,6 @@ export default function Leaderboard() {
     );
     if (typeof analysisId === 'number') {
       const url = `/analysis/${analysisId}/leaderboard`;
-      console.log('Leaderboard URL:', url);
       DashboardService.getLeaderBoard(url)
           .then((leaderboardResponse) => {
             setLeaderboardIsLoading(false);
@@ -260,7 +259,6 @@ export default function Leaderboard() {
             return DashboardService.formatResponse(resp.submissions);
           })
           .then((formattedResponse) => {
-            console.log('Formatted response:', formattedResponse);
             if (formattedResponse.length > 0) {
               setLeaderboardDetails(formattedResponse);
             } else {
@@ -270,7 +268,7 @@ export default function Leaderboard() {
                 created_by: 'N/A',
                 execution_time: 0,
                 status: 'N/A',
-                metrics: ['N/A'],
+                dataRequirements: ['N/A'],
                 error: 0,
               }]);
             }
@@ -283,7 +281,6 @@ export default function Leaderboard() {
           });
       DashboardService.getAnalysisDetails(analysisId)
           .then((response) => {
-            console.log('Analysis details:', response.data.display_errors);
             setAnalysisErrorTypes(response.data.display_errors);
           })
           .catch((error) => {
@@ -297,7 +294,7 @@ export default function Leaderboard() {
         created_by: 'Development',
         execution_time: 0,
         status: 'Development',
-        metrics: ['Development'],
+        dataRequirements: ['Development'],
         error: 0,
       }]);
       resetDefaultColumns(columnArray);
@@ -313,7 +310,6 @@ export default function Leaderboard() {
   }, [analysisId]);
 
   useEffect(() => {
-    console.log('Leaderboard details:', leaderboardDetails);
   }, [leaderboardDetails]);
 
   useEffect(() => {

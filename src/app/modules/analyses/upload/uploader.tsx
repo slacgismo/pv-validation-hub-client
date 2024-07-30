@@ -52,7 +52,6 @@ export default function SubmissionUploader(
   useEffect(() => {
     AnalysisService.getPythonVersions()
         .then((response) => {
-          console.log('versions:', response);
           if (response.status === 200) {
             setPythonVersions(response.data);
           }
@@ -63,7 +62,6 @@ export default function SubmissionUploader(
   }, []);
 
   const handleNameChange = (e: any) => {
-    console.log('event: ', e);
     let val = e.target.value;
     if (typeof(val) !== 'string' || val === undefined || val === null) {
       console.error('Name submission must be a string.');
@@ -73,7 +71,6 @@ export default function SubmissionUploader(
   };
 
   const handleSelectChange = (e: any) => {
-    console.log('event: ', e);
     let val = e.target.value;
     if (typeof(val) !== 'string' || val === undefined || val === null) {
       console.error('Name submission must be a string.');
@@ -106,7 +103,6 @@ export default function SubmissionUploader(
 
     responsePromise
         .then((response) => {
-          console.log('response:', response);
           clearName();
           if (response.status === 200) {
             setUploadSuccess({

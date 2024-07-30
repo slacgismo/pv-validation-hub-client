@@ -11,7 +11,6 @@ import React from 'react';
 
 
 const MarimoProcessor = ({htmlFile}: {htmlFile: string}) => {
-  console.log('htmlFile: ', htmlFile);
   return (
     <div className="iframeContainer">
       <iframe

@@ -78,7 +78,6 @@ const AnalysisPage: React.FC = () => {
   )) {
     console.log('Development analysis');
   } else {
-    console.log('NO!', selectedAnalysis);
     navigate.push('/analyses');
   }
 
@@ -127,7 +126,6 @@ const AnalysisPage: React.FC = () => {
       AnalysisService.getCardDetails(selectedAnalysis)
           .then((response: any) => {
             setIsLoading(false);
-            console.log('resp:', response.data);
             setAnalysisDetailsCard(response.data);
             setAnalysisId(response.data.analysis_id);
           })
@@ -144,7 +142,6 @@ const AnalysisPage: React.FC = () => {
   }, [selectedAnalysis, error, navigate]);
 
   useEffect(() => {
-    console.log('analysis', selectedAnalysis, typeof selectedAnalysis);
     if (selectedAnalysis !== undefined && selectedAnalysis !== null &&
             ((typeof(selectedAnalysis) === 'number' && selectedAnalysis > 0) ||
             (
@@ -152,7 +149,6 @@ const AnalysisPage: React.FC = () => {
               selectedAnalysis === 'development'
             ))) {
       setCoverImageDir(`/static/assets/${selectedAnalysis}/banner.png`);
-      console.log('cid', coverImageDir);
 
       MS.fetchMarkdown(`/static/assets/${selectedAnalysis}/description.md`)
           .then((text) => replaceImagePaths(text, selectedAnalysis))
@@ -179,7 +175,6 @@ const AnalysisPage: React.FC = () => {
 
 
   const handleChange = (event: any, newValue: number) => {
-    console.log('new value:', newValue);
     setValue(newValue);
   };
 

@@ -5,8 +5,6 @@ const DashboardService = {
   formatResponse(response: any) {
     const finalResponse = [];
     let id = 0;
-    console.log('Printing response');
-    console.log(response);
     if (response.length > 0) {
       for (let i = 0; i < response.length; i += 1) {
         const formattedSubmittedAt = new Date(
@@ -19,14 +17,13 @@ const DashboardService = {
           created_by: response[i].created_by.username,
           execution_time: response[i].mrt,
           status: response[i].status,
-          metrics: response[i].data_requirements,
+          dataRequirements: response[i].data_requirements,
           error: null,
           submitted_at: formattedSubmittedAt,
           python_version: response[i].python_version,
         };
         const keys = Object.keys(response[i].result);
         const resObj = response[i].result;
-        console.log('keys:', keys);
         if (keys.length > 0) {
           for (const key in resObj) {
             // writing style workaround, I DO want all the keys
@@ -36,12 +33,9 @@ const DashboardService = {
           }
         }
         id += 1;
-        console.log('id:', id);
-        console.log('ele', element);
         finalResponse.push(element);
       }
     }
-    console.log(finalResponse);
     return finalResponse;
   },
   useGetAnalysisSet(analysisUrl: string) {
@@ -78,7 +72,6 @@ const DashboardService = {
     return [isAnalysesLoading, analysesError, analysesDetails];
   },
   getLeaderBoard(leaderBoardUrl: string) {
-    console.log(leaderBoardUrl);
     return client.get(leaderBoardUrl);
   },
   getAnalysisDetails(analysisId: number) {

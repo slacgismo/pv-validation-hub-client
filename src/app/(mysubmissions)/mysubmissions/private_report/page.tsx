@@ -58,7 +58,6 @@ const PrivateReportPage: React.FC = () => {
         try {
           const errors = await
           SubmissionService.getSubmissionErrors(parseInt(selectedSubmission));
-          console.log('Error data:', errors);
           if (errors === 'Invalid submission ID') {
             console.error('Invalid submission ID');
           } else if (errors.length === 0) {
@@ -91,6 +90,7 @@ const PrivateReportPage: React.FC = () => {
         SubmissionService.getSubmissionResults(num)
             .then((response) => response.data)
             .then((result) => {
+              console.log('result:', result);
               if (result === 'Invalid submission ID') {
                 console.error('Invalid submission ID');
               } else {
@@ -155,9 +155,13 @@ const PrivateReportPage: React.FC = () => {
             </AppBar>
           </Box>
 
-          <Suspense fallback={<CircularProgress />}>
+          {
+          (errorData.error_code && errorData.error_code.length > 0) ?
+          <div>
+          </div> : <Suspense fallback={<CircularProgress />}>
             <MarimoProcessor htmlFile={marimoUrl} />
           </Suspense>
+          }
 
         </div>
       </main>

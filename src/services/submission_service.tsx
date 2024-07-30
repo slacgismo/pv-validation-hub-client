@@ -32,8 +32,6 @@ const SubmissionService = {
   },
   formatAllSubmissionsForUser(response: any) {
     const finalResponse = [];
-    console.log('Printing response');
-    console.log(response);
     if (response.length > 0) {
       for (let i = 0; i < response.length; i += 1) {
         const element = {
@@ -48,7 +46,6 @@ const SubmissionService = {
         finalResponse.push(element);
       }
     }
-    console.log(finalResponse);
     return finalResponse;
   },
   getSubmissionResults(submissionId: number | string) {

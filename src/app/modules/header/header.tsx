@@ -162,7 +162,6 @@ const NavMenu: React.FC<NavMenuProps> = ({pages, isLoggedIn}) => {
     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
       {pages.map((page, index) => {
         if (page.requireLogin && !isLoggedIn) {
-          console.log('disabled link');
           return (
             <Link className={`
               ${styles.menuDisabled} 

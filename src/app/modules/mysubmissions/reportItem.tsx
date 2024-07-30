@@ -40,6 +40,8 @@ type Submissions = {
 export default function SubmissionList() {
   const [availableAnalyses, setAvailableAnalyses] = useState<Analysis[]>([]);
   const [submissions, setSubmissions] = useState<Submissions[]>([]);
+  const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({});
+
 
   const handleNameChange = (id: number, newValue: string) => {
     setSubmissions((prevSubmissions) =>
@@ -56,7 +58,6 @@ export default function SubmissionList() {
   };
 
   const handleArchive = async (id: number, archived: boolean) => {
-    console.log('Archiving:', id, archived);
     const user = CookieService.getUserCookie();
     const userId = await UserService.getUserId(user.token);
     await SubmissionService.archiveSubmission(user.token, userId, id, archived);
@@ -79,14 +80,20 @@ export default function SubmissionList() {
         const {value, id, row} = params;
         const {submittedAt} = row;
 
-        const onChange = (newValue: string) => handleNameChange(id, newValue);
-        const onClick = () => handleSetName(id, value);
+        const onChange = (newValue: string) => {
+          setIsEditing((prev) => ({...prev, [id]: true}));
+          handleNameChange(id, newValue);
+        };
+        const onClick = () => {
+          setIsEditing((prev) => ({...prev, [id]: false}));
+          handleSetName(id, value);
+        };
 
 
         if (value !== null &&
           value !== undefined &&
           value !== 'N/A' &&
-          value.length > 0) {
+          (value.length > 0 || isEditing[id])) {
           return (
             <EditableInput
               value={value}
@@ -207,7 +214,6 @@ export default function SubmissionList() {
   ];
 
   const onClick = (e: any) => {
-    console.log('Clicked:', e.target.getAttribute('data-analysisid'));
     const analysisId = parseInt(e.target.getAttribute('data-analysisid'));
     const fetchSubmissions = async () => {
       const user = CookieService.getUserCookie();
@@ -227,7 +233,6 @@ export default function SubmissionList() {
   };
 
   const onClickArchived = (e: any) => {
-    console.log('Clicked:', e.target.getAttribute('data-analysisid'));
     const fetchSubmissions = async () => {
       const user = CookieService.getUserCookie();
       const userId = await UserService.getUserId(user.token);
@@ -260,7 +265,6 @@ export default function SubmissionList() {
           });
       AnalysisService.getAllAnalyses()
           .then((analyses) => {
-            console.log('analyses: ', analyses);
             setAvailableAnalyses(analyses.data);
           })
           .catch((error) => {

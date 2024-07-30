@@ -80,7 +80,7 @@ export default function DemoBoard() {
     },
     {
       field: 'metrics',
-      headerName: 'Metrics',
+      headerName: 'Data Requirements',
       headerAlign: 'center',
       align: 'center',
       filterable: false,
