@@ -5,7 +5,6 @@ import React, {useEffect, useState} from 'react';
 import {Grid} from '@mui/material';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Markdown from 'markdown-to-jsx';
 
@@ -50,14 +49,19 @@ export default function CustomizedCard({
         key={card.analysis_id}
         onClick={() => onClick(card.analysis_id, card.analysis_name)}
         data-testid={testId}
-        className='tableBorder'
+        className='
+        tableBorder
+        justify-center
+        content-center
+        text-center
+        '
       >
-        <CardMedia
-          component="img"
-          height="194"
+        { /* eslint-disable-next-line */ }
+        <img
           src={cardDir}
           alt={card.analysis_name}
           className='
+          object-fill
           tableBorder
           analysisCard
           m-5

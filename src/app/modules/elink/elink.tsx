@@ -8,7 +8,6 @@ import Link from 'next/link';
  */
 export default function Elink(
     {url, linkText}: {url: string, linkText?: string}) {
-  console.log(url, linkText);
   const text = linkText || url;
   return (
     <Link

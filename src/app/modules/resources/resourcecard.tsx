@@ -4,7 +4,6 @@
 import React, {useEffect, useState} from 'react';
 import {Grid} from '@mui/material';
 import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Markdown from 'markdown-to-jsx';
 import Elink from '@/app/modules/elink/elink';
@@ -30,8 +29,7 @@ export default function ResourceCard({
   cardName: string,
   cardId: number,
   testId: string,
-  url: string,
-  linkText: string }) {
+  url: string }) {
   const [shortDescription, setShortDescription] = useState('');
   const [cardDir, setCardDir] = useState('');
 
@@ -53,16 +51,21 @@ export default function ResourceCard({
         sx={{maxWidth: 345, height: 380}}
         key={`${cardName}-${cardId}`}
         data-testid={testId}
-        className='tableBorder'
+        className='
+        tableBorder
+        justify-center
+        content-center
+        text-center
+        '
       >
-        <CardMedia
-          component="img"
-          height="194"
+        { /* eslint-disable-next-line */ }
+        <img
           src={cardDir}
           alt={cardName}
           className='
+          object-fill
           tableBorder
-          analysisCard
+          resourceCard
           m-5
           '
         />

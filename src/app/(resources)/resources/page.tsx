@@ -53,8 +53,18 @@ const ResourcesPage: React.FC = () => {
       items-center
       justify-between
       p-24">
-        <h1>Resources</h1>
-        <p> Something inspirational here.</p>
+        <p className='
+        text-4xl
+        font-bold'>
+          Resources
+        </p>
+        <p className='
+        mb-5
+        mt-5'>
+          The pv-validation-hub was made possible due to the contributions
+          from a wide range of resources. If you want to learn more about our
+          projects, or how to contribute, please visit the following links.
+        </p>
         <Grid container spacing={2}>
           {resources.map((resource) => (
             <ResourceCard
@@ -63,7 +73,6 @@ const ResourcesPage: React.FC = () => {
               cardId={resource.cardId}
               testId={resource.testId}
               url={resource.url}
-              linkText={resource.linkText}
             />
           ))}
         </Grid>
