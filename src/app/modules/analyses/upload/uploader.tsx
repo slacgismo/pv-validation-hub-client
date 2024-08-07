@@ -108,9 +108,10 @@ export default function SubmissionUploader(
             setUploadSuccess({
               success: true,
             });
-            setFile({
+            setFile((prevState) => ({
+              ...prevState,
               file: null,
-            });
+            }));
           } else {
             setUploadSuccess({
               success: false,
@@ -130,16 +131,20 @@ export default function SubmissionUploader(
   const fileTypes = ['ZIP', 'GZ'];
 
   const uploadFile = (fileObject: File) => {
-    setFile({
+    setFile((prevState) => ({
+      ...prevState,
+      name: fileObject.name,
       file: fileObject,
-    });
+    }));
   };
 
   const handleActive = () => file !== null;
 
-  const handleClear = () => setFile({
+  const handleClear = () => setFile((prevState) => ({
+    ...prevState,
+    name: '',
     file: null,
-  });
+  }));
   return (
     <div className='
     grid

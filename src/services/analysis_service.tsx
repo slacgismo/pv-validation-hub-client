@@ -28,12 +28,10 @@ const AnalysisService = {
       formData.append('analysis_id', analysisId.toString()); // Convert analysisId to a string
       formData.append('python_version', pythonVersion);
 
-      console.log('outside: ', altName);
       if ( typeof(altName) === 'string' &&
       altName !== undefined &&
       altName !== null &&
       altName.length > 0 ) {
-        console.log(altName);
         formData.append('alt_name', altName);
       } else {
         formData.append('alt_name', '');
