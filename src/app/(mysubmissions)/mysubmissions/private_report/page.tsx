@@ -15,6 +15,9 @@ import Footer from '@/app/modules/footer/footer';
 import SubmissionService from '@/services/submission_service';
 // eslint-disable-next-line max-len
 import MarimoProcessor from '@/app/modules/mysubmissions/marimo/marimoprocessor';
+import {EditableInput} from '@/app/modules/global/editableComponents';
+import UserService from '@/services/user_service';
+import CookieService from '@/services/cookie_service';
 
 // *********** REDUX IMPORTS ***********
 
@@ -28,6 +31,7 @@ type ErrorData = {
 }
 
 type SubmissionData = {
+  submissionId: number;
   submittedAt: string;
   altName: string;
   dataRequirements: string[];
@@ -50,6 +54,7 @@ const PrivateReportPage: React.FC = () => {
   });
   const [displayErrorDetails, setDisplayErrorDetails] = useState(false);
   const [submissionData, setSubmissionData] = useState<SubmissionData>({
+    submissionId: 0,
     submittedAt: '',
     altName: '',
     dataRequirements: [],
@@ -59,6 +64,51 @@ const PrivateReportPage: React.FC = () => {
     workerVersion: 0,
     status: '',
   });
+  const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({});
+
+  const handleNameChange = (newValue: string) => {
+    setSubmissionData((prevSubmissionData) => ({
+      ...prevSubmissionData,
+      altName: newValue,
+    }));
+  };
+
+  const handleSetName = async (newValue: string) => {
+    const user = CookieService.getUserCookie();
+    const userId = await UserService.getUserId(user.token);
+    await SubmissionService.updateName(
+        user.token,
+        userId,
+        submissionData.submissionId,
+        newValue);
+  };
+
+  const onChange = (newValue: string) => {
+    setIsEditing((prev) => ({...prev, [submissionData.submissionId]: true}));
+    handleNameChange(newValue);
+  };
+
+  const onClick = () => {
+    setIsEditing((prev) => ({...prev, [submissionData.submissionId]: false}));
+    handleSetName(submissionData.altName);
+  };
+
+  const getDisplayName = () => {
+    const {altName, submissionId, submittedAt} = submissionData;
+
+    if (altName !== null &&
+      altName !== undefined &&
+      altName !== 'N/A' &&
+      (altName.length > 0 || isEditing[submissionId])) {
+      return altName;
+    } else if (submissionId !== null &&
+      submissionId !== undefined &&
+      submittedAt !== null && submittedAt !== undefined) {
+      return `Submission_${submissionId}_${submittedAt}`;
+    } else {
+      return 'N/A';
+    }
+  };
 
   const getIcon = (status: string) => {
     switch (status) {
@@ -158,6 +208,7 @@ worker_version: 1}
               } else {
                 setMarimoUrl(result.marimo_url[0]);
                 setSubmissionData({
+                  submissionId: result.submission_details.submission_id,
                   submittedAt: result.submission_details.submitted_at,
                   altName: result.submission_details.alt_name,
                   dataRequirements: result.submission_details.data_requirements,
@@ -202,6 +253,43 @@ worker_version: 1}
         flex-col
         ">
           <Box sx={{flexGrow: 1}}>
+            <AppBar
+              position="static"
+              className="
+              items-center
+              bg-white
+              pal-black
+              mb-4
+              flex
+              flex-row
+              "
+            >
+              <div
+                className="
+                flex
+                flex-row
+                flex-1
+                self-start
+                text-lg
+                font-medium
+                underline
+                ">
+                <EditableInput
+                  value={getDisplayName()}
+                  onChange={(e) => onChange(e.target.value)}
+                  onClick={onClick}
+                />
+              </div>
+              <div
+                className="
+                flex
+                flex-row
+                mr-2
+                self-end
+                ">
+                <button>logs inquiry</button>
+              </div>
+            </AppBar>
             <AppBar
               position="static"
               className="
