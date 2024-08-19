@@ -27,13 +27,15 @@ export default function CarouselCard({
   description,
   link,
   linkText,
+  titleLink,
 }: {
   id: number,
   title: string,
   image: string,
   description: string,
   link: string,
-  linkText: string
+  linkText: string,
+  titleLink: string
   }): React.JSX.Element {
   return (
     <div
@@ -65,9 +67,9 @@ export default function CarouselCard({
           className=''
         />
       </div>
-      <div className='text-xl font-bold'>
+      <Link className='text-xl font-bold' href={titleLink}>
         {title}
-      </div>
+      </Link>
       <p>
         {description}
       </p>

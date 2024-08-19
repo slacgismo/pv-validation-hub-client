@@ -24,6 +24,7 @@ type Slide = {
   description: string,
   link: string,
   linkText: string,
+  titleLink: string,
 }
 
 type PropType = {
@@ -56,6 +57,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
               description,
               link,
               linkText,
+              titleLink,
             } = slide;
             return (
               <div className="
@@ -70,6 +72,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                   description={description}
                   link={link}
                   linkText={linkText}
+                  titleLink={titleLink}
                 />
               </div>
             );

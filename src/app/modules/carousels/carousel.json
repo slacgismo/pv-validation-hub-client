@@ -2,14 +2,16 @@
     {
         "id": 1,
         "title": "Analytical Tasks and Leaderboards",
+        "titleLink": "/analyses",
         "description": "Test your algorithms against predefined tasks and compare how it performs with others in your field",
         "image": "/static/assets/profilecovers/kittens.jpg",
-        "link": "/analyses",
+        "link": "/register",
         "linkText": "Sign Up Now"
     },
     {
         "id": 2,
         "title": "Resources",
+        "titleLink": "/resources",
         "description": "For information about how to contribute to the validation hub",
         "image": "/static/assets/profilecovers/pupper.jpg",
         "link": "/resources",
