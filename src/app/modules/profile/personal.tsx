@@ -1,23 +1,8 @@
 'use client';
 // *********** START OF IMPORTS ***********
 /* eslint-disable no-unused-vars */
-import React, {useEffect, useState} from 'react';
-import {
-  Avatar,
-  Card,
-  CardContent,
-  CardMedia,
-  CircularProgress,
-  Grid, Typography,
-  TextField,
-  Button,
-  CardActions,
-} from '@mui/material';
-import {Box} from '@mui/system';
-import {styled} from '@mui/material/styles';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogAction from '@mui/material/DialogActions';
+import React, {useState} from 'react';
+import {Avatar} from '@mui/material';
 
 // *********** MODULE IMPORTS ***********
 
@@ -46,6 +31,52 @@ type UserDetails = {
  *
  * @return {JSX.Element}
  */
-export default function PersonalDetails() {
-  return 'hi';
+export default function PersonalDetails({
+  userDetails,
+  userToken,
+}: {
+    userDetails: UserDetails,
+    userToken: string
+}) {
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+  const urlUpdate = (
+    userToken !== null
+  ) && (
+    userToken !== undefined
+  ) ? '/account/update/' : '';
+
+  const handleTextChange = (setState: any) => (
+      event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setState(event.target.value);
+  };
+
+  const handleProfileUpdateClick = (userToken: any) => {
+    /*
+    const updatedProfile = {
+      email: emailLink === '' ? userDetails.email : emailLink,
+      githubLink: githubLink === '' ?
+        userDetails.githubLink : githubLink,
+    };
+    // todo: check return value
+    // eslint-disable-next-line no-unused-vars
+    const ret = UserService.updateUserProfile(
+        userToken.token, updatedProfile, urlUpdate
+    );
+    setUpdateDialogOpen(true);
+    */
+  };
+  return (
+    <div className="grid grid-cols-3">
+
+    </div>
+  );
 }
+
+/*
+                  <Avatar
+                    sx={{height: 170, width: 174}}
+                    alt={userDetails.firstName}
+                    src={'/static/assets/profilecovers/ducky.jpg'}
+                  />
+                  */
