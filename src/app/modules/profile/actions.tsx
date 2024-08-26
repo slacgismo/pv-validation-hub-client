@@ -20,5 +20,9 @@ import Elink from '@/app/modules/elink/elink';
  * @return {JSX.Element}
  */
 export default function ProfileActions() {
-  return 'hi';
+  return (
+    <div>
+      <span>hi</span>
+    </div>
+  );
 }

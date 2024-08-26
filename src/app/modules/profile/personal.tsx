@@ -3,6 +3,7 @@
 /* eslint-disable no-unused-vars */
 import React, {useState} from 'react';
 import {Avatar} from '@mui/material';
+import {Button} from '@mui/material';
 
 // *********** MODULE IMPORTS ***********
 
@@ -22,7 +23,9 @@ type UserDetails = {
     firstName: string;
     lastName: string;
     githubLink: string;
-    addtlLinks: string[];
+    webLinks: { [key: string]: string };
+    organization: string;
+    title: string;
   }
 
 // *********** END OF TYPES ***********
@@ -67,16 +70,85 @@ export default function PersonalDetails({
     */
   };
   return (
-    <div className="grid grid-cols-3">
+    <div>
+      <div className="
+      flex
+      items-end
+      w-full
+      ">
+        <div className="flex-1"/>
+        <Button className="self-end standardLink">
+                Edit
+        </Button>
+      </div>
+      <div className="grid grid-cols-3 profileGrid">
+        <div className="
+      justify-center
+      text-center">
+          <Avatar
+            sx={{height: 170, width: 174}}
+            alt={userDetails.firstName}
+            src={'/static/assets/profilecovers/ducky.jpg'}
+            className="mt-1 ml-1"
+          />
+          <h1 className="mt-1 ml-1" >
+            {userDetails.firstName} {userDetails.lastName}
+          </h1>
+          <h1 className="mt-1 ml-1" >
+            {userDetails.title}
+          </h1>
+        </div>
+        <div className="
+      ml-10
+      flex
+      flex-col">
+          <div>
+            <div className="
+          grid grid-rows-1
+          ">
+              <label className="mt-5">
+                Username:
+                <span className="ml-20">
+                  {userDetails.username}
+                </span>
+              </label>
+              <label className="mt-5">
+                Organization:
+                <span className="ml-20">
+                  {userDetails.organization}
+                </span>
+              </label>
+            </div>
 
+          </div>
+        </div>
+        <div>
+          <div className="mt-5">
+            <label>
+            Email:
+              <span className="ml-20">
+                {userDetails.email}
+              </span>
+            </label>
+          </div>
+          <div className="mt-5">
+            <label className="mr-20">
+            Github:
+            </label>
+            <Elink
+              url={userDetails.githubLink}
+              linkText={userDetails.githubLink}
+            />
+          </div>
+          {Object.keys(userDetails.webLinks).map((link) => (
+            <Elink
+              key={userDetails.webLinks.link}
+              url={userDetails.webLinks.link}
+              linkText={userDetails.webLinks.link}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
-
-/*
-                  <Avatar
-                    sx={{height: 170, width: 174}}
-                    alt={userDetails.firstName}
-                    src={'/static/assets/profilecovers/ducky.jpg'}
-                  />
-                  */

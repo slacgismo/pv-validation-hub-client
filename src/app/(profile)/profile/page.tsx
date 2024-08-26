@@ -26,7 +26,9 @@ type UserDetails = {
   firstName: string;
   lastName: string;
   githubLink: string;
-  addtlLinks: string[];
+  webLinks: { [key: string]: string };
+  organization: string;
+  title: string;
 }
 
 const ProfilePage: React.FC = () => {
@@ -47,8 +49,42 @@ const ProfilePage: React.FC = () => {
     firstName: '',
     lastName: '',
     githubLink: '',
-    addtlLinks: [],
+    webLinks: {},
+    organization: '',
+    title: '',
   });
+
+  const [submittedTasks, setSubmittedTasks] = useState([]);
+
+  const formatUserDetails = (userDetails: UserDetails) => {
+    const details: UserDetails = {
+      username: '',
+      email: '',
+      firstName: '',
+      lastName: '',
+      githubLink: '',
+      webLinks: {},
+      organization: '',
+      title: '',
+    };
+    details.username = userDetails.username;
+    details.email = userDetails.email;
+    details.firstName = userDetails.firstName;
+    details.lastName = userDetails.lastName;
+    details.githubLink = userDetails.githubLink;
+    details.webLinks = userDetails.webLinks;
+    details.organization = userDetails.organization;
+    details.title = userDetails.title;
+    if (details.title === '') {
+      details.title = 'User';
+    }
+    if (details.organization === '') {
+      details.organization = 'N/A';
+    }
+    setUserDetails(details);
+    console.log(submittedTasks);
+    setSubmittedTasks(submittedTasks);
+  };
 
   useEffect(() => {
     const retUser = CookieService.getUserCookie();
@@ -66,7 +102,7 @@ const ProfilePage: React.FC = () => {
     UserService.getUserDetails(url, user)
         .then((response) => {
           console.log('userInfo: ', response);
-          setUserDetails(response.data);
+          formatUserDetails(response.data);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -84,26 +120,41 @@ const ProfilePage: React.FC = () => {
         return <CircularProgress />;
       default:
         return (
-          <div className="grid grid-rows-6 tableBorder">
-            <div className="border-b-2">
-              <h1 className="text-4xl">Personal Details</h1>
+          <div className="flex flex-col tableBorder">
+            <div className="
+            b-border
+            pal-border
+            flex-1
+            p-3
+            ">
+              <h1 className="text-xl">Personal Details</h1>
             </div>
-            <div>
+            <div className="flex-1 min-h-80">
               <PersonalDetails
                 userDetails={userDetails}
                 userToken={userToken.token}
               />
             </div>
-            <div className="border-b-2 border-t-2">
-              <h1 className="text-4xl">Submitted Tasks</h1>
+            <div className="
+            bt-border
+            pal-border
+            flex-1
+            p-3
+            ">
+              <h1 className="text-xl">Submitted Tasks</h1>
             </div>
-            <div>
+            <div className="flex-1 min-h-80">
               <ProfileActions />
             </div>
-            <div className="border-b-2 border-t-2">
-              <h1 className="text-4xl">More Actions</h1>
+            <div className="
+            bt-border
+            pal-border
+            flex-1
+            p-3
+            ">
+              <h1 className="text-xl">More Actions</h1>
             </div>
-            <div>
+            <div className="flex-1 min-h-80">
               <ProfileTasks />
             </div>
           </div>
