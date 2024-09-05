@@ -20,6 +20,9 @@ import ProfileTasks from '@/app/modules/profile/tasks';
 
 // *********** END OF IMPORTS ***********
 
+
+// *********** START OF TYPES ***********
+
 type UserDetails = {
   username: string;
   email: string;
@@ -29,7 +32,23 @@ type UserDetails = {
   webLinks: { [key: string]: string };
   organization: string;
   title: string;
+  profileImage: string;
 }
+
+type AllDetails = {
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  githubLink: string;
+  webLinks: { [key: string]: string };
+  organization: string;
+  title: string;
+  profileImage: string;
+  submitted_tasks: { [key: string]: string };
+}
+
+// *********** END OF TYPES ***********
 
 const ProfilePage: React.FC = () => {
   const router = useRouter();
@@ -52,11 +71,12 @@ const ProfilePage: React.FC = () => {
     webLinks: {},
     organization: '',
     title: '',
+    profileImage: 'ducky.jpg',
   });
 
-  const [submittedTasks, setSubmittedTasks] = useState([]);
+  const [submittedTasks, setSubmittedTasks] = useState<[string, string][]>([]);
 
-  const formatUserDetails = (userDetails: UserDetails) => {
+  const formatUserDetails = (userDetails: AllDetails) => {
     const details: UserDetails = {
       username: '',
       email: '',
@@ -66,6 +86,7 @@ const ProfilePage: React.FC = () => {
       webLinks: {},
       organization: '',
       title: '',
+      profileImage: 'ducky.jpg',
     };
     details.username = userDetails.username;
     details.email = userDetails.email;
@@ -75,6 +96,7 @@ const ProfilePage: React.FC = () => {
     details.webLinks = userDetails.webLinks;
     details.organization = userDetails.organization;
     details.title = userDetails.title;
+    details.profileImage = userDetails.profileImage;
     if (details.title === '') {
       details.title = 'User';
     }
@@ -82,8 +104,10 @@ const ProfilePage: React.FC = () => {
       details.organization = 'N/A';
     }
     setUserDetails(details);
-    console.log(submittedTasks);
-    setSubmittedTasks(submittedTasks);
+
+    // Convert submitted_tasks to an array of tuples
+    const submittedTasksArray = Object.entries(userDetails.submitted_tasks);
+    setSubmittedTasks(submittedTasksArray);
   };
 
   useEffect(() => {
@@ -120,7 +144,7 @@ const ProfilePage: React.FC = () => {
         return <CircularProgress />;
       default:
         return (
-          <div className="flex flex-col tableBorder">
+          <div className="flex flex-col tableBorder bg-white">
             <div className="
             b-border
             pal-border
@@ -144,7 +168,7 @@ const ProfilePage: React.FC = () => {
               <h1 className="text-xl">Submitted Tasks</h1>
             </div>
             <div className="flex-1 min-h-80">
-              <ProfileActions />
+              <ProfileTasks submittedTasks={submittedTasks} />
             </div>
             <div className="
             bt-border
@@ -155,7 +179,7 @@ const ProfilePage: React.FC = () => {
               <h1 className="text-xl">More Actions</h1>
             </div>
             <div className="flex-1 min-h-80">
-              <ProfileTasks />
+              <ProfileActions />
             </div>
           </div>
         );

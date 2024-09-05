@@ -26,6 +26,7 @@ type UserDetails = {
     webLinks: { [key: string]: string };
     organization: string;
     title: string;
+    profileImage: string;
   }
 
 // *********** END OF TYPES ***********
@@ -53,6 +54,11 @@ export default function PersonalDetails({
   ) => {
     setState(event.target.value);
   };
+
+  if (typeof window !== 'undefined') {
+    const host = window.location;
+    console.log(host);
+  }
 
   const handleProfileUpdateClick = (userToken: any) => {
     /*
@@ -88,7 +94,7 @@ export default function PersonalDetails({
           <Avatar
             sx={{height: 170, width: 174}}
             alt={userDetails.firstName}
-            src={'/static/assets/profilecovers/ducky.jpg'}
+            src={`/static/assets/profilecovers/${userDetails.profileImage}`}
             className="mt-1 ml-1"
           />
           <h1 className="mt-1 ml-1" >
@@ -114,6 +120,12 @@ export default function PersonalDetails({
               </label>
               <label className="mt-5">
                 Organization:
+                <span className="ml-20">
+                  {userDetails.organization}
+                </span>
+              </label>
+              <label className="mt-5">
+                Profile Link:
                 <span className="ml-20">
                   {userDetails.organization}
                 </span>
