@@ -144,7 +144,7 @@ describe('Footer', () => {
 
     // Filter this array to get the specific links
     const blogLink = allLinks.find((link) => (
-      link.textContent === 'Blog')
+      link.textContent === 'News')
     );
     expect(blogLink).toBeInTheDocument();
   });

@@ -2,10 +2,9 @@
 // *********** START OF IMPORTS ***********
 
 import Link from 'next/link';
-import Image from 'next/image';
 import React from 'react';
 import styles from '@/app/modules/modulecss/footer.module.css';
-import {Grid, Typography} from '@mui/material';
+import {Grid} from '@mui/material';
 import {Box} from '@mui/system';
 
 // *********** MODULE IMPORTS ***********
@@ -39,45 +38,38 @@ export default function Footer() {
                   href="https://www6.slac.stanford.edu/
                   news-and-events/connect-with-us"
                   color="inherit">
-                  Community
+                  SLAC
                 </Link>
               </Grid>
               <Grid item xs={2}>
-                <Link href="https://www6.slac.stanford.edu/about"
+                <Link href="https://gismo.slac.stanford.edu/"
                   color="inherit">
-                  Company
+                  GISMo
                 </Link>
               </Grid>
               <Grid item xs={4}>
                 <Box alignItems="center" justifyContent="center">
-                  <Typography
-                    display="block"
-                    align="center"
-                    variant="h6"
-                    noWrap
-                    sx={{
-                      mr: 2,
-                      fontFamily: 'sans-serif',
-                      fontWeight: 700,
-                      color: 'black',
-                      textDecoration: 'none',
-                    }}
-                  >
-                    PVHub
-                  </Typography>
+                  <Link
+                    href="/"
+                    className="
+                    text-2xl
+                    font-bold
+                    ">
+                    Valhub
+                  </Link>
                 </Box>
               </Grid>
               <Grid item xs={2}>
-                <Link href="https://www6.slac.stanford.edu/
-                news-and-events/news-center"
-                color="inherit">
-                  Blog
+                <Link href="https://gismo.slac.stanford.edu/news-and-events"
+                  color="inherit">
+                  News
                 </Link>
               </Grid>
               <Grid item xs={2}>
-                <Link href="https://www6.slac.stanford.edu/about/resources"
-                  color="inherit">
-                  Resources
+                <Link href="https://www.energy.gov/eere/solar/
+                solar-energy-technologies-office"
+                color="inherit">
+                  SETO
                 </Link>
               </Grid>
             </Grid>
@@ -86,18 +78,11 @@ export default function Footer() {
         </Grid>
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <Image src="/static/next.svg"
-              alt="Next.js Logo" width={32} height={32}
-              className={styles.footerIcon} />
-            <Image src="/static/next.svg"
-              alt="Next.js Logo" width={32} height={32}
-              className={styles.footerIcon} />
-            <Image src="/static/next.svg"
-              alt="Next.js Logo" width={32} height={32}
-              className={styles.footerIcon} />
-            <Image src="/static/next.svg"
-              alt="Next.js Logo" width={32} height={32}
-              className={styles.footerIcon} />
+            <div>
+            This work is supported by the U.S. Department of Energy’s
+            Office of Energy Efficiency and Renewable Energy (EERE) under
+            the Solar Energy Technologies Office Award Number 38529.
+            </div>
           </Box>
         </Grid>
       </Grid>
