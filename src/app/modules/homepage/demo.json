@@ -23,7 +23,7 @@
         "created_by": "Jane Doe",
         "execution_time": 49.543,
         "status": "completed",
-        "metrics": ["latitude", "longitude"],
+        "metrics": ["time_series", "latitude", "longitude"],
         "error": 22.207
       },
       {
@@ -32,7 +32,7 @@
         "created_by": "Bob",
         "execution_time": 12.345,
         "status": "completed",
-        "metrics": ["data_sampling_frequency"],
+        "metrics": ["time_series", "data_sampling_frequency"],
         "error": 20.207
       },
       {

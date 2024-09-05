@@ -35,25 +35,28 @@ export default function Home() {
         <div className="flex flex-col items-center">
         </div>
         <div className='grid grid-cols-2 gap-4 justify-center content-center'>
-          <div className="m-2
+          <div className="
+          m-2
           flex
           flex-column
           shadow tableBorder
           bg-white
           completeFit
-          justify-center">
+          justify-center
+          overflow-scroll
+          ">
             <DemoBoard />
           </div>
           <div className="flex flex-col items-center">
             <div className="text-5xl font-bold">
               <span className="
               sTextColor">
-           PV-
+           PV{' '}
               </span>
            Validation Hub!
             </div>
             <p className="text-lg mt-4 pl-36 items-center">
-            Helping developers to validate their pv science algorithms,
+            Helping developers to validate their PV science algorithms,
             and helping analysts select algorithms for use in their pipelines
             </p>
             <div className="flex flex-row mt-4">

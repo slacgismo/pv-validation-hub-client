@@ -109,7 +109,7 @@ export default function DemoBoard() {
 
   return (
     <Box sx={{
-      height: '55dvh',
+      height: '40dvh',
       width: '60dvw',
     }} className='content-center justify-center'>
       <Typography
@@ -121,7 +121,7 @@ export default function DemoBoard() {
         columns={columns}
         disableColumnFilter={true}
         rows={Array.isArray(demo) ? demo : []}
-        hideFooterPagination={true}
+        hideFooter={true}
         className="scale-[0.85]"
       />
     </Box>
