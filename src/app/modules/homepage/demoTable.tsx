@@ -55,7 +55,8 @@ export default function DemoBoard() {
       groupable: false,
       headerClassName: 'text-center',
       valueGetter: (params: any) => {
-        return params !== null && params !== undefined ? params + '%' : 0 + '%';
+        return params !== null && params !== undefined ?
+        params.toFixed(2) + '%' : 0 + '%';
       },
     },
     {
@@ -65,7 +66,8 @@ export default function DemoBoard() {
       align: 'center',
       flex: 1,
       valueGetter: (params: any) => {
-        return params !== null && params !== undefined ? params : 'N/A';
+        return params !== null && params !== undefined ?
+        params.toFixed(2) : 'N/A';
       },
     },
     {
@@ -75,7 +77,8 @@ export default function DemoBoard() {
       align: 'center',
       flex: 1,
       valueGetter: (params: any) => {
-        return params !== null && params !== undefined ? params : 0;
+        return params !== null && params !== undefined ?
+        params.toFixed(2) : 0;
       },
     },
     {
