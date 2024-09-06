@@ -117,7 +117,7 @@ export default function DemoBoard() {
     }} className='content-center justify-center'>
       <Typography
         variant="h1"
-        className="text-5xl font-bold sTextColor scale-[0.73]">
+        className="text-5xl font-bold sTextColor scale-[0.73] mt-2">
         Demo Board
       </Typography>
       <DataGrid
@@ -125,7 +125,7 @@ export default function DemoBoard() {
         disableColumnFilter={true}
         rows={Array.isArray(demo) ? demo : []}
         hideFooter={true}
-        className="scale-[0.85]"
+        className="scale-[0.85] mb-2"
       />
     </Box>
   );
