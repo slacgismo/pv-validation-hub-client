@@ -3,7 +3,7 @@
         "id": 1,
         "file_completion": 100,
         "created_by": "John Doe",
-        "execution_time": 42.021,
+        "execution_time": 42.02,
         "status": "completed",
         "metrics": ["time_series"],
         "error": 26.207
