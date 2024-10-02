@@ -29,6 +29,7 @@ type Submissions = {
     submittedAt: number;
     altName: string;
     analysis: Analysis;
+    ttc: string;
   }
 
 /**
@@ -165,6 +166,26 @@ export default function SubmissionList() {
             params
         ).toLocaleString('en-US');
         return params !== null && params !== undefined ? formatDate : 'N/A';
+      },
+    },
+    {
+      field: 'ttc',
+      headerName: 'Time to Completion',
+      flex: 1,
+      filterable: false,
+      sortable: false,
+      groupable: false,
+      renderCell: (params: any) => {
+        const {value} = params;
+        if (value !== null || value !== undefined) {
+          return (
+            <div className="">
+              {value}
+            </div>
+          );
+        } else {
+          return 'N/A';
+        }
       },
     },
     {

@@ -33,7 +33,29 @@ const SubmissionService = {
   formatAllSubmissionsForUser(response: any) {
     const finalResponse = [];
     if (response.length > 0) {
+      // ttc = time to completion
+      console.log('response', response);
       for (let i = 0; i < response.length; i += 1) {
+        let ttc;
+        if (
+          (response[i].current_file_count > 0 &&
+          response[i].analysis.total_files %
+          response[i].current_file_count === 0) ||
+          response[i].status === 'finished') {
+          ttc = 'Done';
+        } else if (response[i].current_file_count === 0 &&
+          response[i].status === 'running'
+        ) {
+          ttc = 'Calculating...';
+        } else if (response[i].current_file_count > 0) {
+          const filesLeft = response[i].analysis.total_files -
+            response[i].current_file_count;
+          const avgTime = response[i].avg_file_exec_time;
+          const timeLeft = (filesLeft * avgTime).toFixed(0);
+          ttc = `~${timeLeft} seconds`;
+        } else {
+          ttc = 'Check Status';
+        }
         const element = {
           id: response[i].submission_id,
           status: response[i].status,
@@ -42,6 +64,7 @@ const SubmissionService = {
           subStatus: response[i].status,
           analysis: response[i].analysis,
           archived: response[i].archived,
+          ttc,
         };
         finalResponse.push(element);
       }
