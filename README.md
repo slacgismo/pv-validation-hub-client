@@ -20,7 +20,7 @@ npm install
 npm run dev
 ```
 
-These commands will install all the repository dependencies and then run a development version of the client. If nothing is occupying port 3000, you can view your local instance at localhost:3000 in the browser. If it is occupied, the there will be a link in the shell output to the port it is being hosted on.
+These commands will install all the repository dependencies and then run a development version of the client. If nothing is occupying port 3000, you can view your local instance at 127.0.0.1:3000 in the browser. If it is occupied, the there will be a link in the shell output to the port it is being hosted on.
 
 ### Adding an Analysis
 
@@ -34,11 +34,11 @@ cardCover.png ==> The image viewed on the analysis card on the Analytical Tasks 
 
 shortdesc.md ==> very short blurb for the card on the Analytical Tasks page, maximum of 100 characters.
 
-dataset.md ==> dataset description for the dataset tab on the analysis page. 
+dataset.md ==> dataset description for the dataset tab on the analysis page.
 
-description.md ==> overview for the analysis tab on the analysis page. 
+description.md ==> overview for the analysis tab on the analysis page.
 
-SubmissionInstructions.md ==> Instructions on how to format your submission to be able to run in our system, on the instructions tab on the analysis page. 
+SubmissionInstructions.md ==> Instructions on how to format your submission to be able to run in our system, on the instructions tab on the analysis page.
 
 You can add reference images used in your markdown files in this directory as well.
 
@@ -47,7 +47,7 @@ Use the format:
 ![image info](./random_time_shift.png)
 ```
 
-The `./` is programmatically replaced with the actual path to your images in all build versions. 
+The `./` is programmatically replaced with the actual path to your images in all build versions.
 
 When you are satisfied with your changes, copy all your files and paste them into the numbered directory you made earlier. That directory is now prepped for when the new analysis is added to our back-end.
 

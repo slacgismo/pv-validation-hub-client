@@ -4,13 +4,13 @@ const ENVIRONMENT_DEVELOPMENT = 'DEVELOPMENT';
 const ENVIRONMENT_STAGING = 'STAGING';
 const ENVIRONMENT_PRODUCTION = 'PRODUCTION';
 
-const BASE_API_URL_APP_DEVELOPMENT = 'http://localhost:8005';
+const BASE_API_URL_APP_DEVELOPMENT = 'http://127.0.0.1:8005';
 const BASE_API_URL_APP_STAGING = 'https://api-staging.pv-validation-hub.org';
 const BASE_API_URL_APP_PRODUCTION = 'https://api.pv-validation-hub.org';
 
 const parseEnvironment = () => {
   if (typeof window !== 'undefined') {
-    if (window.location.hostname.includes('localhost')) {
+    if (window.location.hostname.includes('127.0.0.1')) {
       return ENVIRONMENT_DEVELOPMENT;
     }
     if (window.location.hostname.includes('staging')) {

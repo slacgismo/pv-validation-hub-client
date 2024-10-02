@@ -52,7 +52,7 @@ const DashboardService = {
             setAnalysesDetails(analysisResponse.data);
           })
           .catch((error) => {
-            if (window.location.hostname.includes('localhost') &&
+            if (window.location.hostname.includes('127.0.0.1') &&
             (analysesDetails.length === 0 ||
                         analysesDetails[0].analysis_id === 'development')) {
               setAnalysesDetails([{

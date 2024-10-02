@@ -110,7 +110,7 @@ const AnalysisPage: React.FC = () => {
   }, [dispatch, loggedIn]);
 
   useEffect(() => {
-    if (window.location.hostname.includes('localhost') && (
+    if (window.location.hostname.includes('127.0.0.1') && (
       selectedAnalysis === 'development'
     )) {
       setAnalysisDetailsCard({
