@@ -10,7 +10,8 @@ const BASE_API_URL_APP_PRODUCTION = 'https://api.pv-validation-hub.org';
 
 const parseEnvironment = () => {
   if (typeof window !== 'undefined') {
-    if (window.location.hostname.includes('127.0.0.1') || window.location.hostname.includes('localhost')) {
+    if (window.location.hostname.includes('127.0.0.1') ||
+      window.location.hostname.includes('localhost')) {
       return ENVIRONMENT_DEVELOPMENT;
     }
     if (window.location.hostname.includes('staging')) {
