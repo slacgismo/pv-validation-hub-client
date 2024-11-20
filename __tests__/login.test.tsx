@@ -1,11 +1,11 @@
 // *********** START OF IMPORTS ***********
 
-import {render, fireEvent, waitFor, screen, getByTestId} from '@testing-library/react';
+import { render, fireEvent, waitFor, screen, getByTestId } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/jest-globals';
-import {describe, it, expect} from '@jest/globals';
-import {useRouter} from 'next/navigation';
+import { describe, it, expect } from '@jest/globals';
+import { useRouter } from 'next/navigation';
 import fetch from 'jest-fetch-mock';
 import 'jest-location-mock';
 
@@ -20,10 +20,10 @@ import client from '@/services/api_service';
 
 // *********** REDUX IMPORTS ***********
 
-import {configureStore} from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '@/reducers/user';
-import {Provider} from 'react-redux';
-import {store} from '../src/store/store';
+import { Provider } from 'react-redux';
+import { store } from '../src/store/store';
 
 // *********** END OF IMPORTS ***********
 
@@ -59,6 +59,7 @@ describe('Login page', () => {
     preloadedState: {
       user: {
         loggedIn: false,
+        username: '',
       },
     },
   });
@@ -69,10 +70,10 @@ describe('Login page', () => {
     </Provider>);
   });
   it('displays error when username is empty', async () => {
-    const {getByTestId} = render(
-        <Provider store={store}>
-          <Login />
-        </Provider>
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <Login />
+      </Provider>
     );
 
     fireEvent.click(getByTestId('loginButton'));
@@ -83,10 +84,10 @@ describe('Login page', () => {
   });
 
   it('displays error when password is empty', async () => {
-    const {getByTestId} = render(
-        <Provider store={store}>
-          <Login />
-        </Provider>
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <Login />
+      </Provider>
     );
 
     fireEvent.click(getByTestId('loginButton'));
@@ -99,18 +100,18 @@ describe('Login page', () => {
   it('displays error when username is not found', async () => {
     (Validation.isUserNameTaken as jest.Mock).mockReturnValue(false);
 
-    const {getByTestId, getByRole} = render(
-        <Provider store={store}>
-          <Login />
-        </Provider>
+    const { getByTestId, getByRole } = render(
+      <Provider store={store}>
+        <Login />
+      </Provider>
     );
-    fireEvent.change(getByRole('textbox', {name: /username/i}),
-        {target: {value: 'testuser'}});
+    fireEvent.change(getByRole('textbox', { name: /username/i }),
+      { target: { value: 'testuser' } });
     fireEvent.click(getByTestId('loginButton'));
 
     await waitFor(() => {
       expect(getByTestId('uname').parentElement).toHaveTextContent(
-          'Username not found'
+        'Username not found'
       );
     });
   });
@@ -118,19 +119,19 @@ describe('Login page', () => {
   it('displays error when email is not found', async () => {
     (Validation.isEmailInUse as jest.Mock).mockReturnValue(false);
 
-    const {getByTestId, getByRole} = render(
-        <Provider store={store}>
-          <Login />
-        </Provider>
+    const { getByTestId, getByRole } = render(
+      <Provider store={store}>
+        <Login />
+      </Provider>
     );
 
-    fireEvent.change(getByRole('textbox', {name: /username/i}),
-        {target: {value: 'test@example.com'}});
+    fireEvent.change(getByRole('textbox', { name: /username/i }),
+      { target: { value: 'test@example.com' } });
     fireEvent.click(getByTestId('loginButton'));
 
     await waitFor(() => {
       expect(getByTestId('uname').parentElement).toHaveTextContent(
-          'Email not found'
+        'Email not found'
       );
     });
   });
@@ -168,6 +169,7 @@ describe('Register page', () => {
     preloadedState: {
       user: {
         loggedIn: false,
+        username: '',
       },
     },
   });
