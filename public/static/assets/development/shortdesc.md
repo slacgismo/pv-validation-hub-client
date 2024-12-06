@@ -1,3 +1,1 @@
-Estimate azimuth and tilt values for fixed-tilt PV systems.
-
-
+# To edit the contents of this element you will need to modify the shortdesc.md asset file
