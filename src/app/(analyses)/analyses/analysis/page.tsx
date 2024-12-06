@@ -1,13 +1,13 @@
 'use client';
 // *********** START OF IMPORTS ***********
 
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box, Grid, Tab, Tabs, Typography, CircularProgress,
 } from '@mui/material';
-import {Container} from '@mui/system';
-import {useRouter} from 'next/navigation';
-import {useSearchParams} from 'next/navigation';
+import { Container } from '@mui/system';
+import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 // *********** MODULE IMPORTS ***********
 
@@ -25,9 +25,9 @@ import CookieService from '@/services/cookie_service';
 
 // *********** REDUX IMPORTS ***********
 
-import {useAppSelector} from '@/store/store';
-import {useDispatch} from 'react-redux';
-import {logIn} from '@/reducers/user';
+import { useAppSelector } from '@/store/store';
+import { useDispatch } from 'react-redux';
+import { logIn } from '@/reducers/user';
 
 // *********** END OF IMPORTS ***********
 
@@ -65,17 +65,17 @@ const AnalysisPage: React.FC = () => {
   if ((
     selectedAnalysis !== 'development'
   ) && (
-    selectedAnalysis !== null
-  ) && !validAnalysisParam) {
+      selectedAnalysis !== null
+    ) && !validAnalysisParam) {
     selectedAnalysis = parseInt(
-        selectedAnalysis.toString() || '', 10);
+      selectedAnalysis.toString() || '', 10);
   } else if ((
     selectedAnalysis !== null
   ) && (
-    isNaN(parseInt(selectedAnalysis))
-  ) && (
-    selectedAnalysis === 'development'
-  )) {
+      isNaN(parseInt(selectedAnalysis))
+    ) && (
+      selectedAnalysis === 'development'
+    )) {
     console.log('Development analysis');
   } else {
     navigate.push('/analyses');
@@ -124,50 +124,50 @@ const AnalysisPage: React.FC = () => {
       navigate.push('/analyses');
     } else {
       AnalysisService.getCardDetails(selectedAnalysis)
-          .then((response: any) => {
-            setIsLoading(false);
-            setAnalysisDetailsCard(response.data);
-            setAnalysisId(response.data.analysis_id);
-          })
-          .catch((e: any) => {
-            setError(e);
-            console.error('Error:', error);
-            setIsLoading(false);
-            setAnalysisDetailsCard({
-              analysisId: 'development',
-              analysis_name: 'Dev Analysis',
-            });
+        .then((response: any) => {
+          setIsLoading(false);
+          setAnalysisDetailsCard(response.data);
+          setAnalysisId(response.data.analysis_id);
+        })
+        .catch((e: any) => {
+          setError(e);
+          console.error('Error:', error);
+          setIsLoading(false);
+          setAnalysisDetailsCard({
+            analysisId: 'development',
+            analysis_name: 'Dev Analysis',
           });
+        });
     }
   }, [selectedAnalysis, error, navigate]);
 
   useEffect(() => {
     if (selectedAnalysis !== undefined && selectedAnalysis !== null &&
-            ((typeof(selectedAnalysis) === 'number' && selectedAnalysis > 0) ||
-            (
-              typeof(selectedAnalysis) === 'string' &&
-              selectedAnalysis === 'development'
-            ))) {
-      setCoverImageDir(`/static/assets/${selectedAnalysis}/banner.png`);
+      ((typeof (selectedAnalysis) === 'number' && selectedAnalysis > 0) ||
+        (
+          typeof (selectedAnalysis) === 'string' &&
+          selectedAnalysis === 'development'
+        ))) {
+      setCoverImageDir(`/static/assets/analysis/${selectedAnalysis}/banner.png`);
 
-      MS.fetchMarkdown(`/static/assets/${selectedAnalysis}/description.md`)
-          .then((text) => replaceImagePaths(text, selectedAnalysis))
-          .then((text) => setLongDescription(text))
-          .catch((err) => console.log(err));
+      MS.fetchMarkdown(`/static/assets/analysis/${selectedAnalysis}/description.md`)
+        .then((text) => replaceImagePaths(text, selectedAnalysis))
+        .then((text) => setLongDescription(text))
+        .catch((err) => console.log(err));
 
       MS.fetchMarkdown(
-          `/static/assets/${selectedAnalysis}/SubmissionInstructions.md`
+        `/static/assets/analysis/${selectedAnalysis}/SubmissionInstructions.md`
       )
-          .then((text) => replaceImagePaths(text, selectedAnalysis))
-          .then((text) => setRulesetDescription(text))
-          .catch((err) => console.log(err));
+        .then((text) => replaceImagePaths(text, selectedAnalysis))
+        .then((text) => setRulesetDescription(text))
+        .catch((err) => console.log(err));
 
       MS.fetchMarkdown(
-          `/static/assets/${selectedAnalysis}/shortdesc.md`)
-          .then((text) => {
-            setAnalysesBlurb(text);
-          })
-          .catch((error) => console.error(error));
+        `/static/assets/analysis/${selectedAnalysis}/shortdesc.md`)
+        .then((text) => {
+          setAnalysesBlurb(text);
+        })
+        .catch((error) => console.error(error));
     } else {
       console.error('Analysis ID not found');
     }
@@ -184,7 +184,7 @@ const AnalysisPage: React.FC = () => {
       <main id="mainElement" className="flex min-h-screen flex-col
     items-center justify-between p-24">
         {
-            isLoading !== false ? <CircularProgress /> :
+          isLoading !== false ? <CircularProgress /> :
             (
               <Container id="analysis">
                 <Box sx={{
@@ -224,7 +224,7 @@ const AnalysisPage: React.FC = () => {
 
                     {/* eslint-disable-next-line @next/next/no-img-element*/}
                     <div
-                      style={{backgroundImage: `url(${coverImageDir})`}}
+                      style={{ backgroundImage: `url(${coverImageDir})` }}
                       className='
                         relative
                         bg-cover
@@ -235,7 +235,7 @@ const AnalysisPage: React.FC = () => {
                 </Box>
 
                 <Box
-                  sx={{width: '100%'}}
+                  sx={{ width: '100%' }}
                   className='
                   mt-1
                   tableBorder
@@ -277,9 +277,9 @@ const AnalysisPage: React.FC = () => {
                               className='
                           panelTab
                           '/> : <Tab
-                                label="Submit Algorithm"
-                                disabled
-                                className='
+                              label="Submit Algorithm"
+                              disabled
+                              className='
                         panelTab
                         '/>
                           }

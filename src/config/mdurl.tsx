@@ -10,7 +10,7 @@
 function replaceImagePaths(markdown: string, analysisId: number | string) {
   const regex = /!\[(.*?)\]\(\.\/(.*?)\)/g;
   return markdown.replace(regex,
-      `![$1](/static/assets/${analysisId}/$2)`);
+    `![$1](/static/assets/analysis/${analysisId}/$2)`);
 }
 
 export default replaceImagePaths;

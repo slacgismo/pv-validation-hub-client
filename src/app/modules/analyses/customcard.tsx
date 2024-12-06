@@ -1,8 +1,8 @@
 'use client';
 // *********** START OF IMPORTS ***********
 
-import React, {useEffect, useState} from 'react';
-import {Grid} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Grid } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -31,21 +31,21 @@ export default function CustomizedCard({
 
   useEffect(() => {
     if (card.analysis_id !== undefined && card.analysis_id !== null &&
-              (card.analysis_id > 0 || card.analysis_id === 'development')) {
+      (card.analysis_id > 0 || card.analysis_id === 'development')) {
       setCardDir(
-          `/static/assets/${card.analysis_id}/cardCover.png`
+        `/static/assets/analysis/${card.analysis_id}/cardCover.png`
       );
-      fetch(`/static/assets/${card.analysis_id}/shortdesc.md`)
-          .then((res) => res.text())
-          .then((text) => setShortDescription(text))
-          .catch((err) => console.log(err));
+      fetch(`/static/assets/analysis/${card.analysis_id}/shortdesc.md`)
+        .then((res) => res.text())
+        .then((text) => setShortDescription(text))
+        .catch((err) => console.log(err));
     }
   }, [card.analysis_id]);
 
   return (
     <Grid item xs={2} sm={4} md={4} key={index}>
       <Card
-        sx={{maxWidth: 345, height: 380}}
+        sx={{ maxWidth: 345, height: 380 }}
         key={card.analysis_id}
         onClick={() => onClick(card.analysis_id, card.analysis_name)}
         data-testid={testId}
@@ -56,7 +56,7 @@ export default function CustomizedCard({
         text-center
         '
       >
-        { /* eslint-disable-next-line */ }
+        { /* eslint-disable-next-line */}
         <img
           src={cardDir}
           alt={card.analysis_name}
@@ -68,14 +68,14 @@ export default function CustomizedCard({
           '
         />
         <CardHeader
-          sx={{height: 61}}
+          sx={{ height: 61 }}
           title={card.analysis_name}
         />
         <CardContent>
-          { /* eslint-disable-next-line */ }
-              <Markdown className='reactMarkdown' children={shortDescription !== undefined &&
-                              shortDescription.length > 100 ?
-                `${shortDescription.slice(0, 100)}.....` : shortDescription}
+          { /* eslint-disable-next-line */}
+          <Markdown className='reactMarkdown' children={shortDescription !== undefined &&
+            shortDescription.length > 100 ?
+            `${shortDescription.slice(0, 100)}.....` : shortDescription}
           />
         </CardContent>
       </Card>
