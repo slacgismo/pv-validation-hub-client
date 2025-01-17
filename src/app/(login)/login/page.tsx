@@ -1,12 +1,12 @@
 'use client';
 // *********** START OF IMPORTS ***********
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 
 // We need to use useRouter from next/navigation instead of next/navigation
 // as it uses special hook for navigation within app directory
-import {useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Cookies from 'universal-cookie';
 
 // *********** MODULE IMPORTS ***********
@@ -21,9 +21,9 @@ import client from '@/services/api_service';
 
 // *********** REDUX IMPORTS ***********
 
-import {AppDispatch} from '@/store/store';
-import {useDispatch} from 'react-redux';
-import {logIn} from '@/reducers/user';
+import { AppDispatch } from '@/store/store';
+import { useDispatch } from 'react-redux';
+import { logIn } from '@/reducers/user';
 
 // *********** END OF IMPORTS ***********
 
@@ -31,6 +31,7 @@ type LoginStates = {
   username: string;
   password: string;
 }
+
 
 const LoginPage: React.FC = () => {
   const cookies = new Cookies();
@@ -51,7 +52,7 @@ const LoginPage: React.FC = () => {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {id, value} = e.target;
+    const { id, value } = e.target;
     setLoginStates((prevState) => ({
       ...prevState,
       [id]: value,
@@ -98,9 +99,10 @@ const LoginPage: React.FC = () => {
   }
 
 
-  const submitHandler = () => {
-    const {username} = loginStates;
-    const {password} = loginStates;
+  const submitHandler: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    const { username } = loginStates;
+    const { password } = loginStates;
     const usernameError = validateUsername(username);
 
     if (usernameError === '' && password !== '') {
@@ -114,17 +116,18 @@ const LoginPage: React.FC = () => {
           return;
         }
         cookies.set(
-            'user',
-            {
-              token: response.data.token,
-              sameSite: 'lax',
-              username: response.data.username,
-            },
-            {path: '/', sameSite: 'strict'},
+          'user',
+          {
+            token: response.data.token,
+            sameSite: 'lax',
+            username: response.data.username,
+          },
+          { path: '/', sameSite: 'strict' },
         );
         dispatch(logIn(username));
+        console.log('Login successful');
         router.push('/');
-      }).catch((error) => {
+      }).catch(() => {
         setShowAlert(true);
         setTimeout(() => {
           setShowAlert(false);
@@ -146,7 +149,7 @@ const LoginPage: React.FC = () => {
         <Grid container
           justifyContent="center"
           alignItems="center"
-          sx={{mt: '10px'}}
+          sx={{ mt: '10px' }}
         >
           {
             showAlert &&
@@ -157,14 +160,15 @@ const LoginPage: React.FC = () => {
           <Box
             component="form"
             sx={{
-              '& .MuiTextField-root': {m: 1, width: '35ch'},
-              '& .MuiButtonBase-root': {m: 1},
+              '& .MuiTextField-root': { m: 1, width: '35ch' },
+              '& .MuiButtonBase-root': { m: 1 },
               'border': '1px solid black',
               'padding': '4em',
             }}
             noValidate
             autoComplete="off"
             className='shadowedBox'
+            onSubmit={(e) => submitHandler(e)}
           >
             <Box className='flex flex-column'>
               <span className='headerText'>
@@ -210,7 +214,7 @@ const LoginPage: React.FC = () => {
               </Link>
               <Button
                 variant="contained"
-                onClick={submitHandler}
+                type='submit'
                 className="m-1"
                 data-testid="loginButton"
               >
