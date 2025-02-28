@@ -1,7 +1,7 @@
 'use client';
 // *********** START OF IMPORTS ***********
 
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { GridColDef } from '@mui/x-data-grid';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
@@ -235,17 +235,36 @@ export default function SubmissionList() {
 	];
 
 	const onClick = (e: any) => {
-		fetchSubmissions();
+		const analysisId = parseInt(e.target.getAttribute('data-analysisid'));
+		fetchSubmissions(analysisId);
 	};
 
-	const onClickArchived = (e: any) => {
-		fetchSubmissions();
+	const onClickArchived = () => {
+		fetchArchivedSubmissions();
 	};
 
-	const fetchSubmissions = async () => {
+	const fetchArchivedSubmissions = async () => {
 		const user = CookieService.getUserCookie();
 		const userId = await UserService.getUserId(user.token);
-		SubmissionService.getAllSubmissionsForUser(userId)
+		SubmissionService.getArchivedSubmissionsForUser(userId)
+			.then((fetchedSubmissions) => {
+				// eslint-disable-next-line
+				const formattedSubs =
+					SubmissionService.formatAllSubmissionsForUser(
+						fetchedSubmissions
+					).sort((a, b) => a.id - b.id);
+
+				console.log('formattedSubs', formattedSubs);
+				setSubmissions(formattedSubs);
+			})
+			.catch((error) => {
+				console.error('Error fetching submissions:', error);
+			});
+	};
+	const fetchSubmissions = async (analysisId: number) => {
+		const user = CookieService.getUserCookie();
+		const userId = await UserService.getUserId(user.token);
+		SubmissionService.getSelectedSubmissionsForUser(userId, analysisId)
 			.then((fetchedSubmissions) => {
 				// eslint-disable-next-line
 				const formattedSubs =
@@ -269,7 +288,7 @@ export default function SubmissionList() {
 	};
 
 	useEffect(() => {
-		fetchSubmissions();
+		fetchSubmissions(0);
 	}, []);
 
 	const getIcon = (status: string) => {
@@ -302,7 +321,7 @@ export default function SubmissionList() {
 		let interval: NodeJS.Timeout | undefined = undefined;
 		if (submissionsInProgress.length > 0) {
 			interval = setInterval(() => {
-				fetchSubmissions();
+				fetchSubmissions(0);
 			}, LONG_POLLING_INTERVAL);
 		} else {
 			clearInterval(interval);
