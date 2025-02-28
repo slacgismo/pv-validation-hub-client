@@ -14,6 +14,8 @@ import UserService from '@/services/user_service';
 import CookieService from '@/services/cookie_service';
 import { EditableInput } from '@/app/modules/global/editableComponents';
 
+import { FormattedSubmission } from '@/services/submission_service';
+
 // *********** REDUX IMPORTS ***********
 
 // *********** END OF IMPORTS ***********
@@ -23,14 +25,7 @@ type Analysis = {
 	analysis_name: string;
 };
 
-type Submissions = {
-	id: number;
-	subStatus: string;
-	submittedAt: number;
-	altName: string;
-	analysis: Analysis;
-	ttc: string;
-};
+const LONG_POLLING_INTERVAL = 5000;
 
 /**
  * Component to display the list of submissions
@@ -40,7 +35,7 @@ type Submissions = {
  */
 export default function SubmissionList() {
 	const [availableAnalyses, setAvailableAnalyses] = useState<Analysis[]>([]);
-	const [submissions, setSubmissions] = useState<Submissions[]>([]);
+	const [submissions, setSubmissions] = useState<FormattedSubmission[]>([]);
 	const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({});
 	const [
 		number_of_submissions_in_progress,
@@ -139,12 +134,15 @@ export default function SubmissionList() {
 			sortable: false,
 			groupable: false,
 			renderCell: (params: any) => {
-				const { value } = params;
-				if (value !== null || value !== undefined) {
-					return <div className="">{value.analysis_name}</div>;
-				} else {
-					return 'N/A';
-				}
+				const value = params.value as Analysis;
+				return (
+					<Link
+						href={`/analyses/analysis/?analysisId=${value.analysis_id}`}
+						className="standardLink"
+					>
+						{value.analysis_name}
+					</Link>
+				);
 			},
 		},
 		{
@@ -237,73 +235,40 @@ export default function SubmissionList() {
 	];
 
 	const onClick = (e: any) => {
-		const analysisId = parseInt(e.target.getAttribute('data-analysisid'));
-		const fetchSubmissions = async () => {
-			const user = CookieService.getUserCookie();
-			const userId = await UserService.getUserId(user.token);
-			SubmissionService.getSelectedSubmissionsForUser(userId, analysisId)
-				.then((fetchedSubmissions) => {
-					// eslint-disable-next-line
-					const formattedSubs =
-						SubmissionService.formatAllSubmissionsForUser(
-							fetchedSubmissions
-						);
-					setSubmissions(formattedSubs);
-				})
-				.catch((error) => {
-					console.error('Error fetching submissions:', error);
-				});
-		};
-
 		fetchSubmissions();
 	};
 
 	const onClickArchived = (e: any) => {
-		const fetchSubmissions = async () => {
-			const user = CookieService.getUserCookie();
-			const userId = await UserService.getUserId(user.token);
-			SubmissionService.getArchivedSubmissionsForUser(userId)
-				.then((fetchedSubmissions) => {
-					// eslint-disable-next-line
-					const formattedSubs =
-						SubmissionService.formatAllSubmissionsForUser(
-							fetchedSubmissions
-						);
-					setSubmissions(formattedSubs);
-				})
-				.catch((error) => {
-					console.error('Error fetching submissions:', error);
-				});
-		};
-
 		fetchSubmissions();
 	};
 
-	useEffect(() => {
-		const fetchSubmissions = async () => {
-			const user = CookieService.getUserCookie();
-			const userId = await UserService.getUserId(user.token);
-			SubmissionService.getAllSubmissionsForUser(userId)
-				.then((fetchedSubmissions) => {
-					// eslint-disable-next-line
-					const formattedSubs =
-						SubmissionService.formatAllSubmissionsForUser(
-							fetchedSubmissions
-						);
-					setSubmissions(formattedSubs);
-				})
-				.catch((error) => {
-					console.error('Error fetching submissions:', error);
-				});
-			AnalysisService.getAllAnalyses()
-				.then((analyses) => {
-					setAvailableAnalyses(analyses.data);
-				})
-				.catch((error) => {
-					console.error('Error fetching analyses:', error);
-				});
-		};
+	const fetchSubmissions = async () => {
+		const user = CookieService.getUserCookie();
+		const userId = await UserService.getUserId(user.token);
+		SubmissionService.getAllSubmissionsForUser(userId)
+			.then((fetchedSubmissions) => {
+				// eslint-disable-next-line
+				const formattedSubs =
+					SubmissionService.formatAllSubmissionsForUser(
+						fetchedSubmissions
+					).sort((a, b) => a.id - b.id);
 
+				console.log('formattedSubs', formattedSubs);
+				setSubmissions(formattedSubs);
+			})
+			.catch((error) => {
+				console.error('Error fetching submissions:', error);
+			});
+		AnalysisService.getAllAnalyses()
+			.then((analyses) => {
+				setAvailableAnalyses(analyses.data);
+			})
+			.catch((error) => {
+				console.error('Error fetching analyses:', error);
+			});
+	};
+
+	useEffect(() => {
 		fetchSubmissions();
 	}, []);
 
@@ -334,27 +299,11 @@ export default function SubmissionList() {
 	console.log(`submissions in progress: ${submissionsInProgress.length}`);
 
 	useEffect(() => {
-		const fetchSubmissions = async () => {
-			const user = CookieService.getUserCookie();
-			const userId = await UserService.getUserId(user.token);
-			SubmissionService.getSelectedSubmissionsForUser(userId, 0)
-				.then((fetchedSubmissions) => {
-					// eslint-disable-next-line
-					const formattedSubs =
-						SubmissionService.formatAllSubmissionsForUser(
-							fetchedSubmissions
-						);
-					setSubmissions(formattedSubs);
-				})
-				.catch((error) => {
-					console.error('Error fetching submissions:', error);
-				});
-		};
 		let interval: NodeJS.Timeout | undefined = undefined;
 		if (submissionsInProgress.length > 0) {
 			interval = setInterval(() => {
 				fetchSubmissions();
-			}, 10000);
+			}, LONG_POLLING_INTERVAL);
 		} else {
 			clearInterval(interval);
 		}
@@ -404,12 +353,12 @@ export default function SubmissionList() {
 				})}
 				<button
 					className="
-              tableBorder
-              bg-white
-              ml-3
-              p-1
-              hover:bg-pal-500
-          "
+						tableBorder
+						bg-white
+						ml-3
+						p-1
+						hover:bg-pal-500
+				"
 					data-analysisid={'archived'}
 					onClick={onClickArchived}
 				>
