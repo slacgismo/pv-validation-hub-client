@@ -14,8 +14,9 @@ import Cookies from 'universal-cookie';
 import Header from '@/app/modules/header/header';
 import Footer from '@/app/modules/footer/footer';
 import {
-  Grid, Box, Button, TextField,
+  Box, Button, TextField,
 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import Validation from '@/services/validation_service';
 import client from '@/services/api_service';
 

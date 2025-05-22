@@ -14,7 +14,7 @@ import {useSearchParams} from 'next/navigation';
 
 // *********** END OF IMPORTS ***********
 
-const LogoutPage: React.FC = (props) => {
+const ExternLink: React.FC = (props) => {
   const searchParams = useSearchParams();
   const extURL = searchParams.get('exturl') || '';
   // Add check for http or https headers and add them if missing
@@ -37,4 +37,4 @@ const LogoutPage: React.FC = (props) => {
   );
 };
 
-export default LogoutPage;
+export default ExternLink;

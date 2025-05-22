@@ -3,8 +3,11 @@
 
 import React from 'react';
 import {
-  Box, Button, Grid, Typography,
+  Box, 
+  Button, 
+  Typography,
 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import Markdown from 'markdown-to-jsx';
 
 // *********** MODULE IMPORTS ***********

@@ -2,7 +2,7 @@
 // *********** START OF IMPORTS ***********
 
 import React from 'react';
-import { Grid2 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 
 // *********** MODULE IMPORTS ***********
 
@@ -72,7 +72,7 @@ const ResourcesPage: React.FC = () => {
 					learn more about our projects, or how to contribute, please
 					visit the following links.
 				</p>
-				<Grid2 container spacing={2}>
+				<Grid container spacing={2}>
 					{resources.map((resource) => (
 						<ResourceCard
 							key={resource.cardId}
@@ -82,7 +82,7 @@ const ResourcesPage: React.FC = () => {
 							url={resource.url}
 						/>
 					))}
-				</Grid2>
+				</Grid>
 			</main>
 			<Footer />
 		</div>

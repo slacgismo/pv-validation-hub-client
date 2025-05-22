@@ -4,12 +4,12 @@
 import React, { useState, useEffect } from 'react';
 import {
 	Box,
-	Grid,
 	Tab,
 	Tabs,
 	Typography,
 	CircularProgress,
 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { Container } from '@mui/system';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';

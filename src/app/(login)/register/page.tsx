@@ -9,8 +9,11 @@ import Cookies from 'universal-cookie';
 // *********** MODULE IMPORTS ***********
 
 import {
-  Box, Button, TextField, Grid,
+  Box, 
+  Button, 
+  TextField,
 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import Validation from '@/services/validation_service';
 import UserService from '@/services/user_service';
 import Header from '@/app/modules/header/header';

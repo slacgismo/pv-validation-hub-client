@@ -2,7 +2,8 @@
 // *********** START OF IMPORTS ***********
 
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography, Grid2 } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import Cookies from 'universal-cookie';
 import { FileUploader } from 'react-drag-drop-files';
 
@@ -181,13 +182,13 @@ export default function SubmissionUploader({
       max-w-md
       "
 			>
-				<Grid2 container spacing={2}>
-					<Grid2 size={{ sm: 11 }}>
+				<Grid container spacing={2}>
+					<Grid size={{ sm: 11 }}>
 						<Typography sx={{ marginLeft: 10 }} variant="h5">
 							PVHub Algorithm Upload
 						</Typography>
-					</Grid2>
-				</Grid2>
+					</Grid>
+				</Grid>
 				<Box sx={{ marginTop: 2, marginBottom: 2 }}>
 					<FileUploader
 						multiple={false}

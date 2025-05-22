@@ -2,7 +2,7 @@
 // *********** START OF IMPORTS ***********
 
 import React, { useEffect, useState } from 'react';
-import { Grid2 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Markdown from 'markdown-to-jsx';
@@ -48,7 +48,7 @@ export default function ResourceCard({
 	}, [cardId]);
 
 	return (
-		<Grid2 size={{ xs: 2, sm: 4, md: 4 }} key={cardId}>
+		<Grid size={{ xs: 2, sm: 4, md: 4 }} key={cardId}>
 			<Card
 				sx={{ maxWidth: 345, height: 380 }}
 				key={`${cardName}-${cardId}`}
@@ -84,6 +84,6 @@ export default function ResourceCard({
 					</Markdown>
 				</CardContent>
 			</Card>
-		</Grid2>
+		</Grid>
 	);
 }

@@ -3,8 +3,9 @@
 
 import React, {useState, useEffect} from 'react';
 import {
-  Box, Grid, Typography,
+  Box, Typography,
 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import {Container} from '@mui/system';
 import CircularProgress from '@mui/material/CircularProgress';
 import {useRouter} from 'next/navigation';

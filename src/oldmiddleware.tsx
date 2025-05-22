@@ -6,6 +6,9 @@ const corsMw = cors({
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
 });
 
+interface mwFunction {
+  (req: any, res: any, func: any): any
+}
 
 /**
  * The middleware function is used to run the CORS middleware.
@@ -14,7 +17,7 @@ const corsMw = cors({
  * @param {Function} fn The function to run.
  * @return {Promise} The promise object.
 */
-function runMiddleware(req: NextRequest, res: NextResponse, fn: Function) {
+function runMiddleware(req: NextRequest, res: NextResponse, fn: mwFunction) {
   const resWithHeader = {
     ...res,
     setHeader: (name: string, value: string) => {

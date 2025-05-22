@@ -17,9 +17,13 @@ import MS from '@/services/md_service';
 
 // *********** END OF IMPORTS ***********
 
+interface closeFunc {
+  (): any
+}
+
 type TermsProps = {
   isOpen: boolean;
-  closeModal: Function;
+  closeModal: closeFunc;
 }
 
 const Terms: React.FC<TermsProps> = ({isOpen, closeModal}) => {

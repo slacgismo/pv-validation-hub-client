@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Grid2 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -14,6 +14,10 @@ import Markdown from 'markdown-to-jsx';
 // *********** REDUX IMPORTS ***********
 
 // *********** END OF IMPORTS ***********
+
+interface clickFunc {
+	(value: any): any
+}
 
 /**
  * CustomizedCard component
@@ -32,7 +36,7 @@ export default function CustomizedCard({
 }: {
 	index: number;
 	card: any;
-	onClick: Function;
+	onClick: clickFunc;
 	testId: string;
 }) {
 	const [shortDescription, setShortDescription] = useState('');
@@ -55,7 +59,7 @@ export default function CustomizedCard({
 	}, [card.analysis_id]);
 
 	return (
-		<Grid2 sx={{ xs: 2, sm: 4, md: 4 }} key={index}>
+		<Grid sx={{ xs: 2, sm: 4, md: 4 }} key={index}>
 			{cardDir && (
 				<Card
 					sx={{ maxWidth: 345, height: 380 }}
@@ -99,6 +103,6 @@ export default function CustomizedCard({
 					</CardContent>
 				</Card>
 			)}
-		</Grid2>
+		</Grid>
 	);
 }
