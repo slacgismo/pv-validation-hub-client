@@ -71,7 +71,7 @@ const AnalysesPage: React.FC = () => {
           </Box>
 
           <Grid container spacing={2}>
-            <Grid item>
+            <Grid>
               <Box sx={{flexGrow: 1, marginTop: 3}}>
                 <Typography
                   variant="body1"

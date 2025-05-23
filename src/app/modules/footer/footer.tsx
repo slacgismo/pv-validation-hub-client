@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import React from 'react';
 import styles from '@/app/modules/modulecss/footer.module.css';
-import {Grid} from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import {Box} from '@mui/system';
 
 // *********** MODULE IMPORTS ***********
@@ -27,13 +27,13 @@ export default function Footer() {
     className={styles.footerBackground}
     >
       <Grid container spacing={2}>
-        <Grid item xs={12}>
+        <Grid size={{xs: 12}}>
           <Box display="flex" justifyContent="center"
             alignItems="center" sx={{borderBottom: 1, borderColor: 'divider',
               marginTop: 4}}>
-            <Grid item xs={2} />
+            <Grid size={{xs: 2}} />
             <Grid container spacing={2}>
-              <Grid item xs={2}>
+              <Grid size={{xs: 2}}>
                 <Link
                   href="https://www6.slac.stanford.edu/
                   news-and-events/connect-with-us"
@@ -41,13 +41,13 @@ export default function Footer() {
                   SLAC
                 </Link>
               </Grid>
-              <Grid item xs={2}>
+              <Grid size={{xs: 2}}>
                 <Link href="https://gismo.slac.stanford.edu/"
                   color="inherit">
                   GISMo
                 </Link>
               </Grid>
-              <Grid item xs={4}>
+              <Grid size={{xs: 4}}>
                 <Box alignItems="center" justifyContent="center">
                   <Link
                     href="/"
@@ -59,13 +59,13 @@ export default function Footer() {
                   </Link>
                 </Box>
               </Grid>
-              <Grid item xs={2}>
+              <Grid size={{xs: 2}}>
                 <Link href="https://gismo.slac.stanford.edu/news-and-events"
                   color="inherit">
                   News
                 </Link>
               </Grid>
-              <Grid item xs={2}>
+              <Grid size={{xs: 2}}>
                 <Link href="https://www.energy.gov/eere/solar/
                 solar-energy-technologies-office"
                 color="inherit">
@@ -73,10 +73,10 @@ export default function Footer() {
                 </Link>
               </Grid>
             </Grid>
-            <Grid item xs={2} />
+            <Grid size={{xs: 2}} />
           </Box>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{xs: 12}}>
           <Box display="flex" justifyContent="center" alignItems="center">
             <div>
             This work is supported by the U.S. Department of Energy’s

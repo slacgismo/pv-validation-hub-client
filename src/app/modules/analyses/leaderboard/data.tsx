@@ -32,7 +32,7 @@ export default function Data({dataDescription, downloadableLink}:
 
   return (
     <Grid container spacing={2}>
-      <Grid item md={8}>
+      <Grid size={{md:8}}>
         <Box>
           <Typography variant="h3">
             Dataset Description
@@ -41,7 +41,7 @@ export default function Data({dataDescription, downloadableLink}:
             <Markdown className='reactMarkdown' children={dataDescription} />
         </Box>
       </Grid>
-      <Grid item md={4}>
+      <Grid size={{md:4}}>
         <Box sx={{marginTop: 7, marginLeft: 10}}>
           <Typography variant="h6">
             Files

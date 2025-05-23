@@ -264,7 +264,7 @@ const AnalysisPage: React.FC = () => {
 								}}
 							>
 								<Grid container spacing={2}>
-									<Grid item xs={6} md={10}>
+									<Grid size={{xs: 6, md:10}}>
 										<Tabs
 											value={value}
 											onChange={handleChange}
@@ -308,7 +308,7 @@ const AnalysisPage: React.FC = () => {
 										</Tabs>
 									</Grid>
 
-									<Grid item xs={6} md={2}></Grid>
+									<Grid size={{xs: 6, md:2}}></Grid>
 								</Grid>
 							</Box>
 
