@@ -16,7 +16,7 @@ import Markdown from 'markdown-to-jsx';
 // *********** END OF IMPORTS ***********
 
 interface clickFunc {
-	(value: any): any
+	(value?: any, valueTwo?: any): any
 }
 
 /**
